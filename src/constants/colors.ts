@@ -5,4 +5,5 @@ export const COLORS = {
   MAIN_SUBTEXT: '#444444',
   MAIN_BODYTEXT: '#666666',
   WHITE: '#FFFFFF',
+  light_green: '#eaf1e6',
 };
