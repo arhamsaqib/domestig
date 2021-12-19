@@ -5,6 +5,8 @@ const arrowRightBlack = require('../assets/images/icons/arrowRightBlack.png');
 const user = require('../assets/images/icons/user.png');
 const verified = require('../assets/images/icons/verified.png');
 const upload = require('../assets/images/icons/upload.png');
+const arrowLeftBlack = require('../assets/images/icons/arrowLeftBlack.png');
+const arrowLeftWhite = require('../assets/images/icons/arrowLeftwhite.png');
 
 const ICONS = {
   upload,
@@ -14,6 +16,8 @@ const ICONS = {
   arrowRight,
   arrowRightBlack,
   user,
+  arrowLeftBlack,
+  arrowLeftWhite,
 };
 
 export {ICONS};

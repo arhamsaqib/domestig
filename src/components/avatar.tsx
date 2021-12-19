@@ -31,12 +31,16 @@ export const Avatar = (props: Props) => {
         ]}
         source={source ?? ICONS.user}
       />
-      <View style={[styles.sideIconContainer]}>
-        {upload && <Image source={ICONS.upload} style={[styles.uploadIcon]} />}
-        {verified && (
-          <Image source={ICONS.verified} style={[styles.verifiedIcon]} />
-        )}
-      </View>
+      {(verified || upload) && (
+        <View style={[styles.sideIconContainer]}>
+          {upload && (
+            <Image source={ICONS.upload} style={[styles.uploadIcon]} />
+          )}
+          {verified && (
+            <Image source={ICONS.verified} style={[styles.verifiedIcon]} />
+          )}
+        </View>
+      )}
     </TouchableOpacity>
   );
 };
