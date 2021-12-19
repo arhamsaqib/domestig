@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {MyButton} from './components/button';
 import {CheckBox} from './components/checkbox';
 import {CustomSwitch} from './components/customSwitch';
+import {Avatar} from './components/avatar';
 
 export const Domestig = () => {
   return (
@@ -22,6 +23,8 @@ export const Domestig = () => {
         <MyButton secondary />
         <CheckBox />
         <CustomSwitch onToggle={() => {}} />
+        <Avatar verified />
+        <Avatar upload size={120} customSize />
       </View>
     </SafeAreaView>
   );
