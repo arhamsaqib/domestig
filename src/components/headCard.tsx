@@ -72,12 +72,12 @@ const styles = StyleSheet.create({
   gm: {
     fontFamily: FONTS.P_REGULAR,
     fontSize: 12,
-    color: COLORS.MAIN_SUBTEXT,
+    color: COLORS.WF_TITLE,
   },
   name: {
     fontFamily: FONTS.P_SEMIBOLD,
     fontSize: 20,
-    color: COLORS.MAIN_SUBTEXT,
+    color: COLORS.WF_TITLE,
   },
   notification: {
     width: 26.96,
@@ -91,6 +91,6 @@ const styles = StyleSheet.create({
   headTxt: {
     fontFamily: FONTS.P_SEMIBOLD,
     fontSize: 25,
-    color: COLORS.MAIN_SUBTEXT,
+    color: COLORS.WF_TITLE,
   },
 });

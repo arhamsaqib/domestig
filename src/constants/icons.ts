@@ -10,6 +10,7 @@ const arrowLeftWhite = require('../assets/images/icons/arrowLeftwhite.png');
 const broom = require('../assets/images/icons/broom.png');
 const vaccum = require('../assets/images/icons/vaccum.png');
 const notification = require('../assets/images/icons/notification.png');
+const rating = require('../assets/images/icons/rating.png');
 
 const ICONS = {
   upload,
@@ -24,6 +25,7 @@ const ICONS = {
   broom,
   vaccum,
   notification,
+  rating,
 };
 
 export {ICONS};

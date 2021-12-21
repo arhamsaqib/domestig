@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {GreenCircle} from '../../../components/greenCircle';
 import {Text} from 'react-native';
 import {HeadCard} from '../../../components/headCard';
+import {MenuStack} from '../menu/menuStack';
 
 const BottomNav = createBottomTabNavigator();
 
@@ -45,7 +46,7 @@ const MainBottomNav = () => {
       }}>
       <BottomNav.Screen
         name="home"
-        component={SamplePage}
+        component={MenuStack}
         options={{
           title: 'Home',
           tabBarIcon: ({color, focused}) => (
