@@ -4,13 +4,16 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {COLORS} from '../../../constants/colors';
 import {PageNameText} from '../../../components/texts/pageNameText';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {GreenCircle} from '../../../components/greenCircle';
+import {Text} from 'react-native';
+import {HeadCard} from '../../../components/headCard';
 
 const BottomNav = createBottomTabNavigator();
 
 const SamplePage = () => {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: COLORS.MAIN_SUBTEXT}}>
-      <PageNameText white>HEHE</PageNameText>
+      <HeadCard />
     </SafeAreaView>
   );
 };

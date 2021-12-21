@@ -7,6 +7,9 @@ const verified = require('../assets/images/icons/verified.png');
 const upload = require('../assets/images/icons/upload.png');
 const arrowLeftBlack = require('../assets/images/icons/arrowLeftBlack.png');
 const arrowLeftWhite = require('../assets/images/icons/arrowLeftwhite.png');
+const broom = require('../assets/images/icons/broom.png');
+const vaccum = require('../assets/images/icons/vaccum.png');
+const notification = require('../assets/images/icons/notification.png');
 
 const ICONS = {
   upload,
@@ -18,6 +21,9 @@ const ICONS = {
   user,
   arrowLeftBlack,
   arrowLeftWhite,
+  broom,
+  vaccum,
+  notification,
 };
 
 export {ICONS};
