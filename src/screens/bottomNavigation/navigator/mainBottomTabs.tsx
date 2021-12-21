@@ -7,6 +7,9 @@ import {HeadCard} from '../../../components/headCard';
 import {HomeStack} from '../home/homeStack';
 import {HistoryStack} from '../history/historyStack';
 import {ServicesStack} from '../services/servicesStack';
+import {MyButton} from '../../../components/button';
+import {Alert} from 'react-native';
+import {DrawerOpener} from './components/drawerOpener';
 
 const BottomNav = createBottomTabNavigator();
 
@@ -75,12 +78,16 @@ const MainBottomNav = () => {
       />
       <BottomNav.Screen
         name="menu"
-        component={SamplePage}
+        // component={SamplePage}
+        component={() => {
+          return null;
+        }}
         options={{
           title: 'Menu',
           tabBarIcon: ({color, focused}) => (
             <Icon name="menu-outline" color={color} size={25} />
           ),
+          tabBarButton: props => <DrawerOpener />,
         }}
       />
     </BottomNav.Navigator>
