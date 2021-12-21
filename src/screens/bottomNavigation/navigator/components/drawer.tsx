@@ -60,12 +60,12 @@ export const Drawer = ({navigation}: any) => {
     {
       name: 'Terms & Conditions',
       iconName: 'book-outline',
-      onPress: () => navigation.navigate(''),
+      onPress: () => navigation.navigate('tos'),
     },
     {
       name: 'Privacy Policy',
       iconName: 'book-outline',
-      onPress: () => navigation.navigate(''),
+      onPress: () => navigation.navigate('privacyPolicy'),
     },
   ];
 

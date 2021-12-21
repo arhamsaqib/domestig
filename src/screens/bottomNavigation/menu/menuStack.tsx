@@ -7,6 +7,8 @@ import {Payment} from './payment/payment';
 import {Wallet} from './wallet/wallet';
 import {Language} from './language/language';
 import {Referrals} from './sharendiscount/referrals';
+import {TOS} from './tos/tos';
+import {PrivacyPolicy} from './privacypolicy/policy';
 
 const Stack = createNativeStackNavigator();
 
@@ -20,6 +22,8 @@ export const MenuStack = () => {
       <Stack.Screen name="wallet" component={Wallet} />
       <Stack.Screen name="language" component={Language} />
       <Stack.Screen name="referrals" component={Referrals} />
+      <Stack.Screen name="tos" component={TOS} />
+      <Stack.Screen name="privacyPolicy" component={PrivacyPolicy} />
     </Stack.Navigator>
   );
 };
