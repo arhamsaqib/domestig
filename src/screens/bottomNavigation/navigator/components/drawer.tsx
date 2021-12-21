@@ -35,7 +35,7 @@ export const Drawer = ({navigation}: any) => {
     {
       name: 'Addresses',
       iconName: 'location-outline',
-      onPress: () => navigation.navigate(''),
+      onPress: () => navigation.navigate('addresses'),
     },
     {
       name: 'Payment',

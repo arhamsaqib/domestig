@@ -14,6 +14,8 @@ const rating = require('../assets/images/icons/rating.png');
 const noimage = require('../assets/images/icons/noimage.jpg');
 const arrowDown = require('../assets/images/icons/arrowDown.png');
 const star_empty = require('../assets/images/icons/star_empty.png');
+const location = require('../assets/images/icons/location.png');
+const pencil = require('../assets/images/icons/pencil.png');
 
 const ICONS = {
   upload,
@@ -32,6 +34,8 @@ const ICONS = {
   noimage,
   arrowDown,
   star_empty,
+  location,
+  pencil,
 };
 
 export {ICONS};
