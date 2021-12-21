@@ -9,6 +9,7 @@ import {Text} from 'react-native';
 import {HeadCard} from '../../../components/headCard';
 import {MenuStack} from '../menu/menuStack';
 import {HistoryStack} from '../history/historyStack';
+import {ServicesStack} from '../services/servicesStack';
 
 const BottomNav = createBottomTabNavigator();
 
@@ -57,7 +58,7 @@ const MainBottomNav = () => {
       />
       <BottomNav.Screen
         name="services"
-        component={SamplePage}
+        component={ServicesStack}
         options={{
           title: 'Services',
           tabBarIcon: ({color, focused}) => (
