@@ -12,6 +12,7 @@ const vaccum = require('../assets/images/icons/vaccum.png');
 const notification = require('../assets/images/icons/notification.png');
 const rating = require('../assets/images/icons/rating.png');
 const noimage = require('../assets/images/icons/noimage.jpg');
+const arrowDown = require('../assets/images/icons/arrowDown.png');
 
 const ICONS = {
   upload,
@@ -28,6 +29,7 @@ const ICONS = {
   notification,
   rating,
   noimage,
+  arrowDown,
 };
 
 export {ICONS};

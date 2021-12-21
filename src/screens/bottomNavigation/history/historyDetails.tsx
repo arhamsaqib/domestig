@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Image, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import {CommonStyles} from '../../../common/styles';
 import {Avatar} from '../../../components/avatar';
 import {BackIcon} from '../../../components/backIcon';
+import {BottomCard} from '../../../components/bottomCard';
 import {MyButton} from '../../../components/button';
 import {GreenCircle} from '../../../components/greenCircle';
 import {PageNameText} from '../../../components/texts/pageNameText';
@@ -10,10 +11,16 @@ import {COLORS} from '../../../constants/colors';
 import {FONTS} from '../../../constants/fonts';
 import {ICONS} from '../../../constants/icons';
 import {ScrollableView} from '../../../helpers/scrollableView';
+import {ProviderDetails} from './provider/providerDetails';
 
 export const HistoryDetails = ({navigation}: any) => {
+  const [card, setCard] = useState(false);
   return (
     <SafeAreaView style={CommonStyles.screenMain}>
+      <ProviderDetails
+        modalVisibility={card}
+        onOutsidePress={() => setCard(false)}
+      />
       <ScrollableView>
         <View style={styles.topRow}>
           <View style={{width: '15%', alignItems: 'flex-start'}}>
@@ -66,7 +73,12 @@ export const HistoryDetails = ({navigation}: any) => {
         </View>
         <View style={styles.pDetailsContainer}>
           <View style={styles.avatrNameCont}>
-            <Avatar customSize size={41} />
+            <Avatar
+              customSize
+              size={41}
+              onPress={() => setCard(true)}
+              pressable
+            />
             <Text style={[styles.name, {marginLeft: 5}]}>Arham Saqib</Text>
           </View>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
