@@ -15,17 +15,17 @@ export const Drawer = ({navigation}: any) => {
     {
       name: 'Home',
       iconName: 'home-outline',
-      onPress: () => navigation.navigate({key: 'hehe'}),
+      //onPress: () => navigation.navigate({key: 'hehe'}),
     },
     {
       name: 'History',
       iconName: 'time-outline',
-      onPress: () => navigation.navigate(''),
+      //onPress: () => navigation.navigate(''),
     },
     {
       name: 'Notification',
       iconName: 'notifications-outline',
-      onPress: () => navigation.navigate(''),
+      //onPress: () => navigation.navigate(''),
     },
     {
       name: 'My account',
@@ -55,7 +55,7 @@ export const Drawer = ({navigation}: any) => {
     {
       name: 'Share & Discount',
       iconName: 'share-social',
-      onPress: () => navigation.navigate(''),
+      onPress: () => navigation.navigate('referrals'),
     },
     {
       name: 'Terms & Conditions',
