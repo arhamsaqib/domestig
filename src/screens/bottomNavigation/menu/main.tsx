@@ -10,7 +10,7 @@ import {ScrollableView} from '../../../helpers/scrollableView';
 import {CategoryCard} from './components/categoryCard';
 import {RecommendedCard} from './components/recommendedCard';
 
-export const MainMenu = () => {
+export const MainMenu = ({navigation}: any) => {
   const data = [
     {name: 'Cat-1'},
     {name: 'Cat-2'},
@@ -48,7 +48,9 @@ export const MainMenu = () => {
   const RenderHeader = () => {
     return (
       <>
-        <HeadCard />
+        <HeadCard
+          onNotificationPress={() => navigation.navigate('notifications')}
+        />
         <View style={{width: '90%', alignSelf: 'center'}}>
           <Text style={[styles.subtext, {marginBottom: 5}]}>Category</Text>
         </View>

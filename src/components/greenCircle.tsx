@@ -10,12 +10,14 @@ interface Props {
   children?: any;
   onPress?(): void;
   broom?: boolean;
+  notPressable?: boolean;
 }
 
 export const GreenCircle = (props: Props) => {
   const {s50, s40, s41} = props;
   return (
     <TouchableOpacity
+      disabled={props.notPressable}
       onPress={props.onPress}
       style={[
         style.main,
