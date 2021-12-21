@@ -8,6 +8,7 @@ import {GreenCircle} from '../../../components/greenCircle';
 import {Text} from 'react-native';
 import {HeadCard} from '../../../components/headCard';
 import {MenuStack} from '../menu/menuStack';
+import {HistoryStack} from '../history/historyStack';
 
 const BottomNav = createBottomTabNavigator();
 
@@ -66,7 +67,7 @@ const MainBottomNav = () => {
       />
       <BottomNav.Screen
         name="history"
-        component={SamplePage}
+        component={HistoryStack}
         options={{
           title: 'History',
           tabBarIcon: ({color, focused}) => (
