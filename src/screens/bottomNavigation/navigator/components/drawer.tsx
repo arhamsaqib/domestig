@@ -50,7 +50,7 @@ export const Drawer = ({navigation}: any) => {
     {
       name: 'Language',
       iconName: 'globe-outline',
-      onPress: () => navigation.navigate(''),
+      onPress: () => navigation.navigate('language'),
     },
     {
       name: 'Share & Discount',

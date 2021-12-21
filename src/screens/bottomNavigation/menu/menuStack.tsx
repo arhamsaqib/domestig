@@ -5,6 +5,7 @@ import {AccountTopBar} from './account/accountTopBar';
 import {Addresses} from './addresses/adresses';
 import {Payment} from './payment/payment';
 import {Wallet} from './wallet/wallet';
+import {Language} from './language/language';
 
 const Stack = createNativeStackNavigator();
 
@@ -16,6 +17,7 @@ export const MenuStack = () => {
       <Stack.Screen name="addresses" component={Addresses} />
       <Stack.Screen name="payment" component={Payment} />
       <Stack.Screen name="wallet" component={Wallet} />
+      <Stack.Screen name="language" component={Language} />
     </Stack.Navigator>
   );
 };
