@@ -45,7 +45,7 @@ export const Drawer = ({navigation}: any) => {
     {
       name: 'Wallet',
       iconName: 'wallet-outline',
-      onPress: () => navigation.navigate(''),
+      onPress: () => navigation.navigate('wallet'),
     },
     {
       name: 'Language',
