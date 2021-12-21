@@ -2,12 +2,9 @@ import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {COLORS} from '../../../constants/colors';
-import {PageNameText} from '../../../components/texts/pageNameText';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {GreenCircle} from '../../../components/greenCircle';
-import {Text} from 'react-native';
 import {HeadCard} from '../../../components/headCard';
-import {MenuStack} from '../menu/menuStack';
+import {HomeStack} from '../home/homeStack';
 import {HistoryStack} from '../history/historyStack';
 import {ServicesStack} from '../services/servicesStack';
 
@@ -48,7 +45,7 @@ const MainBottomNav = () => {
       }}>
       <BottomNav.Screen
         name="home"
-        component={MenuStack}
+        component={HomeStack}
         options={{
           title: 'Home',
           tabBarIcon: ({color, focused}) => (

@@ -5,7 +5,7 @@ import {Notification} from './notifications';
 
 const Stack = createNativeStackNavigator();
 
-export const MenuStack = () => {
+export const HomeStack = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="menu" component={MainMenu} />

@@ -4,7 +4,7 @@ import {CommonStyles} from '../../../common/styles';
 import {BackIcon} from '../../../components/backIcon';
 import {CheckMark} from '../../../components/checkmark';
 import {PageNameText} from '../../../components/texts/pageNameText';
-import {CategoryCard} from '../menu/components/categoryCard';
+import {CategoryCard} from '../home/components/categoryCard';
 
 export const ServicesMain = ({navigation}: any) => {
   const data = [
