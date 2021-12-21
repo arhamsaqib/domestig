@@ -5,7 +5,7 @@ import {FONTS} from '../../../../constants/fonts';
 import {Drawer} from './drawer';
 import {DrawerModal} from './drawerModal';
 
-export const DrawerOpener = () => {
+export const DrawerOpener = (props: any) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <>

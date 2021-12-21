@@ -13,7 +13,7 @@ interface Props {
 
 export const DrawerOption = (props: Props) => {
   return (
-    <TouchableOpacity style={styles.main}>
+    <TouchableOpacity onPress={props.onPress} style={styles.main}>
       <Icon
         name={props.iconName}
         size={20}

@@ -4,21 +4,18 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {CommonStyles} from '../../../../common/styles';
 import {Avatar} from '../../../../components/avatar';
 import {Divider} from '../../../../components/divider';
-import {TitleText} from '../../../../components/texts/titleText';
 import {COLORS} from '../../../../constants/colors';
 import {FONTS} from '../../../../constants/fonts';
 import {ICONS} from '../../../../constants/icons';
-import Icon from 'react-native-vector-icons/Ionicons';
 import {DrawerOption} from './drawerOption';
 import {ScrollableView} from '../../../../helpers/scrollableView';
 
-export const Drawer = () => {
-  var navigation: any;
+export const Drawer = ({navigation}: any) => {
   const options = [
     {
       name: 'Home',
       iconName: 'home-outline',
-      onPress: () => navigation.navigate(''),
+      onPress: () => navigation.navigate({key: 'hehe'}),
     },
     {
       name: 'History',
@@ -33,7 +30,7 @@ export const Drawer = () => {
     {
       name: 'My account',
       iconName: 'person-outline',
-      onPress: () => navigation.navigate(''),
+      onPress: () => navigation.navigate('userAccount'),
     },
     {
       name: 'Addresses',
@@ -73,7 +70,13 @@ export const Drawer = () => {
   ];
 
   const renderOptions = (item: any) => {
-    return <DrawerOption name={item.name} iconName={item.iconName} />;
+    return (
+      <DrawerOption
+        name={item.name}
+        iconName={item.iconName}
+        onPress={item.onPress}
+      />
+    );
   };
 
   return (

@@ -10,6 +10,8 @@ import {ServicesStack} from '../services/servicesStack';
 import {MyButton} from '../../../components/button';
 import {Alert} from 'react-native';
 import {DrawerOpener} from './components/drawerOpener';
+import {Drawer} from './components/drawer';
+import {MenuStack} from '../menu/menuStack';
 
 const BottomNav = createBottomTabNavigator();
 
@@ -78,16 +80,16 @@ const MainBottomNav = () => {
       />
       <BottomNav.Screen
         name="menu"
-        // component={SamplePage}
-        component={() => {
-          return null;
-        }}
+        component={MenuStack}
+        // component={() => {
+        //   return null;
+        // }}
         options={{
           title: 'Menu',
           tabBarIcon: ({color, focused}) => (
             <Icon name="menu-outline" color={color} size={25} />
           ),
-          tabBarButton: props => <DrawerOpener />,
+          //tabBarButton: props => <DrawerOpener />,
         }}
       />
     </BottomNav.Navigator>
