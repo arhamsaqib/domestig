@@ -38,6 +38,13 @@ export const ProfileDetails = () => {
             icon={<Icon name="globe-outline" size={15} color={'#777777'} />}
           />
         </View>
+        <View style={{width: '90%', marginTop: 10}}>
+          <Text style={[styles.field, {marginBottom: 5}]}>Location</Text>
+          <DropDown
+            name="Type your location"
+            icon={<Icon name="location-outline" size={15} color={'#777777'} />}
+          />
+        </View>
         <View style={{width: '90%', marginTop: 20}}>
           <MyButton title="Save changes" />
         </View>
