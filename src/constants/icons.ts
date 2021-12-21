@@ -16,6 +16,9 @@ const arrowDown = require('../assets/images/icons/arrowDown.png');
 const star_empty = require('../assets/images/icons/star_empty.png');
 const location = require('../assets/images/icons/location.png');
 const pencil = require('../assets/images/icons/pencil.png');
+const card = require('../assets/images/icons/card.png');
+const cash = require('../assets/images/icons/cash.png');
+const wallet = require('../assets/images/icons/wallet.png');
 
 const ICONS = {
   upload,
@@ -36,6 +39,9 @@ const ICONS = {
   star_empty,
   location,
   pencil,
+  card,
+  cash,
+  wallet,
 };
 
 export {ICONS};

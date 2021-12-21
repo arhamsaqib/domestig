@@ -40,7 +40,7 @@ export const Drawer = ({navigation}: any) => {
     {
       name: 'Payment',
       iconName: 'card-outline',
-      onPress: () => navigation.navigate(''),
+      onPress: () => navigation.navigate('payment'),
     },
     {
       name: 'Wallet',
