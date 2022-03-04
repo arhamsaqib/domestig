@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {BottomSheet} from '../../components/bottomSheet';
 import {MyTextInputWithIcon} from '../../components/textinputwithicon';
@@ -13,10 +13,62 @@ import {CommonStyles} from '../../common/styles';
 import {CheckBox} from '../../components/checkbox';
 import {MainBodyText} from '../../components/texts/mainBodyText';
 import {DividerP} from '../../components/dividerp';
+import {useStore} from 'react-redux';
+import updateCurrentUserAction from '../../redux/action/currectUserAction';
+import {showCustomerByFUID} from '../../api/customer';
+import auth from '@react-native-firebase/auth';
 
 export const Login = ({navigation}: any) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loader, setLoader] = useState(false);
+  const store = useStore();
+  async function verifyLaravelUser(uid: any) {
+    const user = await showCustomerByFUID(uid);
+    if (user.id !== undefined) {
+      store.dispatch(
+        updateCurrentUserAction({
+          id: user.id,
+        }),
+      );
+      navigation.navigate('mainBottomNav');
+
+      // Toast.show({
+      //   type: 'success',
+      //   text1: 'Auth',
+      //   text2: 'Logged in successfully 👋',
+      // });
+      // wait(3000).then(() => {
+      //   navigation.navigate('Onboarding Stack');
+      // });
+    }
+  }
+  function disabled() {
+    return email.length < 8 || password.length < 8;
+  }
   async function onLogin() {
-    navigation.navigate('bottomNav');
+    // setError('');
+    setLoader(true);
+    auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(userCredential => {
+        setLoader(false);
+        const uid = userCredential.user.uid;
+        verifyLaravelUser(uid);
+        //console.log('User account created & signed in!');
+      })
+      .catch((error: any) => {
+        setLoader(false);
+
+        if (error.code === 'auth/invalid-email') {
+          // setError('The email address is invalid!');
+        }
+
+        if (error.code === 'auth/wrong-password') {
+          //setError('Password is invalid!');
+        }
+        console.error(error);
+      });
   }
   return (
     <>
@@ -35,6 +87,7 @@ export const Login = ({navigation}: any) => {
             <MyTextInputWithIcon
               placeholder="Enter your mail"
               autoCapitalize="none"
+              onChangeText={setEmail}
               icon={
                 <Icon
                   name="mail-outline"
@@ -49,6 +102,8 @@ export const Login = ({navigation}: any) => {
             <MyTextInputWithIcon
               placeholder="Enter your password"
               secureTextEntry
+              onChangeText={setPassword}
+              autoCapitalize="none"
               icon={
                 <Icon
                   name="lock-closed-outline"
@@ -73,7 +128,12 @@ export const Login = ({navigation}: any) => {
             </MainBodyText>
           </View>
           <View style={{width: '90%', marginBottom: 20}}>
-            <MyButton title="Login Now" onPress={onLogin} />
+            <MyButton
+              title="Login Now"
+              onPress={onLogin}
+              loading={loader}
+              disabled={disabled() || loader}
+            />
           </View>
           <View style={[CommonStyles.row, CommonStyles.subView]}>
             <DividerP style={{width: '30%'}} />
