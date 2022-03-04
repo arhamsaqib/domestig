@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {BottomSheet} from '../../components/bottomSheet';
 import {MyTextInputWithIcon} from '../../components/textinputwithicon';
@@ -14,10 +14,87 @@ import {CheckBox} from '../../components/checkbox';
 import {MainBodyText} from '../../components/texts/mainBodyText';
 import {DividerP} from '../../components/dividerp';
 import {ScrollableView} from '../../helpers/scrollableView';
+import {CheckSameString} from '../../helpers/checkSameString';
+import auth from '@react-native-firebase/auth';
+import {createCustomer} from '../../api/customer';
 
 export const Signup = ({navigation}: any) => {
-  async function onLogin() {
+  const [name, setName]: any = useState('');
+  const [email, setEmail]: any = useState('');
+  const [phone, setPhone]: any = useState('');
+  const [country, setCountry]: any = useState('');
+  const [location, setLocation]: any = useState('');
+  const [password, setPassword]: any = useState('');
+  const [error, setError]: any = useState('');
+  const [loader, setLoader] = useState(false);
+  const [confirmPassword, setConfirmPassword]: any = useState('');
+  async function onSignup() {
     navigation.navigate('bottomNav');
+  }
+  function disabled() {
+    return (
+      email.length < 8 ||
+      password.length < 8 ||
+      confirmPassword.length < 8 ||
+      name.length < 2
+    );
+  }
+  async function createLaravelUser(uid: string) {
+    const data = {
+      name: name,
+      email: email,
+      fuid: uid,
+      status: 'active',
+      location: location,
+      latitude: '',
+      longitude: '',
+      phone: setPhone,
+    };
+    const user = await createCustomer(data).finally(() => {
+      setLoader(false);
+    });
+    console.log(user, 'New User');
+
+    // if (user.id !== undefined) {
+    //   store.dispatch(
+    //     updateCurrentUserAction({
+    //       id: user.id,
+    //       judgeId: judge.id,
+    //       contestantId: contestant.id,
+    //     }),
+    //   );
+    //   Toast.show({
+    //     type: 'success',
+    //     text1: 'Registration',
+    //     text2: 'Account created successfully 👋',
+    //   });
+    //}
+  }
+  async function onRegister() {
+    setLoader(true);
+    setError('');
+    if (CheckSameString(password, confirmPassword)) {
+      auth()
+        .createUserWithEmailAndPassword(email, password)
+        .then(userCredential => {
+          const uid = userCredential.user.uid;
+          createLaravelUser(uid);
+        })
+        .catch((error: any) => {
+          if (error.code === 'auth/email-already-in-use') {
+            setLoader(false);
+            setError('That email address is already in use!');
+          }
+          if (error.code === 'auth/invalid-email') {
+            setLoader(false);
+            setError('That email address is invalid!');
+          }
+          //console.error(error);
+        });
+    } else {
+      setLoader(false);
+      setError('Passwords do not match');
+    }
   }
   return (
     <>
@@ -35,8 +112,9 @@ export const Signup = ({navigation}: any) => {
             <View style={{width: '90%', marginBottom: 20}}>
               <FieldNameText style={{marginBottom: 5}}>Name</FieldNameText>
               <MyTextInputWithIcon
-                placeholder="Enter your mail"
+                placeholder="Enter your name"
                 autoCapitalize="none"
+                onChangeText={setName}
                 icon={
                   <Icon
                     name="mail-outline"
@@ -50,6 +128,7 @@ export const Signup = ({navigation}: any) => {
               <FieldNameText style={{marginBottom: 5}}>Email</FieldNameText>
               <MyTextInputWithIcon
                 placeholder="Enter your email"
+                onChangeText={setEmail}
                 icon={
                   <Icon
                     name="lock-closed-outline"
@@ -63,6 +142,7 @@ export const Signup = ({navigation}: any) => {
               <FieldNameText style={{marginBottom: 5}}>Phone</FieldNameText>
               <MyTextInputWithIcon
                 placeholder="Enter your phone"
+                onChangeText={setPhone}
                 icon={
                   <Icon
                     name="call-outline"
@@ -76,6 +156,7 @@ export const Signup = ({navigation}: any) => {
               <FieldNameText style={{marginBottom: 5}}>Password</FieldNameText>
               <MyTextInputWithIcon
                 placeholder="Enter your password"
+                onChangeText={setPassword}
                 secureTextEntry
                 icon={
                   <Icon
@@ -93,6 +174,7 @@ export const Signup = ({navigation}: any) => {
               <MyTextInputWithIcon
                 placeholder="Enter confirm password"
                 secureTextEntry
+                onChangeText={setConfirmPassword}
                 icon={
                   <Icon
                     name="lock-closed-outline"
@@ -106,6 +188,7 @@ export const Signup = ({navigation}: any) => {
               <FieldNameText style={{marginBottom: 5}}>Country</FieldNameText>
               <MyTextInputWithIcon
                 placeholder="Select your country"
+                onChangeText={setCountry}
                 icon={
                   <Icon
                     name="globe-outline"
@@ -118,7 +201,8 @@ export const Signup = ({navigation}: any) => {
             <View style={{width: '90%', marginBottom: 20}}>
               <FieldNameText style={{marginBottom: 5}}>Location</FieldNameText>
               <MyTextInputWithIcon
-                placeholder="Enter your password"
+                placeholder="Enter your location"
+                onChangeText={setLocation}
                 icon={
                   <Icon
                     name="location-outline"
@@ -130,7 +214,12 @@ export const Signup = ({navigation}: any) => {
             </View>
 
             <View style={{width: '90%', marginBottom: 300}}>
-              <MyButton title="Sign up now" onPress={onLogin} />
+              <MyButton
+                title="Sign up now"
+                onPress={onSignup}
+                loading={loader}
+                disabled={loader || disabled()}
+              />
             </View>
             {/* <View style={[CommonStyles.row, CommonStyles.subView]}>
               <DividerP style={{width: '30%'}} />
