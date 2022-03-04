@@ -17,6 +17,8 @@ import {ScrollableView} from '../../helpers/scrollableView';
 import {CheckSameString} from '../../helpers/checkSameString';
 import auth from '@react-native-firebase/auth';
 import {createCustomer} from '../../api/customer';
+import updateCurrentUserAction from '../../redux/action/currectUserAction';
+import {useStore} from 'react-redux';
 
 export const Signup = ({navigation}: any) => {
   const [name, setName]: any = useState('');
@@ -28,9 +30,8 @@ export const Signup = ({navigation}: any) => {
   const [error, setError]: any = useState('');
   const [loader, setLoader] = useState(false);
   const [confirmPassword, setConfirmPassword]: any = useState('');
-  async function onSignup() {
-    navigation.navigate('bottomNav');
-  }
+  const store = useStore();
+
   function disabled() {
     return (
       email.length < 8 ||
@@ -48,27 +49,28 @@ export const Signup = ({navigation}: any) => {
       location: location,
       latitude: '',
       longitude: '',
-      phone: setPhone,
+      phone: phone,
+      country: country,
     };
     const user = await createCustomer(data).finally(() => {
       setLoader(false);
     });
     console.log(user, 'New User');
 
-    // if (user.id !== undefined) {
-    //   store.dispatch(
-    //     updateCurrentUserAction({
-    //       id: user.id,
-    //       judgeId: judge.id,
-    //       contestantId: contestant.id,
-    //     }),
-    //   );
-    //   Toast.show({
-    //     type: 'success',
-    //     text1: 'Registration',
-    //     text2: 'Account created successfully 👋',
-    //   });
-    //}
+    if (user.id !== undefined) {
+      store.dispatch(
+        updateCurrentUserAction({
+          id: user.id,
+        }),
+      );
+      navigation.navigate('mainBottomNav');
+
+      //   Toast.show({
+      //     type: 'success',
+      //     text1: 'Registration',
+      //     text2: 'Account created successfully 👋',
+      //   });
+    }
   }
   async function onRegister() {
     setLoader(true);
@@ -117,7 +119,7 @@ export const Signup = ({navigation}: any) => {
                 onChangeText={setName}
                 icon={
                   <Icon
-                    name="mail-outline"
+                    name="person-outline"
                     size={16}
                     color={COLORS.MAIN_BODYTEXT}
                   />
@@ -129,9 +131,10 @@ export const Signup = ({navigation}: any) => {
               <MyTextInputWithIcon
                 placeholder="Enter your email"
                 onChangeText={setEmail}
+                autoCapitalize="none"
                 icon={
                   <Icon
-                    name="lock-closed-outline"
+                    name="mail-outline"
                     size={16}
                     color={COLORS.MAIN_BODYTEXT}
                   />
@@ -157,6 +160,7 @@ export const Signup = ({navigation}: any) => {
               <MyTextInputWithIcon
                 placeholder="Enter your password"
                 onChangeText={setPassword}
+                autoCapitalize="none"
                 secureTextEntry
                 icon={
                   <Icon
@@ -174,6 +178,7 @@ export const Signup = ({navigation}: any) => {
               <MyTextInputWithIcon
                 placeholder="Enter confirm password"
                 secureTextEntry
+                autoCapitalize="none"
                 onChangeText={setConfirmPassword}
                 icon={
                   <Icon
@@ -189,6 +194,7 @@ export const Signup = ({navigation}: any) => {
               <MyTextInputWithIcon
                 placeholder="Select your country"
                 onChangeText={setCountry}
+                autoCapitalize="none"
                 icon={
                   <Icon
                     name="globe-outline"
@@ -216,7 +222,7 @@ export const Signup = ({navigation}: any) => {
             <View style={{width: '90%', marginBottom: 300}}>
               <MyButton
                 title="Sign up now"
-                onPress={onSignup}
+                onPress={onRegister}
                 loading={loader}
                 disabled={loader || disabled()}
               />

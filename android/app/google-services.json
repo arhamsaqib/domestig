@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "285212739787",
+    "project_id": "domestig-27fe5",
+    "storage_bucket": "domestig-27fe5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:285212739787:android:8126176c990658866fb34e",
+        "android_client_info": {
+          "package_name": "com.domestig"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "285212739787-5ikv7n8pnbmdt2gov9dqgac64nk0ii2k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.domestig",
+            "certificate_hash": "303acf6e0a65e9fd45ca5dfa10e06822741ed708"
+          }
+        },
+        {
+          "client_id": "285212739787-srv94fdgdr0lrc12q5h3t5d4pqnlicr2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAS2I2W4Fbjngm9oZLaDiT66NjZhOzcEjQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "285212739787-srv94fdgdr0lrc12q5h3t5d4pqnlicr2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "285212739787-6q35qdhs89g98fmvmnmf5815fee2qt61.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.domestig"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

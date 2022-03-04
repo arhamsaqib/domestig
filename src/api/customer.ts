@@ -19,7 +19,7 @@ export async function createCustomer(data: RegisterCustomer) {
   const res = await post(endpoint, data);
   return res;
 }
-export async function showUser(fuid: string) {
+export async function showCustomerByFUID(fuid: string) {
   const res = await get(endpoint + '/' + fuid);
   return res;
 }
