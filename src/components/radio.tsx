@@ -6,17 +6,15 @@ import {COLORS} from '../constants/colors';
 interface Props {
   circle?: boolean;
   tick?: boolean;
-  onPress?(state: boolean): void;
+  onPress?(): void;
+  active?: boolean;
 }
 
-export const CheckMark = (props: Props) => {
+export const RadioBtn = (props: Props) => {
   const [active, setActive] = useState(false);
   return (
     <TouchableOpacity
-      onPress={() => {
-        setActive(!active);
-        props.onPress && props.onPress(!active);
-      }}
+      onPress={props.onPress}
       style={[styles.main, active && styles.active]}>
       {props.tick && (
         <Icon
@@ -25,7 +23,7 @@ export const CheckMark = (props: Props) => {
           color={active ? COLORS.MAIN_1 : 'black'}
         />
       )}
-      {props.circle && active && <View style={[styles.circle]}></View>}
+      {props.circle && props.active && <View style={[styles.circle]}></View>}
     </TouchableOpacity>
   );
 };

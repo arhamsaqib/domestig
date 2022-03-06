@@ -1,19 +1,61 @@
-import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {TabRouter} from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
+import {FlatList, StyleSheet, Text, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {RootStateOrAny, useSelector} from 'react-redux';
+import {createBookingRequest} from '../../../api/bookingRequest';
+import {createBookings} from '../../../api/bookings';
 import {CommonStyles} from '../../../common/styles';
 import {BackIcon} from '../../../components/backIcon';
 import {MyButton} from '../../../components/button';
 import {CheckMark} from '../../../components/checkmark';
+import {RadioBtn} from '../../../components/radio';
 import {MyTextInput} from '../../../components/textinput';
 import {PageNameText} from '../../../components/texts/pageNameText';
 import {COLORS} from '../../../constants/colors';
 import {FONTS} from '../../../constants/fonts';
+import {ConvertDateToObject} from '../../../helpers/convertDateTobject';
 import {ScrollableView} from '../../../helpers/scrollableView';
 import {ProviderCard} from './components/providerCard';
 import {SubcategoryCard} from './components/subcategoryCard';
 
-export const ConfirmBooking = ({navigation}: any) => {
+export const ConfirmBooking = ({navigation, route}: any) => {
+  const [loader, setLoader] = useState(false);
+  const [date, setDate] = useState(new Date());
+  const [payment, setPayment] = useState('');
+  const [instructions, setInstructions] = useState('');
+  const state = useSelector((state: RootStateOrAny) => state.currentUser);
+  const renderServices = (item: any) => {
+    return <SubcategoryCard name={item.name} hideCheckmark />;
+  };
+  const renderProviders = (item: any) => {
+    return <ProviderCard name={item.name} hideCheckMark />;
+  };
+  useEffect(() => {
+    //console.log(route.params, 'params');
+  }, []);
+  const d = ConvertDateToObject(date);
+  async function onSubmit() {
+    setLoader(true);
+    const booking = {
+      customer_id: state.id,
+      schedule: 'none',
+      date: date.toString(),
+      time: date.toString(),
+      payment_type: payment,
+      instructions: instructions,
+    };
+    const res = await createBookings(booking);
+    console.log(res, 'Booking');
+    if (res.id !== undefined) {
+      const d = {
+        booking_id: res.id,
+        providers: route.params.providers,
+      };
+      const req = await createBookingRequest(d).finally(() => setLoader(false));
+      console.log(req, 'requests');
+    }
+  }
   return (
     <SafeAreaView style={CommonStyles.screenMain}>
       <ScrollableView>
@@ -30,19 +72,18 @@ export const ConfirmBooking = ({navigation}: any) => {
           <Text style={[styles.head, {marginBottom: 10}]}>
             Selected Services
           </Text>
-          <SubcategoryCard hideCheckmark />
-          <SubcategoryCard hideCheckmark />
-          <SubcategoryCard hideCheckmark />
-          <SubcategoryCard hideCheckmark />
+          {/* <FlatList renderItem={renderServices} data={route.params.services} /> */}
+          {route.params.services.map(renderServices)}
         </View>
         <View style={{width: '90%', marginTop: 10}}>
           <Text style={[styles.head, {marginBottom: 10}]}>
             Selected Providers
           </Text>
-          <ProviderCard />
-          <ProviderCard />
-          <ProviderCard />
-          <ProviderCard />
+          {/* <FlatList
+            renderItem={renderProviders}
+            data={route.params.providers}
+          /> */}
+          {route.params.providers.map(renderProviders)}
         </View>
         <View
           style={{
@@ -59,7 +100,9 @@ export const ConfirmBooking = ({navigation}: any) => {
               justifyContent: 'flex-start',
             }}>
             <Text style={[styles.field, {marginBottom: 5}]}>Date</Text>
-            <Text style={styles.value}>25th October</Text>
+            <Text style={styles.value}>
+              {d.date} {d.month}
+            </Text>
           </View>
           <View
             style={{
@@ -68,7 +111,9 @@ export const ConfirmBooking = ({navigation}: any) => {
               justifyContent: 'flex-start',
             }}>
             <Text style={[styles.field, {marginBottom: 5}]}>Time</Text>
-            <Text style={styles.value}>02:25 PM</Text>
+            <Text style={styles.value}>
+              {d.hours}:{d.minutes}
+            </Text>
           </View>
         </View>
         <View style={{width: '90%', marginVertical: 15}}>
@@ -76,15 +121,27 @@ export const ConfirmBooking = ({navigation}: any) => {
         </View>
         <View style={styles.row}>
           <Text style={styles.value}>Cash</Text>
-          <CheckMark circle />
+          <RadioBtn
+            circle
+            active={payment === 'cash' && true}
+            onPress={() => setPayment('cash')}
+          />
         </View>
         <View style={styles.row}>
           <Text style={styles.value}>Wallet</Text>
-          <CheckMark circle />
+          <RadioBtn
+            active={payment === 'wallet' && true}
+            circle
+            onPress={() => setPayment('wallet')}
+          />
         </View>
         <View style={styles.row}>
           <Text style={styles.value}>Credit Card</Text>
-          <CheckMark circle />
+          <RadioBtn
+            active={payment === 'card' && true}
+            circle
+            onPress={() => setPayment('card')}
+          />
         </View>
         <View style={{width: '90%', marginVertical: 15}}>
           <Text style={[styles.field]}>Card Details</Text>
@@ -116,14 +173,21 @@ export const ConfirmBooking = ({navigation}: any) => {
           <Text style={[styles.head]}>Instructions</Text>
         </View>
         <View style={{width: '90%', marginTop: 0}}>
-          <MyTextInput style={{borderRadius: 5, height: 100}} />
+          <MyTextInput
+            style={{borderRadius: 5, height: 100}}
+            onChangeText={setInstructions}
+          />
         </View>
         <View style={styles.btnRow}>
           <View style={{width: '45%'}}>
             <MyButton secondary title="Back" />
           </View>
           <View style={{width: '45%'}}>
-            <MyButton title="Send Request" />
+            <MyButton
+              title="Send Request"
+              loading={loader}
+              onPress={onSubmit}
+            />
           </View>
         </View>
       </ScrollableView>

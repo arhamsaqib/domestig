@@ -7,6 +7,7 @@ import {FONTS} from '../../../../constants/fonts';
 interface Props {
   name?: string;
   hideCheckmark?: boolean;
+  onPress?(): void;
 }
 
 export const SubcategoryCard = (props: Props) => {
@@ -14,7 +15,7 @@ export const SubcategoryCard = (props: Props) => {
     <TouchableOpacity style={styles.main}>
       <View style={styles.row}>
         <Text style={styles.txt}>{props.name ?? 'Cat'}</Text>
-        {!props.hideCheckmark && <CheckMark tick />}
+        {!props.hideCheckmark && <CheckMark tick onPress={props.onPress} />}
       </View>
     </TouchableOpacity>
   );

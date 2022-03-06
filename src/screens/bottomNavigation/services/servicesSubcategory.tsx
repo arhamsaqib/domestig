@@ -1,14 +1,37 @@
-import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {FlatList, StyleSheet, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {CommonStyles} from '../../../common/styles';
 import {BackIcon} from '../../../components/backIcon';
 import {MyButton} from '../../../components/button';
 import {PageNameText} from '../../../components/texts/pageNameText';
+import {arrayOfObjectsSearchWithId} from '../../../helpers/arrayOfObjectsSearch';
+import {removeItemOnce} from '../../../helpers/removeItemFromArray';
 import {ProviderCard} from './components/providerCard';
 import {SubcategoryCard} from './components/subcategoryCard';
 
-export const ServicesSubcategory = ({navigation}: any) => {
+export const ServicesSubcategory = ({navigation, route}: any) => {
+  const [selected, setSelected]: any = useState([]);
+  function onServicePress(item: any) {
+    console.log(item, 'item');
+    if (arrayOfObjectsSearchWithId(item.id, selected)) {
+      var res = removeItemOnce(item, selected);
+      setSelected(res);
+    } else {
+      setSelected([...selected, item]);
+    }
+  }
+  useEffect(() => {
+    console.log(route.params.service);
+  }, []);
+  const renderServices = ({item}: any) => {
+    return (
+      <SubcategoryCard name={item.name} onPress={() => onServicePress(item)} />
+    );
+  };
+  function onNextPress() {
+    navigation.navigate('selectProviders', {services: selected});
+  }
   return (
     <SafeAreaView style={CommonStyles.screenMain}>
       <View style={styles.topRow}>
@@ -20,24 +43,18 @@ export const ServicesSubcategory = ({navigation}: any) => {
         </View>
       </View>
       <View style={{width: '90%', marginTop: 10}}>
-        <SubcategoryCard />
-        <SubcategoryCard />
-        <SubcategoryCard />
-        <SubcategoryCard />
-        <SubcategoryCard />
-        <SubcategoryCard />
-        <SubcategoryCard />
-        <SubcategoryCard />
+        <FlatList
+          renderItem={renderServices}
+          data={route.params.service.services}
+        />
       </View>
+
       <View style={styles.btnRow}>
         <View style={{width: '45%'}}>
           <MyButton secondary title="Schedule" />
         </View>
         <View style={{width: '45%'}}>
-          <MyButton
-            title="Book now"
-            onPress={() => navigation.navigate('selectProviders')}
-          />
+          <MyButton title="Book now" onPress={onNextPress} />
         </View>
       </View>
     </SafeAreaView>

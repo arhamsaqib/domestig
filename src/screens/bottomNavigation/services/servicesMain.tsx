@@ -1,12 +1,35 @@
-import React from 'react';
-import {FlatList, SafeAreaView, StyleSheet, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  ActivityIndicator,
+  FlatList,
+  SafeAreaView,
+  StyleSheet,
+  View,
+} from 'react-native';
+import {getAllServices} from '../../../api/categories';
 import {CommonStyles} from '../../../common/styles';
 import {BackIcon} from '../../../components/backIcon';
 import {CheckMark} from '../../../components/checkmark';
 import {PageNameText} from '../../../components/texts/pageNameText';
+import {COLORS} from '../../../constants/colors';
+import {arrayOfObjectsSearchWithId} from '../../../helpers/arrayOfObjectsSearch';
+import {removeItemOnce} from '../../../helpers/removeItemFromArray';
 import {CategoryCard} from '../home/components/categoryCard';
 
 export const ServicesMain = ({navigation}: any) => {
+  const [services, setServices]: any = useState([]);
+  const [loader, setLoader] = useState(false);
+
+  async function getData() {
+    setLoader(true);
+    const res = await getAllServices().finally(() => setLoader(false));
+    if (res !== undefined) {
+      setServices(res);
+    }
+  }
+  useEffect(() => {
+    getData();
+  }, []);
   const data = [
     {name: 'Cat-1'},
     {name: 'Cat-2'},
@@ -25,12 +48,13 @@ export const ServicesMain = ({navigation}: any) => {
   const renderServices = ({item}: any) => {
     return (
       <CategoryCard
-        name={item.name}
+        name={item.categoryName}
         style={{width: '25%'}}
-        onPress={() => navigation.navigate('servicesSub')}
+        onPress={() => navigation.navigate('servicesSub', {service: item})}
       />
     );
   };
+
   return (
     <SafeAreaView style={CommonStyles.screenMain}>
       <View style={styles.topRow}>
@@ -41,8 +65,9 @@ export const ServicesMain = ({navigation}: any) => {
           <PageNameText>Services Category</PageNameText>
         </View>
       </View>
+      {loader && <ActivityIndicator color={COLORS.MAIN_1} size="small" />}
       <View style={{width: '90%', marginVertical: 10}}>
-        <FlatList numColumns={4} renderItem={renderServices} data={data} />
+        <FlatList numColumns={4} renderItem={renderServices} data={services} />
       </View>
     </SafeAreaView>
   );

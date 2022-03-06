@@ -8,6 +8,8 @@ import {ICONS} from '../../../../constants/icons';
 
 interface Props {
   name?: string;
+  onPress?(): void;
+  hideCheckMark?: boolean;
 }
 
 export const ProviderCard = (props: Props) => {
@@ -34,7 +36,7 @@ export const ProviderCard = (props: Props) => {
             <Text style={[styles.txt, {fontSize: 15}]}>24/h</Text>
             <Text style={styles.rating}>5km away</Text>
           </View>
-          <CheckMark tick />
+          {!props.hideCheckMark && <CheckMark tick onPress={props.onPress} />}
         </View>
       </View>
     </TouchableOpacity>
