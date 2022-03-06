@@ -52,7 +52,9 @@ export const ConfirmBooking = ({navigation, route}: any) => {
       status: 'pending',
       verification_code: code.toString(),
       services: services,
+      category_name: route.params.categoryName,
     };
+
     const res = await createBookings(booking);
     //console.log(res, 'Booking');
     if (res.id !== undefined) {

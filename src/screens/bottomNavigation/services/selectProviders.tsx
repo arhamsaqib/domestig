@@ -37,6 +37,7 @@ export const SelectProviders = ({navigation, route}: any) => {
     navigation.navigate('confirmBooking', {
       services: route.params.services,
       providers: selected,
+      categoryName: route.params.categoryName,
     });
   }
   const renderProviders = ({item}: any) => {

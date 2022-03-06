@@ -30,7 +30,10 @@ export const ServicesSubcategory = ({navigation, route}: any) => {
     );
   };
   function onNextPress() {
-    navigation.navigate('selectProviders', {services: selected});
+    navigation.navigate('selectProviders', {
+      services: selected,
+      categoryName: route.params.categoryName,
+    });
   }
   return (
     <SafeAreaView style={CommonStyles.screenMain}>

@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Image, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {showProviderWithId} from '../../../api/provider';
 import {CommonStyles} from '../../../common/styles';
 import {Avatar} from '../../../components/avatar';
 import {BackIcon} from '../../../components/backIcon';
@@ -13,8 +14,24 @@ import {ICONS} from '../../../constants/icons';
 import {ScrollableView} from '../../../helpers/scrollableView';
 import {ProviderDetails} from './provider/providerDetails';
 
-export const HistoryDetails = ({navigation}: any) => {
+export const HistoryDetails = ({navigation, route}: any) => {
   const [card, setCard] = useState(false);
+  const details = route.params.details;
+  const [laoder, setLoader] = useState(false);
+  const [provider, setProvider]: any = useState([]);
+  async function getData() {
+    setLoader(true);
+    const res = await showProviderWithId(details.provider_id).finally(() =>
+      setLoader(false),
+    );
+    if (res !== undefined) {
+      setProvider(res);
+    }
+    console.log(res, 'provider');
+  }
+  useEffect(() => {
+    getData();
+  }, []);
   return (
     <SafeAreaView style={CommonStyles.screenMain}>
       <ProviderDetails
@@ -34,7 +51,8 @@ export const HistoryDetails = ({navigation}: any) => {
         <View style={styles.categoryNameContainer}>
           <GreenCircle broom s41 />
           <Text style={[styles.name, {marginLeft: 5}]}>
-            Service Category Name
+            {/* {Service Category Name} */}
+            {details.category_name + ' (' + details.services + ')'}
           </Text>
         </View>
         <View
@@ -52,7 +70,7 @@ export const HistoryDetails = ({navigation}: any) => {
               justifyContent: 'flex-start',
             }}>
             <Text style={[styles.field, {marginBottom: 5}]}>Booking ID</Text>
-            <Text style={styles.value}>#12345</Text>
+            <Text style={styles.value}>#{details.id}</Text>
           </View>
           <View
             style={{
@@ -61,7 +79,7 @@ export const HistoryDetails = ({navigation}: any) => {
               justifyContent: 'flex-start',
             }}>
             <Text style={[styles.field, {marginBottom: 5}]}>Status</Text>
-            <Text style={styles.value}>Complete</Text>
+            <Text style={styles.value}>{details.status}</Text>
           </View>
         </View>
         <View style={{width: '90%', marginVertical: 10}}>
@@ -79,7 +97,7 @@ export const HistoryDetails = ({navigation}: any) => {
               onPress={() => setCard(true)}
               pressable
             />
-            <Text style={[styles.name, {marginLeft: 5}]}>Arham Saqib</Text>
+            <Text style={[styles.name, {marginLeft: 5}]}>{provider.name}</Text>
           </View>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Text style={styles.valueBold}>24</Text>

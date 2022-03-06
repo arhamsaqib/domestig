@@ -50,7 +50,12 @@ export const ServicesMain = ({navigation}: any) => {
       <CategoryCard
         name={item.categoryName}
         style={{width: '25%'}}
-        onPress={() => navigation.navigate('servicesSub', {service: item})}
+        onPress={() =>
+          navigation.navigate('servicesSub', {
+            service: item,
+            categoryName: item.categoryName,
+          })
+        }
       />
     );
   };

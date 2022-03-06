@@ -31,7 +31,13 @@ export const HistoryMain = ({navigation}: any) => {
     console.log(res, 'history response');
   }
   const renderHistory = ({item}: any) => {
-    return <HistoryCard status={item.status} />;
+    return (
+      <HistoryCard
+        status={item.status}
+        title={item.category_name + '(' + item.services + ')'}
+        onPress={() => navigation.navigate('historyDetails', {details: item})}
+      />
+    );
   };
   useEffect(() => {
     getData();
