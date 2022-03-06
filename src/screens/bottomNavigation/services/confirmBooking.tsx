@@ -15,6 +15,8 @@ import {PageNameText} from '../../../components/texts/pageNameText';
 import {COLORS} from '../../../constants/colors';
 import {FONTS} from '../../../constants/fonts';
 import {ConvertDateToObject} from '../../../helpers/convertDateTobject';
+import {extractKeys, joinArrayKeys} from '../../../helpers/extractKeys';
+import {getRndInteger} from '../../../helpers/generateRandomNumber';
 import {ScrollableView} from '../../../helpers/scrollableView';
 import {ProviderCard} from './components/providerCard';
 import {SubcategoryCard} from './components/subcategoryCard';
@@ -36,7 +38,10 @@ export const ConfirmBooking = ({navigation, route}: any) => {
   }, []);
   const d = ConvertDateToObject(date);
   async function onSubmit() {
+    const separate = extractKeys(route.params.services);
+    const services = joinArrayKeys(separate);
     setLoader(true);
+    const code = getRndInteger();
     const booking = {
       customer_id: state.id,
       schedule: 'none',
@@ -44,16 +49,19 @@ export const ConfirmBooking = ({navigation, route}: any) => {
       time: date.toString(),
       payment_type: payment,
       instructions: instructions,
+      status: 'pending',
+      verification_code: code.toString(),
+      services: services,
     };
     const res = await createBookings(booking);
-    console.log(res, 'Booking');
+    //console.log(res, 'Booking');
     if (res.id !== undefined) {
       const d = {
         booking_id: res.id,
         providers: route.params.providers,
       };
       const req = await createBookingRequest(d).finally(() => setLoader(false));
-      console.log(req, 'requests');
+      //console.log(req, 'requests');
     }
   }
   return (

@@ -20,10 +20,10 @@ export async function createBookings(data: RegisterBooking) {
   const res = await post(endpoint, data);
   return res;
 }
-// export async function showCustomerByFUID(fuid: string) {
-//   const res = await get(endpoint + '/' + fuid);
-//   return res;
-// }
+export async function showAllCustomerBookings(id: string) {
+  const res = await get(endpoint + '/' + id);
+  return res;
+}
 // export async function deleteCustomer(id: string) {
 //   const res = await del(endpoint + '/' + id);
 //   return res;
