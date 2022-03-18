@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {getAllServices} from '../../../api/categories';
 import {CommonStyles} from '../../../common/styles';
 import {Banner} from '../../../components/banner';
 import {GreenCircle} from '../../../components/greenCircle';
@@ -11,6 +12,18 @@ import {CategoryCard} from './components/categoryCard';
 import {RecommendedCard} from './components/recommendedCard';
 
 export const MainMenu = ({navigation}: any) => {
+  const [loader, setLoader] = useState(false);
+  const [services, setServices]: any = useState([]);
+  async function getData() {
+    setLoader(true);
+    const res = await getAllServices().finally(() => setLoader(false));
+    if (res !== undefined) {
+      setServices(res);
+    }
+  }
+  useEffect(() => {
+    getData();
+  }, []);
   const data = [
     {name: 'Cat-1'},
     {name: 'Cat-2'},
@@ -22,7 +35,7 @@ export const MainMenu = ({navigation}: any) => {
     {name: 'Cat-8'},
   ];
   const renderServices = ({item}: any) => {
-    return <CategoryCard name={item.name} style={{width: '25%'}} />;
+    return <CategoryCard name={item.categoryName} style={{width: '25%'}} />;
   };
   const RenderFooter = () => {
     return (
@@ -65,7 +78,7 @@ export const MainMenu = ({navigation}: any) => {
           ListHeaderComponent={RenderHeader}
           numColumns={4}
           renderItem={renderServices}
-          data={data}
+          data={services}
           ListFooterComponent={RenderFooter}
         />
       </View>

@@ -64,6 +64,7 @@ export const ConfirmBooking = ({navigation, route}: any) => {
       };
       const req = await createBookingRequest(d).finally(() => setLoader(false));
       //console.log(req, 'requests');
+      navigation.navigate('servicesMain');
     }
   }
   return (

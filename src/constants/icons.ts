@@ -21,8 +21,11 @@ const cash = require('../assets/images/icons/cash.png');
 const wallet = require('../assets/images/icons/wallet.png');
 const wallet_cash = require('../assets/images/icons/wallet_cash.png');
 const cash_coins = require('../assets/images/icons/cash_coins.png');
-
+const markRead = require('../assets/images/icons/markRead.png');
+const bin = require('../assets/images/icons/bin.png');
 const ICONS = {
+  markRead,
+  bin,
   upload,
   verified,
   logo_white,

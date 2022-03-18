@@ -19,6 +19,9 @@ import auth from '@react-native-firebase/auth';
 import {createCustomer} from '../../api/customer';
 import updateCurrentUserAction from '../../redux/action/currectUserAction';
 import {useStore} from 'react-redux';
+import {CountriesOptions} from '../../components/countriesOption';
+import {MultipleOptions} from '../../components/multipleOptions';
+import {findPlaceByText, placeAutocomplete} from '../../api/places';
 
 export const Signup = ({navigation}: any) => {
   const [name, setName]: any = useState('');
@@ -30,6 +33,10 @@ export const Signup = ({navigation}: any) => {
   const [error, setError]: any = useState('');
   const [loader, setLoader] = useState(false);
   const [confirmPassword, setConfirmPassword]: any = useState('');
+  const [place, setPlace]: any = useState('');
+  const [placeIinfo, setPlaceInfo]: any = useState([]);
+  const [showPlaces, setShowPlaces] = useState(false);
+  const [showCountries, setShowCountries] = useState(false);
   const store = useStore();
 
   function disabled() {
@@ -47,8 +54,8 @@ export const Signup = ({navigation}: any) => {
       fuid: uid,
       status: 'active',
       location: location,
-      latitude: '',
-      longitude: '',
+      latitude: placeIinfo.geometry.location.lat,
+      longitude: placeIinfo.geometry.location.lng,
       phone: phone,
       country: country,
     };
@@ -97,6 +104,23 @@ export const Signup = ({navigation}: any) => {
       setLoader(false);
       setError('Passwords do not match');
     }
+  }
+  async function findLocation(str: string) {
+    const res = await placeAutocomplete(str);
+    setPlace(res);
+  }
+
+  async function findPlace(place: string) {
+    const res = await findPlaceByText(place);
+    console.log(res, 'Place by text');
+    setPlaceInfo(res.candidates[0]);
+  }
+
+  function onSelect(item: any) {
+    //console.log(item, 'Selected Item');
+    setLocation(item.description);
+    setShowPlaces(false);
+    findPlace(item.description);
   }
   return (
     <>
@@ -194,6 +218,49 @@ export const Signup = ({navigation}: any) => {
               <MyTextInputWithIcon
                 placeholder="Select your country"
                 onChangeText={setCountry}
+                defaultValue={country}
+                onFocus={() => setShowCountries(true)}
+                autoCapitalize="none"
+                icon={
+                  <Icon
+                    name="globe-outline"
+                    size={16}
+                    color={COLORS.MAIN_BODYTEXT}
+                  />
+                }
+              />
+              {showCountries && (
+                <CountriesOptions
+                  onSelect={(item: any) => {
+                    setCountry(item.name);
+                    setShowCountries(false);
+                  }}
+                  find={country}
+                />
+              )}
+            </View>
+            <View style={{width: '90%', marginBottom: 20}}>
+              <FieldNameText style={{marginBottom: 5}}>Location</FieldNameText>
+              <MyTextInputWithIcon
+                onFocus={() => setShowPlaces(true)}
+                placeholder="Enter your location"
+                defaultValue={location}
+                onChangeText={findLocation}
+                icon={
+                  <Icon
+                    name="location-outline"
+                    size={16}
+                    color={COLORS.MAIN_BODYTEXT}
+                  />
+                }
+              />
+              {showPlaces && (
+                <MultipleOptions data={place.predictions} onSelect={onSelect} />
+              )}
+              {/* <FieldNameText style={{marginBottom: 5}}>Country</FieldNameText>
+              <MyTextInputWithIcon
+                placeholder="Select your country"
+                onChangeText={setCountry}
                 autoCapitalize="none"
                 icon={
                   <Icon
@@ -217,8 +284,8 @@ export const Signup = ({navigation}: any) => {
                   />
                 }
               />
+            </View> */}
             </View>
-
             <View style={{width: '90%', marginBottom: 300}}>
               <MyButton
                 title="Sign up now"
