@@ -19,6 +19,11 @@ export async function getCustomerNotifications(id: string) {
   const res = await get(endpoint + '/' + id);
   return res;
 }
+export async function getCustomerNotificationsCount(id: string) {
+  const endpoint = 'customer-notification-count';
+  const res = await get(endpoint + '/' + id);
+  return res;
+}
 export async function deleteCustomerNotifications(id: string) {
   const res = await del(endpoint + '/' + id);
   return res;

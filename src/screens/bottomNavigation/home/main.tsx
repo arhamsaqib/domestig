@@ -12,12 +12,14 @@ import {CategoryCard} from './components/categoryCard';
 import {RecommendedCard} from './components/recommendedCard';
 import {getCustomerById} from '../../../api/customer';
 import {RootStateOrAny, useSelector} from 'react-redux';
+import {getCustomerNotificationsCount} from '../../../api/customerNotifications';
 
 export const MainMenu = ({navigation}: any) => {
   const [loader, setLoader] = useState(false);
   const state = useSelector((state: RootStateOrAny) => state.currentUser);
   const [services, setServices]: any = useState([]);
   const [customer, setCustomer]: any = useState([]);
+  const [notifCount, setNotifCount]: any = useState([]);
   async function getData() {
     setLoader(true);
     const res = await getAllServices().finally(() => setLoader(false));
@@ -28,6 +30,8 @@ export const MainMenu = ({navigation}: any) => {
     if (user !== undefined) {
       setCustomer(user);
     }
+    const count = await getCustomerNotificationsCount(state.id);
+    setNotifCount(count);
   }
   useEffect(() => {
     getData();
@@ -73,6 +77,7 @@ export const MainMenu = ({navigation}: any) => {
         <HeadCard
           name={customer.name}
           onNotificationPress={() => navigation.navigate('notifications')}
+          notificationCount={notifCount}
         />
         <View style={{width: '90%', alignSelf: 'center'}}>
           <Text style={[styles.subtext, {marginBottom: 5}]}>Category</Text>

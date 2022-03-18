@@ -242,9 +242,11 @@ export const HistoryDetails = ({navigation, route}: any) => {
           <Text style={[styles.name, {fontSize: 13}]}>Amount</Text>
           <Text style={[styles.name, {fontSize: 13}]}> ${invoice.amount}</Text>
         </View>
-        <View style={{width: '90%', marginVertical: 20}}>
-          <MyButton title="Cancel Booking" />
-        </View>
+        {details.status !== 'completed' && (
+          <View style={{width: '90%', marginVertical: 20}}>
+            <MyButton title="Cancel Booking" />
+          </View>
+        )}
       </ScrollableView>
     </SafeAreaView>
   );

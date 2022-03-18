@@ -7,10 +7,12 @@ import {FONTS} from '../constants/fonts';
 import {ICONS} from '../constants/icons';
 import {generateGreetings} from '../helpers/greetings';
 import {Avatar} from './avatar';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 interface Props {
   onNotificationPress?(): void;
   name?: string;
+  notificationCount?: string;
 }
 
 export const HeadCard = (props: Props) => {
@@ -31,8 +33,20 @@ export const HeadCard = (props: Props) => {
           </View>
         </View>
         <View style={styles.notificationContainer}>
-          <TouchableOpacity onPress={props.onNotificationPress}>
-            <Image source={ICONS.notification} style={styles.notification} />
+          {/* <Image source={ICONS.notification} style={styles.notification} /> */}
+          {/* <MainBodyText>{props.notificationCount}</MainBodyText> */}
+          <View style={styles.notifCont}>
+            <Text style={styles.notifText}>{props.notificationCount}</Text>
+          </View>
+          <TouchableOpacity
+            style={[{transform: [{rotate: '335deg'}]}]}
+            onPress={props.onNotificationPress}>
+            <Icon
+              name="notifications-outline"
+              size={27}
+              color="black"
+              style={{borderRadius: 27}}
+            />
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -93,5 +107,21 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.P_SEMIBOLD,
     fontSize: 25,
     color: COLORS.WF_TITLE,
+  },
+  notifCont: {
+    padding: 3,
+    backgroundColor: COLORS.MAIN_1,
+    borderRadius: 50,
+    height: 18,
+    minWidth: 18,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: -12,
+    marginRight: -5,
+  },
+  notifText: {
+    color: 'white',
+    fontSize: 10,
+    fontFamily: FONTS.P_MEDIUM,
   },
 });

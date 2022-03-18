@@ -8,4 +8,5 @@ export const COLORS = {
   light_green: '#eaf1e6',
   WF_TITLE: 'black',
   WF2: '#f8f8f8',
+  danger: '#CA4141',
 };
