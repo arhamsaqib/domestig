@@ -6,19 +6,15 @@ import {FONTS} from '../constants/fonts';
 interface Props {
   onPress?(): void;
   name?: string;
-  activeByDefault?: boolean;
+  active?: boolean;
 }
 
 export const ToggleButton = (props: Props) => {
-  const [state, setState] = useState(false);
-  useEffect(() => {
-    props.activeByDefault && setState(true);
-  }, []);
   return (
     <TouchableOpacity
-      onPress={() => setState(!state)}
-      style={[styles.main, !state && styles.inactive]}>
-      <Text style={[styles.txt, !state && {color: COLORS.MAIN_SUBTEXT}]}>
+      onPress={props.onPress}
+      style={[styles.main, !props.active && styles.inactive]}>
+      <Text style={[styles.txt, !props.active && {color: COLORS.MAIN_SUBTEXT}]}>
         {props.name ?? 'Btn'}
       </Text>
     </TouchableOpacity>
