@@ -136,7 +136,15 @@ export const HistoryDetails = ({navigation, route}: any) => {
             <Text style={[styles.field, {marginBottom: 5}]}>
               Before work image
             </Text>
-            <Image source={ICONS.noimage} style={styles.img} />
+            <Image
+              source={
+                (submission.before_work_image && {
+                  uri: MEDIA_URL + submission.before_work_image,
+                }) ??
+                ICONS.noimage
+              }
+              style={styles.img}
+            />
           </View>
           <View
             style={{
@@ -147,7 +155,15 @@ export const HistoryDetails = ({navigation, route}: any) => {
             <Text style={[styles.field, {marginBottom: 5}]}>
               After work image
             </Text>
-            <Image source={ICONS.noimage} style={styles.img} />
+            <Image
+              source={
+                (submission.after_work_image && {
+                  uri: MEDIA_URL + submission.after_work_image,
+                }) ??
+                ICONS.noimage
+              }
+              style={styles.img}
+            />
           </View>
         </View>
         <View style={{width: '90%', marginVertical: 20}}>

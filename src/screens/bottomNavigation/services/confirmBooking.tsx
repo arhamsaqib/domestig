@@ -185,6 +185,7 @@ export const ConfirmBooking = ({navigation, route}: any) => {
         </View>
         <View style={{width: '90%', marginTop: 0}}>
           <MyTextInput
+            multiline
             style={{borderRadius: 5, height: 100}}
             onChangeText={setInstructions}
           />
