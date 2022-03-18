@@ -10,23 +10,31 @@ import {Avatar} from '../../../../components/avatar';
 import {FONTS} from '../../../../constants/fonts';
 import {COLORS} from '../../../../constants/colors';
 import {ICONS} from '../../../../constants/icons';
+import {MEDIA_URL} from '../../../../constants/url';
 
 const TobTabs = createMaterialTopTabNavigator();
 
 interface Props {
   modalVisibility: boolean;
   onOutsidePress?(): void;
+  data?: any;
 }
 
 export const ProviderDetails = (props: Props) => {
+  const {data} = props;
   return (
     <BottomCard
       style={{height: '80%'}}
       onOutsidePress={props.onOutsidePress}
       modalVisibility={props.modalVisibility}>
       <View style={{width: '90%', alignItems: 'center', alignSelf: 'center'}}>
-        <Avatar customSize size={80} verified />
-        <Text style={[styles.name, {marginVertical: 3}]}>Arham Saqib</Text>
+        <Avatar
+          customSize
+          size={80}
+          source={data.avatar && {uri: MEDIA_URL + data.avatar}}
+          verified
+        />
+        <Text style={[styles.name, {marginVertical: 3}]}>{data.name}</Text>
         <View
           style={{
             flexDirection: 'row',
@@ -50,6 +58,7 @@ export const ProviderDetails = (props: Props) => {
           name="providerDetails"
           component={ProviderProfileDetails}
           options={{title: 'Profile Details'}}
+          initialParams={{provider: data}}
         />
         <TobTabs.Screen
           name="providerReviews"

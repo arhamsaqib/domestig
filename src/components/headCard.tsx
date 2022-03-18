@@ -5,6 +5,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {COLORS} from '../constants/colors';
 import {FONTS} from '../constants/fonts';
 import {ICONS} from '../constants/icons';
+import {generateGreetings} from '../helpers/greetings';
 import {Avatar} from './avatar';
 
 interface Props {
@@ -25,7 +26,7 @@ export const HeadCard = (props: Props) => {
               justifyContent: 'flex-start',
               marginLeft: 5,
             }}>
-            <Text style={[styles.gm]}>Good Morning</Text>
+            <Text style={[styles.gm]}>{generateGreetings()}</Text>
             <Text style={[styles.name]}>{props.name ?? 'Arham S.'}</Text>
           </View>
         </View>

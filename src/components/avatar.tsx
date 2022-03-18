@@ -24,13 +24,23 @@ export const Avatar = (props: Props) => {
         styles.ratio,
         customSize && {height: size, width: size, borderRadius: size},
       ]}>
-      <Image
-        style={[
-          styles.ratio,
-          customSize && {height: size, width: size, borderRadius: size},
-        ]}
-        source={source ?? ICONS.user}
-      />
+      {props.source !== undefined ? (
+        <Image
+          style={[
+            styles.ratio,
+            customSize && {height: size, width: size, borderRadius: size},
+          ]}
+          source={source ?? ICONS.user}
+        />
+      ) : (
+        <Image
+          style={[
+            styles.ratio,
+            customSize && {height: size, width: size, borderRadius: size},
+          ]}
+          source={ICONS.user}
+        />
+      )}
       {(verified || upload) && (
         <View style={[styles.sideIconContainer]}>
           {upload && (

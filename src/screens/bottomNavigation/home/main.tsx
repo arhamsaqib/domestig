@@ -10,15 +10,23 @@ import {FONTS} from '../../../constants/fonts';
 import {ScrollableView} from '../../../helpers/scrollableView';
 import {CategoryCard} from './components/categoryCard';
 import {RecommendedCard} from './components/recommendedCard';
+import {getCustomerById} from '../../../api/customer';
+import {RootStateOrAny, useSelector} from 'react-redux';
 
 export const MainMenu = ({navigation}: any) => {
   const [loader, setLoader] = useState(false);
+  const state = useSelector((state: RootStateOrAny) => state.currentUser);
   const [services, setServices]: any = useState([]);
+  const [customer, setCustomer]: any = useState([]);
   async function getData() {
     setLoader(true);
     const res = await getAllServices().finally(() => setLoader(false));
     if (res !== undefined) {
       setServices(res);
+    }
+    const user = await getCustomerById(state.id);
+    if (user !== undefined) {
+      setCustomer(user);
     }
   }
   useEffect(() => {
@@ -58,10 +66,12 @@ export const MainMenu = ({navigation}: any) => {
       </>
     );
   };
+
   const RenderHeader = () => {
     return (
       <>
         <HeadCard
+          name={customer.name}
           onNotificationPress={() => navigation.navigate('notifications')}
         />
         <View style={{width: '90%', alignSelf: 'center'}}>

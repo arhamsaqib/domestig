@@ -1,5 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Image, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {showBookingSubmission} from '../../../api/bookingSubmission';
+import {viewInvoiceByBookingId} from '../../../api/invoice';
 import {showProviderWithId} from '../../../api/provider';
 import {CommonStyles} from '../../../common/styles';
 import {Avatar} from '../../../components/avatar';
@@ -11,6 +13,7 @@ import {PageNameText} from '../../../components/texts/pageNameText';
 import {COLORS} from '../../../constants/colors';
 import {FONTS} from '../../../constants/fonts';
 import {ICONS} from '../../../constants/icons';
+import {MEDIA_URL} from '../../../constants/url';
 import {ScrollableView} from '../../../helpers/scrollableView';
 import {ProviderDetails} from './provider/providerDetails';
 
@@ -19,15 +22,25 @@ export const HistoryDetails = ({navigation, route}: any) => {
   const details = route.params.details;
   const [laoder, setLoader] = useState(false);
   const [provider, setProvider]: any = useState([]);
+  const [submission, setSubmission]: any = useState([]);
+  const [invoice, setInvoice]: any = useState([]);
   async function getData() {
     setLoader(true);
     const res = await showProviderWithId(details.provider_id).finally(() =>
       setLoader(false),
     );
+    const bs = await showBookingSubmission(details.id);
     if (res !== undefined) {
       setProvider(res);
     }
-    console.log(res, 'provider');
+    if (bs !== undefined) {
+      setSubmission(bs);
+    }
+    const inv = await viewInvoiceByBookingId(details.id);
+    if (inv !== undefined) {
+      setInvoice(inv);
+    }
+    //console.log(res, 'provider');
   }
   useEffect(() => {
     getData();
@@ -35,6 +48,7 @@ export const HistoryDetails = ({navigation, route}: any) => {
   return (
     <SafeAreaView style={CommonStyles.screenMain}>
       <ProviderDetails
+        data={provider}
         modalVisibility={card}
         onOutsidePress={() => setCard(false)}
       />
@@ -95,6 +109,7 @@ export const HistoryDetails = ({navigation, route}: any) => {
               customSize
               size={41}
               onPress={() => setCard(true)}
+              source={provider.avatar && {uri: MEDIA_URL + provider.avatar}}
               pressable
             />
             <Text style={[styles.name, {marginLeft: 5}]}>{provider.name}</Text>
@@ -173,7 +188,7 @@ export const HistoryDetails = ({navigation, route}: any) => {
           <Text style={[styles.field, {marginBottom: 5}]}>
             Total Serving Time
           </Text>
-          <Text style={[styles.value]}>2 hours 20 minutes</Text>
+          <Text style={[styles.value]}>{submission.time_taken}</Text>
         </View>
         <View
           style={{
@@ -184,7 +199,9 @@ export const HistoryDetails = ({navigation, route}: any) => {
             marginBottom: 10,
           }}>
           <Text style={[styles.name, {fontSize: 13}]}>Total Amount</Text>
-          <Text style={[styles.name, {fontSize: 13}]}>$52</Text>
+          <Text style={[styles.name, {fontSize: 13}]}>
+            ${invoice.total_amount}
+          </Text>
         </View>
         <View
           style={{
@@ -194,7 +211,9 @@ export const HistoryDetails = ({navigation, route}: any) => {
             justifyContent: 'space-between',
           }}>
           <Text style={[styles.name, {fontSize: 13}]}>Extra work charge</Text>
-          <Text style={[styles.name, {fontSize: 13}]}>$10</Text>
+          <Text style={[styles.name, {fontSize: 13}]}>
+            ${invoice.extra_amount_charges ?? 0}
+          </Text>
         </View>
         <View
           style={{
@@ -205,7 +224,7 @@ export const HistoryDetails = ({navigation, route}: any) => {
             marginBottom: 10,
           }}>
           <Text style={[styles.name, {fontSize: 13}]}>Amount</Text>
-          <Text style={[styles.name, {fontSize: 13}]}>$60</Text>
+          <Text style={[styles.name, {fontSize: 13}]}> ${invoice.amount}</Text>
         </View>
         <View style={{width: '90%', marginVertical: 20}}>
           <MyButton title="Cancel Booking" />

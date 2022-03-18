@@ -7,6 +7,7 @@ export async function showAllProviders() {
   return res;
 }
 export async function showProviderWithId(id: string) {
+  var endpoint = 'get-provider-by-id';
   const res = await get(endpoint + '/' + id);
   return res;
 }
