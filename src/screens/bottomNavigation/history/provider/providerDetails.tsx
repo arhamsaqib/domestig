@@ -64,6 +64,7 @@ export const ProviderDetails = (props: Props) => {
           name="providerReviews"
           component={ProviderReviews}
           options={{title: 'Reviews'}}
+          initialParams={{provider: data}}
         />
       </TobTabs.Navigator>
     </BottomCard>

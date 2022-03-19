@@ -30,7 +30,7 @@ export const HistoryMain = ({navigation}: any) => {
     if (res !== undefined) {
       setHistory(res);
     }
-    console.log(res, 'history response');
+    // console.log(res, 'history response');
   }
   const renderHistory = ({item}: any) => {
     return (
