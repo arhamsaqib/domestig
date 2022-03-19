@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Image, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import {showBookingSubmission} from '../../../api/bookingSubmission';
+import {getCustomerById} from '../../../api/customer';
 import {viewInvoiceByBookingId} from '../../../api/invoice';
 import {showProviderWithId} from '../../../api/provider';
 import {CommonStyles} from '../../../common/styles';
@@ -21,14 +22,16 @@ export const HistoryDetails = ({navigation, route}: any) => {
   const [card, setCard] = useState(false);
   const details = route.params.details;
   const [laoder, setLoader] = useState(false);
-  const [provider, setProvider]: any = useState([]);
   const [submission, setSubmission]: any = useState([]);
+  const [provider, setProvider]: any = useState([]);
+  const [customer, setCustomer]: any = useState([]);
   const [invoice, setInvoice]: any = useState([]);
   async function getData() {
     setLoader(true);
     const res = await showProviderWithId(details.provider_id).finally(() =>
       setLoader(false),
     );
+
     const bs = await showBookingSubmission(details.id);
     if (res !== undefined) {
       setProvider(res);
@@ -95,6 +98,12 @@ export const HistoryDetails = ({navigation, route}: any) => {
             <Text style={[styles.field, {marginBottom: 5}]}>Status</Text>
             <Text style={styles.value}>{details.status}</Text>
           </View>
+        </View>
+        <View style={{width: '90%', marginVertical: 10}}>
+          <Text style={[styles.field, {marginBottom: 5}]}>
+            Verification Code
+          </Text>
+          <Text style={[styles.value]}>{details.verification_code}</Text>
         </View>
         <View style={{width: '90%', marginVertical: 10}}>
           <Text style={[styles.field, {marginBottom: 5}]}>Location</Text>

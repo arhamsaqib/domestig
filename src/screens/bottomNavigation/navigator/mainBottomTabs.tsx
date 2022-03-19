@@ -80,16 +80,16 @@ const MainBottomNav = () => {
       />
       <BottomNav.Screen
         name="menu"
-        //component={MenuStack}
-        component={() => {
-          return null;
-        }}
+        component={MenuStack}
+        // component={() => {
+        //   return null;
+        // }}
         options={{
           title: 'Menu',
           tabBarIcon: ({color, focused}) => (
             <Icon name="menu-outline" color={color} size={25} />
           ),
-          tabBarButton: props => <DrawerOpener />,
+          //tabBarButton: props => <DrawerOpener />,
         }}
       />
     </BottomNav.Navigator>

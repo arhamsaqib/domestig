@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
 import {CommonStyles} from '../../../../common/styles';
 import {PageNameText} from '../../../../components/texts/pageNameText';
@@ -12,10 +12,45 @@ import {ICONS} from '../../../../constants/icons';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {BackIcon} from '../../../../components/backIcon';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {RootStateOrAny, useSelector} from 'react-redux';
+import {getCustomerById, updateCustomer} from '../../../../api/customer';
+import {MEDIA_URL} from '../../../../constants/url';
+import ImageCropPicker from 'react-native-image-crop-picker';
+import {uploadImage} from '../../../../api/uploadImage';
 
 const TobTabs = createMaterialTopTabNavigator();
 
 export const AccountTopBar = ({navigation}: any) => {
+  const state = useSelector((state: RootStateOrAny) => state.currentUser);
+  const [loader, setLoader] = useState(false);
+  const [fileUri, setFileUri]: any = useState(null);
+  const [customer, setCustomer]: any = useState([]);
+  async function onImagePick() {
+    let result: any = await ImageCropPicker.openPicker({});
+    // console.log(result, 'Image picked');
+    if (!result.cancelled) {
+      setFileUri(result.sourceURL.toString());
+    }
+    setLoader(true);
+    const res: any = await uploadImage(result);
+    console.log(res, 'upload res 1');
+    if (res.id !== undefined) {
+      const up = await updateCustomer(state.id, {avatar: res.uri}).finally(() =>
+        setLoader(false),
+      );
+    }
+  }
+  async function getData() {
+    setLoader(true);
+    const res = await getCustomerById(state.id).finally(() => setLoader(false));
+    if (res !== undefined) {
+      if (res.avatar.length > 1) setFileUri(MEDIA_URL + res.avatar);
+    }
+    setCustomer(res);
+  }
+  useEffect(() => {
+    getData();
+  }, []);
   return (
     <>
       <View style={styles.card}>
@@ -33,8 +68,17 @@ export const AccountTopBar = ({navigation}: any) => {
             </View>
           </View>
           <View style={{marginVertical: 20}} />
-          <Avatar customSize size={110} upload pressable />
-          <Text style={[styles.name, {marginVertical: 3}]}>Arham Saqib</Text>
+          <Avatar
+            customSize
+            size={110}
+            upload
+            pressable
+            onPress={onImagePick}
+            source={fileUri && {uri: fileUri}}
+          />
+          <Text style={[styles.name, {marginVertical: 3}]}>
+            {customer.name}
+          </Text>
           <View
             style={{
               flexDirection: 'row',

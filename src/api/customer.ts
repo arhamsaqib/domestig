@@ -1,4 +1,4 @@
-import {del, get, post} from './requestStructure';
+import {del, get, post, put} from './requestStructure';
 
 export interface RegisterCustomer {
   fuid: string;
@@ -13,7 +13,22 @@ export interface RegisterCustomer {
   country?: string;
 }
 
+export interface UpdateProvider {
+  phone?: string;
+  location?: string;
+  avatar?: string;
+  longitude?: string;
+  latitude?: string;
+  country?: string;
+  working_status?: string;
+}
+
 const endpoint = 'customer';
+
+export async function updateCustomer(customerId: string, data: UpdateProvider) {
+  const res = await put(endpoint + '/' + customerId, data);
+  return res;
+}
 
 export async function createCustomer(data: RegisterCustomer) {
   const res = await post(endpoint, data);
