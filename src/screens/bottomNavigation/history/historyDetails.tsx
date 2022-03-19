@@ -1,9 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {Image, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {getBookingReviews} from '../../../api/bookingReview';
 import {showBookingSubmission} from '../../../api/bookingSubmission';
 import {getCustomerById} from '../../../api/customer';
 import {viewInvoiceByBookingId} from '../../../api/invoice';
 import {showProviderWithId} from '../../../api/provider';
+import {saveProviderReview} from '../../../api/providerReview';
 import {CommonStyles} from '../../../common/styles';
 import {Avatar} from '../../../components/avatar';
 import {BackIcon} from '../../../components/backIcon';
@@ -16,6 +18,7 @@ import {FONTS} from '../../../constants/fonts';
 import {ICONS} from '../../../constants/icons';
 import {MEDIA_URL} from '../../../constants/url';
 import {ScrollableView} from '../../../helpers/scrollableView';
+import {GiveReview} from './components/giveReview';
 import {ProviderDetails} from './provider/providerDetails';
 
 export const HistoryDetails = ({navigation, route}: any) => {
@@ -26,6 +29,8 @@ export const HistoryDetails = ({navigation, route}: any) => {
   const [provider, setProvider]: any = useState([]);
   const [customer, setCustomer]: any = useState([]);
   const [invoice, setInvoice]: any = useState([]);
+  const [ratingModal, setRatingModal] = useState(false);
+  const [review, setReview]: any = useState([]);
   async function getData() {
     setLoader(true);
     const res = await showProviderWithId(details.provider_id).finally(() =>
@@ -43,7 +48,48 @@ export const HistoryDetails = ({navigation, route}: any) => {
     if (inv !== undefined) {
       setInvoice(inv);
     }
-    //console.log(res, 'provider');
+    const rev = await getBookingReviews(details.id);
+    if (rev !== undefined) {
+      setReview(rev);
+    }
+    console.log(rev, 'provider');
+  }
+  useEffect(() => {
+    getData();
+  }, []);
+  async function onRatingSubmit(rating: string, stars: any) {
+    const data = {
+      booking_id: details.id,
+      provider_id: details.provider_id,
+      customer_id: details.customer_id,
+      review: rating,
+      stars: stars,
+    };
+    const res = await saveProviderReview(data).finally(() => {
+      setRatingModal(false);
+    });
+    console.log(res, 'Review');
+    // const notifications = generateReviewNotification({
+    //   services: details.services,
+    //   provider_name: 'Provider',
+    //   category_name: details.category_name,
+    // });
+    // const n1data = {
+    //   provider_id: details.provider_id,
+    //   customer_id: details.customer_id,
+    //   booking_id: details.booking_id,
+    //   description: notifications.customer,
+    //   status: 'unread',
+    // };
+    // const n2data = {
+    //   provider_id: details.provider_id,
+    //   customer_id: details.customer_id,
+    //   booking_id: details.booking_id,
+    //   description: notifications.provider,
+    //   status: 'unread',
+    // };
+    // await generateCustomerNotification(n1data);
+    // await generateProviderNotification(n2data);
   }
   useEffect(() => {
     getData();
@@ -251,9 +297,23 @@ export const HistoryDetails = ({navigation, route}: any) => {
           <Text style={[styles.name, {fontSize: 13}]}>Amount</Text>
           <Text style={[styles.name, {fontSize: 13}]}> ${invoice.amount}</Text>
         </View>
+        <GiveReview
+          modalVisibility={ratingModal}
+          onOutisdePress={() => setRatingModal(false)}
+          providerData={provider}
+          onSubmitPress={onRatingSubmit}
+        />
         {details.status !== 'completed' && (
           <View style={{width: '90%', marginVertical: 20}}>
             <MyButton title="Cancel Booking" />
+          </View>
+        )}
+        {!review.review_to_provider && (
+          <View style={{width: '90%', marginVertical: 20}}>
+            <MyButton
+              title="Leave review"
+              onPress={() => setRatingModal(true)}
+            />
           </View>
         )}
       </ScrollableView>
