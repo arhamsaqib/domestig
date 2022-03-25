@@ -24,6 +24,7 @@ import {SubcategoryCard} from './components/subcategoryCard';
 export const ConfirmBooking = ({navigation, route}: any) => {
   const [loader, setLoader] = useState(false);
   const [date, setDate] = useState(new Date());
+  const [time, setTime] = useState('');
   const [payment, setPayment] = useState('');
   const [instructions, setInstructions] = useState('');
   const state = useSelector((state: RootStateOrAny) => state.currentUser);
@@ -31,9 +32,14 @@ export const ConfirmBooking = ({navigation, route}: any) => {
     return <SubcategoryCard name={item.name} hideCheckmark />;
   };
   const renderProviders = (item: any) => {
-    return <ProviderCard name={item.name} hideCheckMark />;
+    return <ProviderCard name={item.name} hideCheckMark data={item} />;
   };
   useEffect(() => {
+    const r = route.params;
+    if (r.schedule !== undefined) {
+      setDate(r.schedule.date);
+      setTime(r.schedule.time);
+    }
     //console.log(route.params, 'params');
   }, []);
   const d = ConvertDateToObject(date);
@@ -46,7 +52,7 @@ export const ConfirmBooking = ({navigation, route}: any) => {
       customer_id: state.id,
       schedule: 'none',
       date: date.toString(),
-      time: date.toString(),
+      time: time ? time.toString() : date.toString(),
       payment_type: payment,
       instructions: instructions,
       status: 'pending',
@@ -67,6 +73,7 @@ export const ConfirmBooking = ({navigation, route}: any) => {
       navigation.navigate('servicesMain');
     }
   }
+
   return (
     <SafeAreaView style={CommonStyles.screenMain}>
       <ScrollableView>
@@ -123,7 +130,7 @@ export const ConfirmBooking = ({navigation, route}: any) => {
             }}>
             <Text style={[styles.field, {marginBottom: 5}]}>Time</Text>
             <Text style={styles.value}>
-              {d.hours}:{d.minutes}
+              {time ? time : `${d.hours}:${d.minutes}`}
             </Text>
           </View>
         </View>

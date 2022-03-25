@@ -8,11 +8,13 @@ import {ICONS} from '../constants/icons';
 import {generateGreetings} from '../helpers/greetings';
 import {Avatar} from './avatar';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {MEDIA_URL} from '../constants/url';
 
 interface Props {
   onNotificationPress?(): void;
   name?: string;
   notificationCount?: string;
+  avatar?: any;
 }
 
 export const HeadCard = (props: Props) => {
@@ -21,7 +23,7 @@ export const HeadCard = (props: Props) => {
       <SafeAreaView style={styles.topView}>
         <View
           style={{width: '50%', flexDirection: 'row', alignItems: 'center'}}>
-          <Avatar />
+          <Avatar source={props.avatar && {uri: MEDIA_URL + props.avatar}} />
           <View
             style={{
               alignItems: 'flex-start',
@@ -29,7 +31,7 @@ export const HeadCard = (props: Props) => {
               marginLeft: 5,
             }}>
             <Text style={[styles.gm]}>{generateGreetings()}</Text>
-            <Text style={[styles.name]}>{props.name ?? 'Arham S.'}</Text>
+            <Text style={[styles.name]}>{props.name ?? 'User'}</Text>
           </View>
         </View>
         <View style={styles.notificationContainer}>

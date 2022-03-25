@@ -1,7 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, FlatList, StyleSheet, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {showAllProviders} from '../../../api/provider';
+import {RootStateOrAny, useSelector} from 'react-redux';
+import {getCustomerById} from '../../../api/customer';
+import {showAllProviders, showProvidersByLocation} from '../../../api/provider';
 import {CommonStyles} from '../../../common/styles';
 import {BackIcon} from '../../../components/backIcon';
 import {MyButton} from '../../../components/button';
@@ -15,11 +17,22 @@ export const SelectProviders = ({navigation, route}: any) => {
   const [providers, setProviders]: any = useState([]);
   const [loader, setLoader]: any = useState(false);
   const [selected, setSelected]: any = useState([]);
+  const state = useSelector((state: RootStateOrAny) => state.currentUser);
   async function getData() {
     setLoader(true);
-    const res = await showAllProviders().finally(() => setLoader(false));
-    if (res !== undefined) {
-      setProviders(res);
+    const cus = await getCustomerById(state.id);
+    //console.log(cus, 'customer');
+    if (cus.id !== undefined) {
+      const data = {
+        lat: cus.latitude,
+        lng: cus.longitude,
+      };
+      const res = await showProvidersByLocation(data).finally(() =>
+        setLoader(false),
+      );
+      if (res !== undefined) {
+        setProviders(res);
+      }
     }
   }
   useEffect(() => {
@@ -38,11 +51,16 @@ export const SelectProviders = ({navigation, route}: any) => {
       services: route.params.services,
       providers: selected,
       categoryName: route.params.categoryName,
+      schedule: route.params.schedule,
     });
   }
   const renderProviders = ({item}: any) => {
     return (
-      <ProviderCard name={item.name} onPress={() => onProviderPress(item)} />
+      <ProviderCard
+        name={item.name}
+        data={item}
+        onPress={() => onProviderPress(item)}
+      />
     );
   };
   return (

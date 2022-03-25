@@ -7,11 +7,13 @@ import {MyButton} from '../../../components/button';
 import {PageNameText} from '../../../components/texts/pageNameText';
 import {arrayOfObjectsSearchWithId} from '../../../helpers/arrayOfObjectsSearch';
 import {removeItemOnce} from '../../../helpers/removeItemFromArray';
+import {CalendarComponet} from './components/calendarComp';
 import {ProviderCard} from './components/providerCard';
 import {SubcategoryCard} from './components/subcategoryCard';
 
 export const ServicesSubcategory = ({navigation, route}: any) => {
   const [selected, setSelected]: any = useState([]);
+  const [modal, setModa]: any = useState(false);
   function onServicePress(item: any) {
     console.log(item, 'item');
     if (arrayOfObjectsSearchWithId(item.id, selected)) {
@@ -35,6 +37,15 @@ export const ServicesSubcategory = ({navigation, route}: any) => {
       categoryName: route.params.categoryName,
     });
   }
+  function onSchedule(data?: any) {
+    console.log(data);
+    setModa(false);
+    navigation.navigate('selectProviders', {
+      services: selected,
+      categoryName: route.params.categoryName,
+      schedule: data,
+    });
+  }
   return (
     <SafeAreaView style={CommonStyles.screenMain}>
       <View style={styles.topRow}>
@@ -51,10 +62,14 @@ export const ServicesSubcategory = ({navigation, route}: any) => {
           data={route.params.service.services}
         />
       </View>
-
+      <CalendarComponet
+        modalVisibility={modal}
+        onOutsidePress={() => setModa(false)}
+        onScheduleNowPress={onSchedule}
+      />
       <View style={styles.btnRow}>
         <View style={{width: '45%'}}>
-          <MyButton secondary title="Schedule" />
+          <MyButton secondary title="Schedule" onPress={() => setModa(true)} />
         </View>
         <View style={{width: '45%'}}>
           <MyButton title="Book now" onPress={onNextPress} />

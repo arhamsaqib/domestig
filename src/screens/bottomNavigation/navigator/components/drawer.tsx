@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {CommonStyles} from '../../../../common/styles';
@@ -9,8 +9,22 @@ import {FONTS} from '../../../../constants/fonts';
 import {ICONS} from '../../../../constants/icons';
 import {DrawerOption} from './drawerOption';
 import {ScrollableView} from '../../../../helpers/scrollableView';
+import {RootStateOrAny, useSelector} from 'react-redux';
+import {getCustomerById} from '../../../../api/customer';
+import {MEDIA_URL} from '../../../../constants/url';
 
 export const Drawer = ({navigation}: any) => {
+  const state = useSelector((state: RootStateOrAny) => state.currentUser);
+  const [user, setUser]: any = useState([]);
+  async function getData() {
+    const usr = await getCustomerById(state.id);
+    if (usr !== undefined) {
+      setUser(usr);
+    }
+  }
+  useEffect(() => {
+    getData();
+  }, []);
   const options = [
     {
       name: 'Home',
@@ -81,8 +95,12 @@ export const Drawer = ({navigation}: any) => {
 
   return (
     <SafeAreaView style={CommonStyles.screenMain}>
-      <Avatar customSize size={70} />
-      <Text style={[styles.name, {marginVertical: 10}]}>Arham Saqib</Text>
+      <Avatar
+        customSize
+        size={70}
+        source={user.avatar && {uri: MEDIA_URL + user.avatar}}
+      />
+      <Text style={[styles.name, {marginVertical: 10}]}>{user.name}</Text>
       <View style={styles.ratingCont}>
         <Image
           style={[styles.rating, {marginRight: 5}]}

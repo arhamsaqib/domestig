@@ -78,6 +78,7 @@ export const MainMenu = ({navigation}: any) => {
           name={customer.name}
           onNotificationPress={() => navigation.navigate('notifications')}
           notificationCount={notifCount}
+          avatar={customer.avatar}
         />
         <View style={{width: '90%', alignSelf: 'center'}}>
           <Text style={[styles.subtext, {marginBottom: 5}]}>Category</Text>

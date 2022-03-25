@@ -5,11 +5,13 @@ import {CheckMark} from '../../../../components/checkmark';
 import {COLORS} from '../../../../constants/colors';
 import {FONTS} from '../../../../constants/fonts';
 import {ICONS} from '../../../../constants/icons';
+import {MEDIA_URL} from '../../../../constants/url';
 
 interface Props {
   name?: string;
   onPress?(): void;
   hideCheckMark?: boolean;
+  data?: any;
 }
 
 export const ProviderCard = (props: Props) => {
@@ -17,7 +19,11 @@ export const ProviderCard = (props: Props) => {
     <TouchableOpacity style={styles.main}>
       <View style={styles.row}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <Avatar customSize size={35} />
+          <Avatar
+            customSize
+            source={props.data.avatar && {uri: MEDIA_URL + props.data.avatar}}
+            size={35}
+          />
           <View style={styles.col}>
             <Text style={[styles.txt]}>{props.name ?? 'Cat'}</Text>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -34,7 +40,9 @@ export const ProviderCard = (props: Props) => {
               marginRight: 5,
             }}>
             <Text style={[styles.txt, {fontSize: 15}]}>24/h</Text>
-            <Text style={styles.rating}>5km away</Text>
+            <Text style={styles.rating}>
+              {props.data.distance.toFixed(1)} km away
+            </Text>
           </View>
           {!props.hideCheckMark && <CheckMark tick onPress={props.onPress} />}
         </View>
