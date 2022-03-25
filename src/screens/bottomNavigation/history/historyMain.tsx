@@ -36,6 +36,9 @@ export const HistoryMain = ({navigation}: any) => {
     return (
       <>
         {(filter === item.status ||
+          (filter === 'upcoming' &&
+            item.schedule === 'yes' &&
+            item.status === 'pending') ||
           (filter === 'in-progress' && item.status === 'pending')) && (
           <HistoryCard
             status={item.status}

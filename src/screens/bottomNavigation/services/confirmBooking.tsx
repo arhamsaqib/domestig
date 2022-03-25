@@ -50,7 +50,7 @@ export const ConfirmBooking = ({navigation, route}: any) => {
     const code = getRndInteger();
     const booking = {
       customer_id: state.id,
-      schedule: 'none',
+      schedule: route.params.schedule ? 'yes' : 'none',
       date: date.toString(),
       time: time ? time.toString() : date.toString(),
       payment_type: payment,

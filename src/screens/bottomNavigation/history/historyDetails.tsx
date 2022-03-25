@@ -155,160 +155,171 @@ export const HistoryDetails = ({navigation, route}: any) => {
           <Text style={[styles.field, {marginBottom: 5}]}>Location</Text>
           <Text style={[styles.value]}>Lorem Ipsum is simply dummy text</Text>
         </View>
-        <View style={{width: '90%', marginVertical: 10}}>
-          <Text style={styles.head}>Provider details</Text>
-        </View>
-        <View style={styles.pDetailsContainer}>
-          <View style={styles.avatrNameCont}>
-            <Avatar
-              customSize
-              size={41}
-              onPress={() => setCard(true)}
-              source={provider.avatar && {uri: MEDIA_URL + provider.avatar}}
-              pressable
+        {details.provider_id && (
+          <>
+            <View style={{width: '90%', marginVertical: 10}}>
+              <Text style={styles.head}>Provider details</Text>
+            </View>
+            <View style={styles.pDetailsContainer}>
+              <View style={styles.avatrNameCont}>
+                <Avatar
+                  customSize
+                  size={41}
+                  onPress={() => setCard(true)}
+                  source={provider.avatar && {uri: MEDIA_URL + provider.avatar}}
+                  pressable
+                />
+                <Text style={[styles.name, {marginLeft: 5}]}>
+                  {provider.name}
+                </Text>
+              </View>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Text style={styles.valueBold}>24</Text>
+                <Text style={styles.value}>/h</Text>
+              </View>
+            </View>
+            <View
+              style={{
+                width: '90%',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginTop: 20,
+              }}>
+              <View
+                style={{
+                  width: '40%',
+                  alignItems: 'flex-start',
+                  justifyContent: 'flex-start',
+                }}>
+                <Text style={[styles.field, {marginBottom: 5}]}>
+                  Before work image
+                </Text>
+                <Image
+                  source={
+                    (submission.before_work_image && {
+                      uri: MEDIA_URL + submission.before_work_image,
+                    }) ??
+                    ICONS.noimage
+                  }
+                  style={styles.img}
+                />
+              </View>
+              <View
+                style={{
+                  width: '40%',
+                  alignItems: 'flex-start',
+                  justifyContent: 'flex-start',
+                }}>
+                <Text style={[styles.field, {marginBottom: 5}]}>
+                  After work image
+                </Text>
+                <Image
+                  source={
+                    (submission.after_work_image && {
+                      uri: MEDIA_URL + submission.after_work_image,
+                    }) ??
+                    ICONS.noimage
+                  }
+                  style={styles.img}
+                />
+              </View>
+            </View>
+            <View style={{width: '90%', marginVertical: 20}}>
+              <Text style={styles.head}>Invoice</Text>
+            </View>
+            <View
+              style={{
+                width: '90%',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginTop: 10,
+              }}>
+              <View
+                style={{
+                  width: '40%',
+                  alignItems: 'flex-start',
+                  justifyContent: 'flex-start',
+                }}>
+                <Text style={[styles.field, {marginBottom: 5}]}>
+                  Service start time
+                </Text>
+                <Text style={styles.value}>10:35 AM</Text>
+              </View>
+              <View
+                style={{
+                  width: '40%',
+                  alignItems: 'flex-start',
+                  justifyContent: 'flex-start',
+                }}>
+                <Text style={[styles.field, {marginBottom: 5}]}>
+                  Service end time
+                </Text>
+                <Text style={styles.value}>02:25 PM</Text>
+              </View>
+            </View>
+            <View style={{width: '90%', marginVertical: 10}}>
+              <Text style={[styles.field, {marginBottom: 5}]}>
+                Total Serving Time
+              </Text>
+              <Text style={[styles.value]}>{submission.time_taken}</Text>
+            </View>
+            <View
+              style={{
+                width: '90%',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: 10,
+              }}>
+              <Text style={[styles.name, {fontSize: 13}]}>Total Amount</Text>
+              <Text style={[styles.name, {fontSize: 13}]}>
+                ${invoice.total_amount}
+              </Text>
+            </View>
+            <View
+              style={{
+                width: '90%',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}>
+              <Text style={[styles.name, {fontSize: 13}]}>
+                Extra work charge
+              </Text>
+              <Text style={[styles.name, {fontSize: 13}]}>
+                ${invoice.extra_amount_charges ?? 0}
+              </Text>
+            </View>
+            <View
+              style={{
+                width: '90%',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: 10,
+              }}>
+              <Text style={[styles.name, {fontSize: 13}]}>Amount</Text>
+              <Text style={[styles.name, {fontSize: 13}]}>
+                {' '}
+                ${invoice.amount}
+              </Text>
+            </View>
+            <GiveReview
+              modalVisibility={ratingModal}
+              onOutisdePress={() => setRatingModal(false)}
+              providerData={provider}
+              onSubmitPress={onRatingSubmit}
             />
-            <Text style={[styles.name, {marginLeft: 5}]}>{provider.name}</Text>
-          </View>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Text style={styles.valueBold}>24</Text>
-            <Text style={styles.value}>/h</Text>
-          </View>
-        </View>
-        <View
-          style={{
-            width: '90%',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginTop: 20,
-          }}>
-          <View
-            style={{
-              width: '40%',
-              alignItems: 'flex-start',
-              justifyContent: 'flex-start',
-            }}>
-            <Text style={[styles.field, {marginBottom: 5}]}>
-              Before work image
-            </Text>
-            <Image
-              source={
-                (submission.before_work_image && {
-                  uri: MEDIA_URL + submission.before_work_image,
-                }) ??
-                ICONS.noimage
-              }
-              style={styles.img}
-            />
-          </View>
-          <View
-            style={{
-              width: '40%',
-              alignItems: 'flex-start',
-              justifyContent: 'flex-start',
-            }}>
-            <Text style={[styles.field, {marginBottom: 5}]}>
-              After work image
-            </Text>
-            <Image
-              source={
-                (submission.after_work_image && {
-                  uri: MEDIA_URL + submission.after_work_image,
-                }) ??
-                ICONS.noimage
-              }
-              style={styles.img}
-            />
-          </View>
-        </View>
-        <View style={{width: '90%', marginVertical: 20}}>
-          <Text style={styles.head}>Invoice</Text>
-        </View>
-        <View
-          style={{
-            width: '90%',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginTop: 10,
-          }}>
-          <View
-            style={{
-              width: '40%',
-              alignItems: 'flex-start',
-              justifyContent: 'flex-start',
-            }}>
-            <Text style={[styles.field, {marginBottom: 5}]}>
-              Service start time
-            </Text>
-            <Text style={styles.value}>10:35 AM</Text>
-          </View>
-          <View
-            style={{
-              width: '40%',
-              alignItems: 'flex-start',
-              justifyContent: 'flex-start',
-            }}>
-            <Text style={[styles.field, {marginBottom: 5}]}>
-              Service end time
-            </Text>
-            <Text style={styles.value}>02:25 PM</Text>
-          </View>
-        </View>
-        <View style={{width: '90%', marginVertical: 10}}>
-          <Text style={[styles.field, {marginBottom: 5}]}>
-            Total Serving Time
-          </Text>
-          <Text style={[styles.value]}>{submission.time_taken}</Text>
-        </View>
-        <View
-          style={{
-            width: '90%',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginBottom: 10,
-          }}>
-          <Text style={[styles.name, {fontSize: 13}]}>Total Amount</Text>
-          <Text style={[styles.name, {fontSize: 13}]}>
-            ${invoice.total_amount}
-          </Text>
-        </View>
-        <View
-          style={{
-            width: '90%',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}>
-          <Text style={[styles.name, {fontSize: 13}]}>Extra work charge</Text>
-          <Text style={[styles.name, {fontSize: 13}]}>
-            ${invoice.extra_amount_charges ?? 0}
-          </Text>
-        </View>
-        <View
-          style={{
-            width: '90%',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginBottom: 10,
-          }}>
-          <Text style={[styles.name, {fontSize: 13}]}>Amount</Text>
-          <Text style={[styles.name, {fontSize: 13}]}> ${invoice.amount}</Text>
-        </View>
-        <GiveReview
-          modalVisibility={ratingModal}
-          onOutisdePress={() => setRatingModal(false)}
-          providerData={provider}
-          onSubmitPress={onRatingSubmit}
-        />
+          </>
+        )}
         {details.status !== 'completed' && (
           <View style={{width: '90%', marginVertical: 20}}>
             <MyButton title="Cancel Booking" />
           </View>
         )}
-        {!review.review_to_provider && (
+        {details.provider_id && !review.review_to_provider && (
           <View style={{width: '90%', marginVertical: 20}}>
             <MyButton
               title="Leave review"
