@@ -149,6 +149,15 @@ export const MainMenu = ({navigation}: any) => {
         provider={provider}
         submissionData={bookingSubmisstion}
         status={booking.status}
+        onMessagePress={() => {
+          setWorkingModal(false);
+          navigation.navigate('chat', {
+            booking_id: booking.id,
+            provider_id: provider.id,
+            customer_id: state.id,
+            provider_details: provider,
+          });
+        }}
       />
     </>
   );
