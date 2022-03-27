@@ -12,6 +12,7 @@ import {Stopwatch, Timer} from 'react-native-stopwatch-timer';
 import {ICONS} from '../../../../constants/icons';
 import {PageNameText} from '../../../../components/texts/pageNameText';
 import {TitleText} from '../../../../components/texts/titleText';
+import {MEDIA_URL} from '../../../../constants/url';
 
 export const PausePlay = (props: {state?: boolean; onPress?(): void}) => {
   return (
@@ -38,16 +39,12 @@ export const PausePlay = (props: {state?: boolean; onPress?(): void}) => {
 interface Props {
   onOutisdePress?(): void;
   modalVisibility: boolean;
-  data?: any;
-  onCompleteWork?(): void;
   onMessagePress?(): void;
 
-  timer?: boolean;
-  onToggleTimer?(): void;
   provider?: any;
+  submissionData?: any;
 
-  getTime?(time?: any): void;
-  setTime?(time?: any): void;
+  status?: string;
 }
 
 export const ProviderWorkingModal = (props: Props) => {
@@ -86,9 +83,11 @@ export const ProviderWorkingModal = (props: Props) => {
                 startTime={props.setTime}
               /> */}
               <View style={styles.container}>
-                <Text style={styles.text}>12:10</Text>
+                <Text style={styles.text}>
+                  {props.submissionData.time_taken ?? 'N/A'}
+                </Text>
               </View>
-              <PausePlay state={props.timer} onPress={props.onToggleTimer} />
+              {/* <PausePlay state={props.timer} onPress={props.onToggleTimer} /> */}
             </View>
             <View
               style={{
@@ -128,7 +127,7 @@ export const ProviderWorkingModal = (props: Props) => {
         </TouchableOpacity> */}
         <ScrollableView>
           <View style={{width: '90%'}}>
-            <ProfileOverview name={'Name'} />
+            <ProfileOverview data={props.provider ?? {}} />
           </View>
           <View
             style={{
@@ -149,9 +148,9 @@ export const ProviderWorkingModal = (props: Props) => {
               </Text>
               <Image
                 source={
-                  // (submission.before_work_image && {
-                  //   uri: MEDIA_URL + submission.before_work_image,
-                  // }) ??
+                  (props.submissionData.before_work_image && {
+                    uri: MEDIA_URL + props.submissionData.before_work_image,
+                  }) ??
                   ICONS.noimage
                 }
                 style={styles.img}
@@ -168,9 +167,9 @@ export const ProviderWorkingModal = (props: Props) => {
               </Text>
               <Image
                 source={
-                  // (submission.after_work_image && {
-                  //   uri: MEDIA_URL + submission.after_work_image,
-                  // }) ??
+                  (props.submissionData.after_work_image && {
+                    uri: MEDIA_URL + props.submissionData.after_work_image,
+                  }) ??
                   ICONS.noimage
                 }
                 style={styles.img}
@@ -179,7 +178,7 @@ export const ProviderWorkingModal = (props: Props) => {
           </View>
           <View style={{marginTop: 10, width: '90%'}}>
             <Text style={[styles.field, {marginBottom: 5}]}>Status</Text>
-            <Text style={styles.statusText}>Assigned</Text>
+            <Text style={styles.statusText}>{props.status ?? 'N/A'}</Text>
           </View>
         </ScrollableView>
       </BottomCard>

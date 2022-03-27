@@ -17,13 +17,24 @@ import {ProviderAcceptModal} from './components/providerAcceptModal';
 import {CancelVerificationModal} from './components/cancelVerificaitionModal';
 import {VerificationCodeModal} from './components/verificationCodeModal';
 import {ProviderWorkingModal} from './components/providerWorkingModal';
+import {getCustomerActiveBookings} from '../../../api/customerActiveBookings';
+import {showProviderWithId} from '../../../api/provider';
+import {showBookingSubmission} from '../../../api/bookingSubmission';
 
 export const MainMenu = ({navigation}: any) => {
   const [loader, setLoader] = useState(false);
   const state = useSelector((state: RootStateOrAny) => state.currentUser);
   const [services, setServices]: any = useState([]);
   const [customer, setCustomer]: any = useState([]);
+  const [provider, setProvider]: any = useState([]);
+  const [booking, setBooking]: any = useState([]);
+  const [bookingSubmisstion, setBookingSubmission]: any = useState([]);
   const [notifCount, setNotifCount]: any = useState([]);
+
+  const [providerWaitingModal, setProviderWaitingModal] = useState(false);
+  const [verificationCodeModal, setVerificationCodeModal] = useState(false);
+  const [workingModal, setWorkingModal] = useState(false);
+
   async function getData() {
     setLoader(true);
     const res = await getAllServices().finally(() => setLoader(false));
@@ -36,20 +47,43 @@ export const MainMenu = ({navigation}: any) => {
     }
     const count = await getCustomerNotificationsCount(state.id);
     setNotifCount(count);
+    const pendingdata = {
+      customer_id: state.id,
+      status: 'pending',
+    };
+    const bkn = await getCustomerActiveBookings(pendingdata);
+    if (bkn.id !== undefined) {
+      setBooking(bkn);
+      setProviderWaitingModal(true);
+    }
+    const inProgressData = {
+      customer_id: state.id,
+      status: 'in-progress',
+    };
+    const bkninp = await getCustomerActiveBookings(inProgressData);
+    if (bkninp.id !== undefined) {
+      setBooking(bkninp);
+      if (bkninp.verified !== 'true') {
+        setVerificationCodeModal(true);
+      } else {
+        setWorkingModal(true);
+      }
+    }
+    if (bkninp.provider_id !== undefined) {
+      const prv = await showProviderWithId(bkninp.provider_id);
+      if (prv.id !== undefined) {
+        setProvider(prv);
+      }
+      const sub = await showBookingSubmission(bkninp.id);
+      if (sub !== undefined) {
+        setBookingSubmission(sub);
+      }
+    }
   }
   useEffect(() => {
     getData();
   }, []);
-  const data = [
-    {name: 'Cat-1'},
-    {name: 'Cat-2'},
-    {name: 'Cat-3'},
-    {name: 'Cat-4'},
-    {name: 'Cat-5'},
-    {name: 'Cat-6'},
-    {name: 'Cat-7'},
-    {name: 'Cat-8'},
-  ];
+
   const renderServices = ({item}: any) => {
     return <CategoryCard name={item.categoryName} style={{width: '25%'}} />;
   };
@@ -104,10 +138,18 @@ export const MainMenu = ({navigation}: any) => {
           />
         </View>
       </View>
-      {/* <ProviderAcceptModal modalVisibility={false} />
+      <ProviderAcceptModal modalVisibility={providerWaitingModal} />
       <CancelVerificationModal modalVisibility={false} />
-      <VerificationCodeModal modalVisibility={false} />
-      <ProviderWorkingModal modalVisibility={true} /> */}
+      <VerificationCodeModal
+        modalVisibility={verificationCodeModal}
+        code={booking.verification_code}
+      />
+      <ProviderWorkingModal
+        modalVisibility={workingModal}
+        provider={provider}
+        submissionData={bookingSubmisstion}
+        status={booking.status}
+      />
     </>
   );
 };
