@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, Modal, StyleSheet, Text, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {CommonStyles} from '../../../../common/styles';
 import {Avatar} from '../../../../components/avatar';
@@ -12,6 +12,7 @@ import {ScrollableView} from '../../../../helpers/scrollableView';
 import {RootStateOrAny, useSelector} from 'react-redux';
 import {getCustomerById} from '../../../../api/customer';
 import {MEDIA_URL} from '../../../../constants/url';
+import {useNavigation} from '@react-navigation/native';
 
 export const Drawer = ({navigation}: any) => {
   const state = useSelector((state: RootStateOrAny) => state.currentUser);
@@ -22,6 +23,7 @@ export const Drawer = ({navigation}: any) => {
       setUser(usr);
     }
   }
+  //const navigation: any = useNavigation();
   useEffect(() => {
     getData();
   }, []);
@@ -34,7 +36,7 @@ export const Drawer = ({navigation}: any) => {
     {
       name: 'History',
       iconName: 'time-outline',
-      //onPress: () => navigation.navigate(''),
+      onPress: () => navigation.navigate('history'),
     },
     {
       name: 'Notification',
@@ -106,7 +108,7 @@ export const Drawer = ({navigation}: any) => {
           style={[styles.rating, {marginRight: 5}]}
           source={ICONS.rating}
         />
-        <Text style={styles.ratingTxt}>4.5 out of 5</Text>
+        <Text style={styles.ratingTxt}>{parseFloat(user.rating)} out of 5</Text>
       </View>
       <Divider />
       <ScrollableView>
@@ -123,8 +125,11 @@ export const Drawer = ({navigation}: any) => {
 
 const styles = StyleSheet.create({
   main: {
-    flex: 1,
+    // flex: 1,
     alignItems: 'center',
+    width: '100%',
+    justifyContent: 'flex-end',
+    height: '100%',
   },
   name: {
     fontFamily: FONTS.P_SEMIBOLD,

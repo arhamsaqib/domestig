@@ -9,7 +9,10 @@ import {Language} from './language/language';
 import {Referrals} from './sharendiscount/referrals';
 import {TOS} from './tos/tos';
 import {PrivacyPolicy} from './privacypolicy/policy';
+import {createDrawerNavigator} from '@react-navigation/drawer';
+import {NavigationContainer} from '@react-navigation/native';
 
+//const Stack = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
 
 export const MenuStack = () => {

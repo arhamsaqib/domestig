@@ -13,6 +13,10 @@ import {RecommendedCard} from './components/recommendedCard';
 import {getCustomerById} from '../../../api/customer';
 import {RootStateOrAny, useSelector} from 'react-redux';
 import {getCustomerNotificationsCount} from '../../../api/customerNotifications';
+import {ProviderAcceptModal} from './components/providerAcceptModal';
+import {CancelVerificationModal} from './components/cancelVerificaitionModal';
+import {VerificationCodeModal} from './components/verificationCodeModal';
+import {ProviderWorkingModal} from './components/providerWorkingModal';
 
 export const MainMenu = ({navigation}: any) => {
   const [loader, setLoader] = useState(false);
@@ -87,18 +91,24 @@ export const MainMenu = ({navigation}: any) => {
     );
   };
   return (
-    <View style={CommonStyles.screenMain}>
-      <View style={{width: '100%', marginBottom: '5%'}}>
-        <FlatList
-          style={styles.servicesView}
-          ListHeaderComponent={RenderHeader}
-          numColumns={4}
-          renderItem={renderServices}
-          data={services}
-          ListFooterComponent={RenderFooter}
-        />
+    <>
+      <View style={CommonStyles.screenMain}>
+        <View style={{width: '100%', marginBottom: '5%'}}>
+          <FlatList
+            style={styles.servicesView}
+            ListHeaderComponent={RenderHeader}
+            numColumns={4}
+            renderItem={renderServices}
+            data={services}
+            ListFooterComponent={RenderFooter}
+          />
+        </View>
       </View>
-    </View>
+      {/* <ProviderAcceptModal modalVisibility={false} />
+      <CancelVerificationModal modalVisibility={false} />
+      <VerificationCodeModal modalVisibility={false} />
+      <ProviderWorkingModal modalVisibility={true} /> */}
+    </>
   );
 };
 

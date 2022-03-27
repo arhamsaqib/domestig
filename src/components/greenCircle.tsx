@@ -7,6 +7,7 @@ interface Props {
   s40?: boolean;
   s41?: boolean;
   s50?: boolean;
+  s60?: boolean;
   children?: any;
   onPress?(): void;
   broom?: boolean;
@@ -14,7 +15,7 @@ interface Props {
 }
 
 export const GreenCircle = (props: Props) => {
-  const {s50, s40, s41} = props;
+  const {s50, s40, s41, s60} = props;
   return (
     <TouchableOpacity
       disabled={props.notPressable}
@@ -24,6 +25,7 @@ export const GreenCircle = (props: Props) => {
         s50 && style.s50,
         s41 && style.s41,
         s40 && style.s40,
+        s60 && style.s60,
       ]}>
       {props.children}
       {props.broom && (
@@ -59,6 +61,11 @@ const style = StyleSheet.create({
     height: 50,
     width: 50,
     borderRadius: 50,
+  },
+  s60: {
+    height: 60,
+    width: 60,
+    borderRadius: 60,
   },
   s41: {
     height: 41,

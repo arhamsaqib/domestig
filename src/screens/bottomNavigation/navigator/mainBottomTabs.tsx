@@ -8,12 +8,16 @@ import {HomeStack} from '../home/homeStack';
 import {HistoryStack} from '../history/historyStack';
 import {ServicesStack} from '../services/servicesStack';
 import {MyButton} from '../../../components/button';
-import {Alert} from 'react-native';
+import {Alert, StyleSheet, Text} from 'react-native';
 import {DrawerOpener} from './components/drawerOpener';
 import {Drawer} from './components/drawer';
 import {MenuStack} from '../menu/menuStack';
 
 const BottomNav = createBottomTabNavigator();
+
+const Label = ({children}: any) => {
+  return <Text style={styles.labelActive}>{children}</Text>;
+};
 
 const SamplePage = () => {
   return (
@@ -56,6 +60,9 @@ const MainBottomNav = () => {
           tabBarIcon: ({color, focused}) => (
             <Icon name="home-outline" color={color} size={25} />
           ),
+          tabBarLabel: ({focused}) => {
+            return <Label>{focused && 'Home'}</Label>;
+          },
         }}
       />
       <BottomNav.Screen
@@ -66,6 +73,9 @@ const MainBottomNav = () => {
           tabBarIcon: ({color, focused}) => (
             <Icon name="apps-outline" color={color} size={25} />
           ),
+          tabBarLabel: ({focused}) => {
+            return <Label>{focused && 'Services'}</Label>;
+          },
         }}
       />
       <BottomNav.Screen
@@ -76,6 +86,9 @@ const MainBottomNav = () => {
           tabBarIcon: ({color, focused}) => (
             <Icon name="time-outline" color={color} size={25} />
           ),
+          tabBarLabel: ({focused}) => {
+            return <Label>{focused && 'History'}</Label>;
+          },
         }}
       />
       <BottomNav.Screen
@@ -89,11 +102,23 @@ const MainBottomNav = () => {
           tabBarIcon: ({color, focused}) => (
             <Icon name="menu-outline" color={color} size={25} />
           ),
+          tabBarLabel: ({focused}) => {
+            return <Label>{focused && 'Menu'}</Label>;
+          },
           //tabBarButton: props => <DrawerOpener />,
         }}
       />
     </BottomNav.Navigator>
   );
 };
+
+const styles = StyleSheet.create({
+  labelActive: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: 12,
+    color: COLORS.MAIN_1,
+    marginLeft: '15%',
+  },
+});
 
 export default MainBottomNav;
