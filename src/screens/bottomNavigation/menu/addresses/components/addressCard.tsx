@@ -1,20 +1,27 @@
 import React from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import {GreenCircle} from '../../../../../components/greenCircle';
 import {COLORS} from '../../../../../constants/colors';
 import {FONTS} from '../../../../../constants/fonts';
 import {ICONS} from '../../../../../constants/icons';
 
-export const AddressCard = () => {
+interface Props {
+  name?: string;
+  onEditPress?(): void;
+}
+
+export const AddressCard = (props: Props) => {
   return (
     <View style={styles.main}>
       <View style={styles.row1}>
         <GreenCircle s41>
           <Image source={ICONS.location} style={{height: 21, width: 21}} />
         </GreenCircle>
-        <Text style={styles.name}>{'Home 1'}</Text>
+        <Text style={styles.name}>{props.name ?? 'Home 1'}</Text>
       </View>
-      <Image source={ICONS.pencil} style={styles.pencil} />
+      <TouchableOpacity onPress={props.onEditPress}>
+        <Image source={ICONS.pencil} style={styles.pencil} />
+      </TouchableOpacity>
     </View>
   );
 };

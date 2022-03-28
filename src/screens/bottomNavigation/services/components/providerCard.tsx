@@ -39,7 +39,9 @@ export const ProviderCard = (props: Props) => {
               justifyContent: 'flex-end',
               marginRight: 5,
             }}>
-            <Text style={[styles.txt, {fontSize: 15}]}>24/h</Text>
+            <Text style={[styles.txt, {fontSize: 15}]}>
+              {props.data.rate}/h
+            </Text>
             <Text style={styles.rating}>
               {props.data.distance.toFixed(1)} km away
             </Text>

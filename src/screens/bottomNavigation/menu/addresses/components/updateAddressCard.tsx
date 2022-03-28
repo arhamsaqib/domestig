@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
 import {BottomCard} from '../../../../../components/bottomCard';
 import {GreenCircle} from '../../../../../components/greenCircle';
@@ -17,10 +17,11 @@ import {createCustomerAddress} from '../../../../../api/customerAddresses';
 interface Props {
   modalVisibility: boolean;
   onOutsidePress?(): void;
-  onSavePress?(data?: any): void;
+  onSavePress?(id: string, data?: any): void;
+  item?: any;
 }
 
-export const AddAddressCard = (props: Props) => {
+export const UpdateAddressCard = (props: Props) => {
   const [place, setPlace]: any = useState('');
   const [name, setName]: any = useState('');
   const [placeIinfo, setPlaceInfo]: any = useState([]);
@@ -29,6 +30,8 @@ export const AddAddressCard = (props: Props) => {
   const [location, setLocation]: any = useState('');
 
   const state = useSelector((state: RootStateOrAny) => state.currentUser);
+
+  console.log(props.item);
 
   async function findLocation(str: string) {
     const res = await placeAutocomplete(str);
@@ -54,9 +57,8 @@ export const AddAddressCard = (props: Props) => {
       location: location,
       latitude: placeIinfo.geometry.location.lat,
       longitude: placeIinfo.geometry.location.lng,
-      customer_id: state.id,
     };
-    props.onSavePress && props.onSavePress(data);
+    props.onSavePress && props.onSavePress(props.item.id, data);
   }
 
   // function disabled() {
@@ -78,7 +80,7 @@ export const AddAddressCard = (props: Props) => {
       </View>
       <View style={{width: '90%', alignSelf: 'center', marginTop: 20}}>
         <Text style={[styles.field, {marginBottom: 5}]}>Name the address</Text>
-        <MyTextInput onChangeText={setName} />
+        <MyTextInput onChangeText={setName} defaultValue={props.item.name} />
       </View>
       <View style={{width: '90%', alignSelf: 'center'}}>
         <Text style={[styles.field, {marginBottom: 5}]}>Location</Text>
@@ -88,7 +90,8 @@ export const AddAddressCard = (props: Props) => {
         <MyTextInputWithIcon
           onFocus={() => setShowPlaces(true)}
           placeholder="Enter your location"
-          defaultValue={location}
+          defaultValue={props.item.location}
+          value={location.length > 1 && location}
           onChangeText={findLocation}
           icon={
             <Icon

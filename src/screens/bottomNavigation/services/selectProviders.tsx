@@ -7,9 +7,11 @@ import {showAllProviders, showProvidersByLocation} from '../../../api/provider';
 import {CommonStyles} from '../../../common/styles';
 import {BackIcon} from '../../../components/backIcon';
 import {MyButton} from '../../../components/button';
+import {FieldNameText} from '../../../components/texts/fieldNameText';
 import {PageNameText} from '../../../components/texts/pageNameText';
 import {COLORS} from '../../../constants/colors';
 import {arrayOfObjectsSearchWithId} from '../../../helpers/arrayOfObjectsSearch';
+import {extractKeys} from '../../../helpers/extractKeys';
 import {removeItemOnce} from '../../../helpers/removeItemFromArray';
 import {ProviderCard} from './components/providerCard';
 
@@ -21,11 +23,15 @@ export const SelectProviders = ({navigation, route}: any) => {
   async function getData() {
     setLoader(true);
     const cus = await getCustomerById(state.id);
-    //console.log(cus, 'customer');
+    //console.log(route.params, 'customer');
+    const ser = extractKeys(route.params.services);
+    console.log(ser, 'services');
     if (cus.id !== undefined) {
       const data = {
         lat: cus.latitude,
         lng: cus.longitude,
+        services: ser,
+        category: route.params.categoryName,
       };
       const res = await showProvidersByLocation(data).finally(() =>
         setLoader(false),
@@ -63,6 +69,9 @@ export const SelectProviders = ({navigation, route}: any) => {
       />
     );
   };
+  function disabled() {
+    return providers.length < 1 || selected.length < 1;
+  }
   return (
     <SafeAreaView style={CommonStyles.screenMain}>
       <View style={styles.topRow}>
@@ -75,6 +84,11 @@ export const SelectProviders = ({navigation, route}: any) => {
       </View>
       <View style={{width: '90%', marginTop: 10}}>
         {loader && <ActivityIndicator color={COLORS.MAIN_1} size="small" />}
+        {providers.length < 1 && (
+          <FieldNameText>
+            No providers found for selected services
+          </FieldNameText>
+        )}
         <FlatList renderItem={renderProviders} data={providers} />
       </View>
       <View style={styles.btnRow}>
@@ -82,7 +96,7 @@ export const SelectProviders = ({navigation, route}: any) => {
           <MyButton secondary title="Back" />
         </View>
         <View style={{width: '45%'}}>
-          <MyButton title="Next" onPress={onNextPress} />
+          <MyButton title="Next" onPress={onNextPress} disabled={disabled()} />
         </View>
       </View>
     </SafeAreaView>

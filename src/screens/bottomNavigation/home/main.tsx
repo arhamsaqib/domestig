@@ -18,6 +18,7 @@ import {ProviderWorkingModal} from './components/providerWorkingModal';
 import {getCustomerActiveBookings} from '../../../api/customerActiveBookings';
 import {showProviderWithId} from '../../../api/provider';
 import {showBookingSubmission} from '../../../api/bookingSubmission';
+import {useFocusEffect} from '@react-navigation/native';
 
 export const MainMenu = ({navigation}: any) => {
   const [loader, setLoader] = useState(false);
@@ -81,6 +82,14 @@ export const MainMenu = ({navigation}: any) => {
   useEffect(() => {
     getData();
   }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const unsubscribe: any = () => getData();
+
+      return () => unsubscribe();
+    }, []),
+  );
 
   const renderServices = ({item}: any) => {
     return <CategoryCard name={item.categoryName} style={{width: '25%'}} />;
