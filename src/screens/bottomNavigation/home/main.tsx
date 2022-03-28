@@ -22,6 +22,7 @@ import {useFocusEffect} from '@react-navigation/native';
 import {BannerPopup} from './components/bannerPopup';
 import {viewAllBanners} from '../../../api/banners';
 import {updateBooking} from '../../../api/bookings';
+import {getRecommended} from '../../../api/recommended';
 
 export const MainMenu = ({navigation}: any) => {
   const [loader, setLoader] = useState(false);
@@ -31,6 +32,7 @@ export const MainMenu = ({navigation}: any) => {
   const [provider, setProvider]: any = useState([]);
   const [booking, setBooking]: any = useState([]);
   const [bookingSubmisstion, setBookingSubmission]: any = useState([]);
+  const [recommended, setRecommended]: any = useState([]);
   const [notifCount, setNotifCount]: any = useState([]);
 
   const [providerWaitingModal, setProviderWaitingModal] = useState(false);
@@ -48,6 +50,16 @@ export const MainMenu = ({navigation}: any) => {
     if (user !== undefined) {
       setCustomer(user);
     }
+
+    const recD = {
+      lat: user.latitude,
+      lng: user.longitude,
+    };
+    const recom = await getRecommended(recD);
+    if (recom !== undefined) {
+      setRecommended(recom);
+    }
+    // console.log(recom, 'recommedned');
     const count = await getCustomerNotificationsCount(state.id);
     setNotifCount(count);
     const pendingdata = {
@@ -122,9 +134,24 @@ export const MainMenu = ({navigation}: any) => {
           <Banner />
         </View>
         <View style={{width: '90%', marginTop: 20, alignSelf: 'center'}}>
-          <Text style={[styles.subtext, {marginBottom: 5}]}>Recommended</Text>
-          <RecommendedCard />
-          <RecommendedCard />
+          {recommended.length > 1 && (
+            <Text style={[styles.subtext, {marginBottom: 5}]}>Recommended</Text>
+          )}
+          {/* <RecommendedCard /> */}
+          {recommended.map((item: any) => {
+            return (
+              <RecommendedCard
+                title={
+                  item.booking.category_name +
+                  '( ' +
+                  item.booking.services +
+                  ' )'
+                }
+                rating={item.review.stars}
+                by={item.provider.name}
+              />
+            );
+          })}
         </View>
       </>
     );

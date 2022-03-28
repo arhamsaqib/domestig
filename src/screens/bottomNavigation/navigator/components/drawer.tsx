@@ -31,7 +31,7 @@ export const Drawer = ({navigation}: any) => {
     {
       name: 'Home',
       iconName: 'home-outline',
-      //onPress: () => navigation.navigate({key: 'hehe'}),
+      onPress: () => navigation.navigate('home'),
     },
     {
       name: 'History',
@@ -41,7 +41,7 @@ export const Drawer = ({navigation}: any) => {
     {
       name: 'Notification',
       iconName: 'notifications-outline',
-      //onPress: () => navigation.navigate(''),
+      onPress: () => navigation.navigate('notifications'),
     },
     {
       name: 'My account',
@@ -96,40 +96,51 @@ export const Drawer = ({navigation}: any) => {
   };
 
   return (
-    <SafeAreaView style={CommonStyles.screenMain}>
-      <Avatar
-        customSize
-        size={70}
-        source={user.avatar && {uri: MEDIA_URL + user.avatar}}
-      />
-      <Text style={[styles.name, {marginVertical: 10}]}>{user.name}</Text>
-      <View style={styles.ratingCont}>
-        <Image
-          style={[styles.rating, {marginRight: 5}]}
-          source={ICONS.rating}
+    <View style={{flex: 1, flexDirection: 'row'}}>
+      <View style={{width: '20%', backgroundColor: COLORS.WF2}} />
+      <SafeAreaView style={[styles.main, styles.elevated_card]}>
+        <Avatar
+          customSize
+          size={70}
+          source={user.avatar && {uri: MEDIA_URL + user.avatar}}
         />
-        <Text style={styles.ratingTxt}>{parseFloat(user.rating)} out of 5</Text>
-      </View>
-      <Divider />
-      <ScrollableView>
-        <View style={{width: '80%', marginTop: 10}}>
-          {options.map(renderOptions)}
+        <Text style={[styles.name, {marginVertical: 10}]}>{user.name}</Text>
+        <View style={styles.ratingCont}>
+          <Image
+            style={[styles.rating, {marginRight: 5}]}
+            source={ICONS.rating}
+          />
+          <Text style={styles.ratingTxt}>
+            {parseFloat(user.rating)} out of 5
+          </Text>
         </View>
-        <View style={{width: '80%', marginTop: 20}}>
-          <DrawerOption name="Log-out" iconName="log-out-outline" />
-        </View>
-      </ScrollableView>
-    </SafeAreaView>
+        <Divider />
+        <ScrollableView>
+          <View style={{width: '80%', marginTop: 10}}>
+            {options.map(renderOptions)}
+          </View>
+          <View style={{width: '80%', marginTop: 20}}>
+            <DrawerOption name="Log-out" iconName="log-out-outline" />
+          </View>
+        </ScrollableView>
+      </SafeAreaView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  // main: {
+  //   // flex: 1,
+  //   alignItems: 'center',
+  //   width: '100%',
+  //   justifyContent: 'flex-end',
+  //   height: '100%',
+  // },
   main: {
-    // flex: 1,
+    //flex: 1,
     alignItems: 'center',
-    width: '100%',
-    justifyContent: 'flex-end',
-    height: '100%',
+    width: '80%',
+    alignSelf: 'flex-end',
   },
   name: {
     fontFamily: FONTS.P_SEMIBOLD,
@@ -152,5 +163,17 @@ const styles = StyleSheet.create({
     width: '90%',
     justifyContent: 'center',
     marginBottom: 10,
+  },
+  elevated_card: {
+    //padding: 10,
+    elevation: 1,
+    shadowColor: 'rgba(0,0,0, .4)', // IOS
+    shadowOffset: {height: 1, width: 1}, // IOS
+    shadowOpacity: 1, // IOS
+    shadowRadius: 1, //IOS
+    backgroundColor: 'white',
+    //borderRadius: 10,
+    //marginVertical: 10,
+    height: '100%',
   },
 });

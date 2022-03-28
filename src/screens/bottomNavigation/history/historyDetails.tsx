@@ -46,6 +46,7 @@ export const HistoryDetails = ({navigation, route}: any) => {
     if (bs !== undefined) {
       setSubmission(bs);
     }
+    console.log(bs, 'submission');
     const inv = await viewInvoiceByBookingId(details.id);
     if (inv !== undefined) {
       setInvoice(inv);
