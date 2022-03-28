@@ -12,6 +12,7 @@ const MainStack = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown: false}}>
+        <Stack.Screen name="splash" component={SplashGreen} />
         <Stack.Screen name="authStack" component={AuthStack} />
         <Stack.Screen name="mainBottomNav" component={MainBottomNav} />
         <Stack.Screen name="splashWhite" component={SplashWhite} />

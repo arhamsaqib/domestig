@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {PersistGate} from 'redux-persist/integration/react';
 import {Provider} from 'react-redux';
 import {createStore} from 'redux';
+import {SplashGreen} from './src/screens/splash/splashGreen';
 
 const App = () => {
   LogBox.ignoreAllLogs();
