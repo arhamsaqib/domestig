@@ -1,17 +1,12 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {BottomCard} from '../../../../components/bottomCard';
 import {COLORS} from '../../../../constants/colors';
 import {StyleSheet, View, Text, TouchableOpacity, Image} from 'react-native';
 import {FONTS} from '../../../../constants/fonts';
 import {ScrollableView} from '../../../../helpers/scrollableView';
-import {MyButton} from '../../../../components/button';
 import {ProfileOverview} from './profileOverview';
 import Icon from 'react-native-vector-icons/Ionicons';
-//@ts-ignore
-import {Stopwatch, Timer} from 'react-native-stopwatch-timer';
 import {ICONS} from '../../../../constants/icons';
-import {PageNameText} from '../../../../components/texts/pageNameText';
-import {TitleText} from '../../../../components/texts/titleText';
 import {MEDIA_URL} from '../../../../constants/url';
 
 export const PausePlay = (props: {state?: boolean; onPress?(): void}) => {
@@ -40,6 +35,7 @@ interface Props {
   onOutisdePress?(): void;
   modalVisibility: boolean;
   onMessagePress?(): void;
+  onPhonePress?(): void;
 
   provider?: any;
   submissionData?: any;
@@ -48,18 +44,6 @@ interface Props {
 }
 
 export const ProviderWorkingModal = (props: Props) => {
-  const {provider} = props;
-  useEffect(() => {}, []);
-  async function getData() {
-    // const res = await getProviderById(props.providerId);
-    // if (res !== undefined) {
-    //   setProvider(res);
-    // }
-  }
-  useEffect(() => {
-    getData();
-  }, []);
-
   return (
     <>
       <BottomCard
@@ -76,25 +60,18 @@ export const ProviderWorkingModal = (props: Props) => {
               alignItems: 'flex-end',
             }}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              {/* <Stopwatch
-                start={props.timer}
-                options={options}
-                getTime={props.getTime}
-                startTime={props.setTime}
-              /> */}
               <View style={styles.container}>
                 <Text style={styles.text}>
                   {props.submissionData.time_taken ?? 'N/A'}
                 </Text>
               </View>
-              {/* <PausePlay state={props.timer} onPress={props.onToggleTimer} /> */}
             </View>
             <View
               style={{
                 alignSelf: 'flex-end',
               }}>
               <TouchableOpacity
-                // onPress={props.onMessagePress}
+                onPress={props.onPhonePress}
                 style={[styles.messageCont, {}]}>
                 <Icon name="call-outline" size={30} color={COLORS.MAIN_1} />
               </TouchableOpacity>
@@ -113,18 +90,10 @@ export const ProviderWorkingModal = (props: Props) => {
         }
         cardTopStyle={{
           width: '90%',
-          //alignItems: 'flex-end',
           justifyContent: 'center',
           marginBottom: 10,
         }}
         onOutsidePress={props.onOutisdePress}>
-        {/* <TouchableOpacity style={[styles.messageCont, {marginTop: -200}]}>
-          <Icon
-            name="chatbubble-ellipses-outline"
-            size={30}
-            color={COLORS.MAIN_1}
-          />
-        </TouchableOpacity> */}
         <ScrollableView>
           <View style={{width: '90%'}}>
             <ProfileOverview data={props.provider ?? {}} />

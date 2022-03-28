@@ -1,13 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {FlatList, Linking, StyleSheet, Text, View} from 'react-native';
 import {getAllServices} from '../../../api/categories';
 import {CommonStyles} from '../../../common/styles';
 import {Banner} from '../../../components/banner';
-import {GreenCircle} from '../../../components/greenCircle';
 import {HeadCard} from '../../../components/headCard';
 import {COLORS} from '../../../constants/colors';
 import {FONTS} from '../../../constants/fonts';
-import {ScrollableView} from '../../../helpers/scrollableView';
 import {CategoryCard} from './components/categoryCard';
 import {RecommendedCard} from './components/recommendedCard';
 import {getCustomerById} from '../../../api/customer';
@@ -158,6 +156,7 @@ export const MainMenu = ({navigation}: any) => {
             provider_details: provider,
           });
         }}
+        onPhonePress={() => Linking.openURL(`tel:${provider.phone}`)}
       />
     </>
   );
