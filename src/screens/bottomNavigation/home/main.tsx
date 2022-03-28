@@ -19,6 +19,8 @@ import {getCustomerActiveBookings} from '../../../api/customerActiveBookings';
 import {showProviderWithId} from '../../../api/provider';
 import {showBookingSubmission} from '../../../api/bookingSubmission';
 import {useFocusEffect} from '@react-navigation/native';
+import {BannerPopup} from './components/bannerPopup';
+import {viewAllBanners} from '../../../api/banners';
 
 export const MainMenu = ({navigation}: any) => {
   const [loader, setLoader] = useState(false);
@@ -36,6 +38,7 @@ export const MainMenu = ({navigation}: any) => {
 
   async function getData() {
     setLoader(true);
+
     const res = await getAllServices().finally(() => setLoader(false));
     if (res !== undefined) {
       setServices(res);
