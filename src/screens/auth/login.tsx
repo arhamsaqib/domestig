@@ -157,7 +157,9 @@ export const Login = ({navigation}: any) => {
               <CheckBox value={rememberMe} onChangeVal={setRememberMe} />
               <FieldNameText>Remember me</FieldNameText>
             </View>
-            <MainBodyText style={{color: 'black'}} onPress={() => {}}>
+            <MainBodyText
+              onPress={() => navigation.navigate('forget')}
+              style={{color: 'black'}}>
               Forgot password!
             </MainBodyText>
           </View>

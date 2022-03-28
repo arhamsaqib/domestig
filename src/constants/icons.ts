@@ -24,8 +24,10 @@ const cash_coins = require('../assets/images/icons/cash_coins.png');
 const markRead = require('../assets/images/icons/markRead.png');
 const bin = require('../assets/images/icons/bin.png');
 const clock = require('../assets/images/icons/clock.png');
+const forget = require('../assets/images/icons/forget.png');
 const ICONS = {
   markRead,
+  forget,
   clock,
   bin,
   upload,
