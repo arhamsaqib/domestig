@@ -28,7 +28,9 @@ export const ProviderCard = (props: Props) => {
             <Text style={[styles.txt]}>{props.name ?? 'Cat'}</Text>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <Image source={ICONS.star_empty} style={styles.star} />
-              <Text style={styles.rating}>{parseFloat(props.data.rating)}</Text>
+              <Text style={styles.rating}>
+                {parseFloat(props.data.rating).toFixed(1)}
+              </Text>
             </View>
           </View>
         </View>

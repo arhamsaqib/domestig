@@ -1,16 +1,19 @@
 import {TabRouter} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {Alert, FlatList, StyleSheet, Text, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {RootStateOrAny, useSelector} from 'react-redux';
+import {getBannerWithCode} from '../../../api/banners';
 import {createBookingRequest} from '../../../api/bookingRequest';
 import {createBookings} from '../../../api/bookings';
+import {getCustomerById} from '../../../api/customer';
 import {CommonStyles} from '../../../common/styles';
 import {BackIcon} from '../../../components/backIcon';
 import {MyButton} from '../../../components/button';
 import {CheckMark} from '../../../components/checkmark';
 import {RadioBtn} from '../../../components/radio';
 import {MyTextInput} from '../../../components/textinput';
+import {FieldNameText} from '../../../components/texts/fieldNameText';
 import {PageNameText} from '../../../components/texts/pageNameText';
 import {COLORS} from '../../../constants/colors';
 import {FONTS} from '../../../constants/fonts';
@@ -18,6 +21,7 @@ import {ConvertDateToObject} from '../../../helpers/convertDateTobject';
 import {extractKeys, joinArrayKeys} from '../../../helpers/extractKeys';
 import {getRndInteger} from '../../../helpers/generateRandomNumber';
 import {ScrollableView} from '../../../helpers/scrollableView';
+import {wait} from '../../../helpers/wait';
 import {ProviderCard} from './components/providerCard';
 import {SubcategoryCard} from './components/subcategoryCard';
 
@@ -26,7 +30,10 @@ export const ConfirmBooking = ({navigation, route}: any) => {
   const [date, setDate] = useState(new Date());
   const [time, setTime] = useState('');
   const [payment, setPayment] = useState('');
+  const [customer, setCustomer]: any = useState([]);
   const [instructions, setInstructions] = useState('');
+  const [coupon, setCoupon] = useState('');
+  const [error, setError] = useState('');
   const state = useSelector((state: RootStateOrAny) => state.currentUser);
   const renderServices = (item: any) => {
     return <SubcategoryCard name={item.name} hideCheckmark />;
@@ -34,12 +41,19 @@ export const ConfirmBooking = ({navigation, route}: any) => {
   const renderProviders = (item: any) => {
     return <ProviderCard name={item.name} hideCheckMark data={item} />;
   };
+  async function getData() {
+    const res = await getCustomerById(state.id);
+    if (res !== undefined) {
+      setCustomer(res);
+    }
+  }
   useEffect(() => {
     const r = route.params;
     if (r.schedule !== undefined) {
       setDate(r.schedule.date);
       setTime(r.schedule.time);
     }
+    getData();
     //console.log(route.params, 'params');
   }, []);
   const d = ConvertDateToObject(date);
@@ -59,6 +73,10 @@ export const ConfirmBooking = ({navigation, route}: any) => {
       verification_code: code.toString(),
       services: services,
       category_name: route.params.categoryName,
+      location: customer.location,
+      latitude: customer.latitude,
+      longitude: customer.longitude,
+      coupon: error === 'applied' ? coupon : '',
     };
 
     const res = await createBookings(booking);
@@ -70,7 +88,26 @@ export const ConfirmBooking = ({navigation, route}: any) => {
       };
       const req = await createBookingRequest(d).finally(() => setLoader(false));
       //console.log(req, 'requests');
-      navigation.navigate('servicesMain');
+      if (res.id !== undefined) {
+        Alert.alert('Booking posted successfully!');
+      }
+      wait(3000).then(() => {
+        navigation.navigate('servicesMain');
+      });
+    }
+  }
+
+  async function onApplyCode() {
+    if (coupon.length > 1) {
+      const res = await getBannerWithCode(coupon);
+      if (res !== undefined) {
+        //   console.log(res, 'Banners');
+        if (res.code === coupon) {
+          setError('applied');
+        } else {
+          setError('code invalid');
+        }
+      }
     }
   }
 
@@ -181,12 +218,26 @@ export const ConfirmBooking = ({navigation, route}: any) => {
         </View>
         <View style={styles.row}>
           <View style={{width: '68%'}}>
-            <MyTextInput style={{borderRadius: 5}} />
+            <MyTextInput style={{borderRadius: 5}} onChangeText={setCoupon} />
           </View>
           <View style={{width: '30%'}}>
-            <MyButton style={{borderRadius: 5}} title="Apply Now" noIcon />
+            <MyButton
+              style={{borderRadius: 5}}
+              title="Apply Now"
+              noIcon
+              onPress={onApplyCode}
+            />
           </View>
         </View>
+        {error.length > 1 && (
+          <FieldNameText
+            style={[
+              error === 'code invalid' && {color: COLORS.danger},
+              error === 'applied' && {color: COLORS.MAIN_1},
+            ]}>
+            {error}
+          </FieldNameText>
+        )}
         <View style={{width: '90%', marginVertical: 15}}>
           <Text style={[styles.head]}>Instructions</Text>
         </View>

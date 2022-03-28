@@ -3,6 +3,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {MainMenu} from './main';
 import {Notification} from './notifications';
 import {Chat} from './chat';
+import {HistoryDetails} from '../history/historyDetails';
 
 const Stack = createNativeStackNavigator();
 
@@ -12,6 +13,7 @@ export const HomeStack = () => {
       <Stack.Screen name="menu" component={MainMenu} />
       <Stack.Screen name="notifications" component={Notification} />
       <Stack.Screen name="chat" component={Chat} />
+      <Stack.Screen name="historyDetails" component={HistoryDetails} />
     </Stack.Navigator>
   );
 };

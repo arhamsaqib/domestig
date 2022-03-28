@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Image, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import {getBookingReviews} from '../../../api/bookingReview';
+import {updateBooking} from '../../../api/bookings';
 import {showBookingSubmission} from '../../../api/bookingSubmission';
 import {getCustomerById} from '../../../api/customer';
 import {viewInvoiceByBookingId} from '../../../api/invoice';
@@ -18,6 +19,7 @@ import {FONTS} from '../../../constants/fonts';
 import {ICONS} from '../../../constants/icons';
 import {MEDIA_URL} from '../../../constants/url';
 import {ScrollableView} from '../../../helpers/scrollableView';
+import {wait} from '../../../helpers/wait';
 import {GiveReview} from './components/giveReview';
 import {ProviderDetails} from './provider/providerDetails';
 
@@ -91,6 +93,17 @@ export const HistoryDetails = ({navigation, route}: any) => {
     // await generateCustomerNotification(n1data);
     // await generateProviderNotification(n2data);
   }
+
+  async function onCancelBooking() {
+    setLoader(true);
+    const data = {
+      status: 'cancelled',
+    };
+    const res = await updateBooking(details.id, data);
+    //console.log(res);
+    wait(3000).then(() => navigation.goBack());
+  }
+
   useEffect(() => {
     getData();
   }, []);
@@ -153,7 +166,7 @@ export const HistoryDetails = ({navigation, route}: any) => {
         </View>
         <View style={{width: '90%', marginVertical: 10}}>
           <Text style={[styles.field, {marginBottom: 5}]}>Location</Text>
-          <Text style={[styles.value]}>Lorem Ipsum is simply dummy text</Text>
+          <Text style={[styles.value]}>{details.location}</Text>
         </View>
         {details.provider_id && (
           <>
@@ -316,7 +329,11 @@ export const HistoryDetails = ({navigation, route}: any) => {
         )}
         {details.status !== 'completed' && (
           <View style={{width: '90%', marginVertical: 20}}>
-            <MyButton title="Cancel Booking" />
+            <MyButton
+              title="Cancel Booking"
+              loading={laoder}
+              onPress={onCancelBooking}
+            />
           </View>
         )}
         {details.provider_id && !review.review_to_provider && (

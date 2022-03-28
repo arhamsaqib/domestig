@@ -21,6 +21,7 @@ import {showBookingSubmission} from '../../../api/bookingSubmission';
 import {useFocusEffect} from '@react-navigation/native';
 import {BannerPopup} from './components/bannerPopup';
 import {viewAllBanners} from '../../../api/banners';
+import {updateBooking} from '../../../api/bookings';
 
 export const MainMenu = ({navigation}: any) => {
   const [loader, setLoader] = useState(false);
@@ -94,6 +95,16 @@ export const MainMenu = ({navigation}: any) => {
     }, []),
   );
 
+  async function onCancelBooking() {
+    const data = {
+      status: 'cancelled',
+    };
+    const res = await updateBooking(booking.id, data);
+    console.log(res);
+    setProviderWaitingModal(false);
+    getData();
+  }
+
   const renderServices = ({item}: any) => {
     return <CategoryCard name={item.categoryName} style={{width: '25%'}} />;
   };
@@ -148,7 +159,14 @@ export const MainMenu = ({navigation}: any) => {
           />
         </View>
       </View>
-      <ProviderAcceptModal modalVisibility={providerWaitingModal} />
+      <ProviderAcceptModal
+        modalVisibility={providerWaitingModal}
+        onCheckBooking={() => {
+          setProviderWaitingModal(false);
+          navigation.navigate('historyDetails', {details: booking});
+        }}
+        onCancelPress={onCancelBooking}
+      />
       <CancelVerificationModal modalVisibility={false} />
       <VerificationCodeModal
         modalVisibility={verificationCodeModal}

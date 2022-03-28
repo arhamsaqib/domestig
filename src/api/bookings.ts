@@ -1,4 +1,4 @@
-import {del, get, post} from './requestStructure';
+import {del, get, post, put} from './requestStructure';
 
 export interface RegisterBooking {
   customer_id: string;
@@ -13,11 +13,28 @@ export interface RegisterBooking {
   longitude?: string;
   location?: string;
 }
+export interface Update {
+  provider_id?: string;
+  schedule?: string;
+  date?: string;
+  time?: string;
+  payment_type?: string;
+  instructions?: string;
+  instructions_image?: string;
+  latitude?: string;
+  longitude?: string;
+  location?: string;
+  status?: string;
+}
 
 const endpoint = 'bookings';
 
 export async function createBookings(data: RegisterBooking) {
   const res = await post(endpoint, data);
+  return res;
+}
+export async function updateBooking(bookingId: string, data: Update) {
+  const res = await put(endpoint + '/' + bookingId, data);
   return res;
 }
 export async function showAllCustomerBookings(id: string) {
