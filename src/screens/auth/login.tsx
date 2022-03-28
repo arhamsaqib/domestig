@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {BottomSheet} from '../../components/bottomSheet';
 import {MyTextInputWithIcon} from '../../components/textinputwithicon';
@@ -13,16 +13,31 @@ import {CommonStyles} from '../../common/styles';
 import {CheckBox} from '../../components/checkbox';
 import {MainBodyText} from '../../components/texts/mainBodyText';
 import {DividerP} from '../../components/dividerp';
-import {useStore} from 'react-redux';
+import {RootStateOrAny, useSelector, useStore} from 'react-redux';
 import updateCurrentUserAction from '../../redux/action/currectUserAction';
 import {showCustomerByFUID} from '../../api/customer';
 import auth from '@react-native-firebase/auth';
+import rememberMeAction from '../../redux/action/rememberMeAction';
 
 export const Login = ({navigation}: any) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loader, setLoader] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   const store = useStore();
+  const state = useSelector((state: RootStateOrAny) => state.rememberMe);
+  function checkRememberMe() {
+    if (state.rememberMe) {
+      setEmail(state.email);
+      setPassword(state.password);
+      setRememberMe(state.rememberMe);
+    }
+  }
+
+  useEffect(() => {
+    checkRememberMe();
+  }, []);
+
   async function verifyLaravelUser(uid: any) {
     const user = await showCustomerByFUID(uid);
     if (user.id !== undefined) {
@@ -31,6 +46,23 @@ export const Login = ({navigation}: any) => {
           id: user.id,
         }),
       );
+      if (rememberMe) {
+        store.dispatch(
+          rememberMeAction({
+            email: email,
+            password: password,
+            rememberMe: true,
+          }),
+        );
+      } else {
+        store.dispatch(
+          rememberMeAction({
+            email: '',
+            password: '',
+            rememberMe: false,
+          }),
+        );
+      }
       navigation.navigate('mainBottomNav');
 
       // Toast.show({
@@ -88,6 +120,7 @@ export const Login = ({navigation}: any) => {
               placeholder="Enter your mail"
               autoCapitalize="none"
               onChangeText={setEmail}
+              value={email}
               icon={
                 <Icon
                   name="mail-outline"
@@ -104,6 +137,7 @@ export const Login = ({navigation}: any) => {
               secureTextEntry
               onChangeText={setPassword}
               autoCapitalize="none"
+              value={password}
               icon={
                 <Icon
                   name="lock-closed-outline"
@@ -120,7 +154,7 @@ export const Login = ({navigation}: any) => {
               {marginBottom: 30},
             ]}>
             <View style={[CommonStyles.row, {width: '40%'}]}>
-              <CheckBox />
+              <CheckBox value={rememberMe} onChangeVal={setRememberMe} />
               <FieldNameText>Remember me</FieldNameText>
             </View>
             <MainBodyText style={{color: 'black'}} onPress={() => {}}>
