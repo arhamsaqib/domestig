@@ -7,7 +7,7 @@ import {wait} from '../../helpers/wait';
 export const SplashGreen = ({navigation}: any) => {
   useEffect(() => {
     wait(3000).then(() => {
-      navigation.replace('authStack');
+      navigation.replace('onBoardingStack');
     });
   }, []);
   return (

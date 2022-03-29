@@ -8,9 +8,11 @@ interface Props extends TextProps {
 }
 
 export const PageNameText = (props: Props) => {
-  const {style, children, white} = props;
+  const {style, children, white, onPress} = props;
   return (
-    <Text style={[styles.main, white && {color: COLORS.WHITE}, style]}>
+    <Text
+      onPress={onPress}
+      style={[styles.main, white && {color: COLORS.WHITE}, style]}>
       {children}
     </Text>
   );

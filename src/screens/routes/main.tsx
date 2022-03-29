@@ -5,6 +5,7 @@ import {SplashWhite} from '../splash/splashWhite';
 import {SplashGreen} from '../splash/splashGreen';
 import MainBottomNav from '../bottomNavigation/navigator/mainBottomTabs';
 import {AuthStack} from '../auth/authStack';
+import {OnboardingRoutes} from '../onboarding/obStack';
 
 const Stack = createNativeStackNavigator();
 
@@ -13,6 +14,7 @@ const MainStack = () => {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown: false}}>
         <Stack.Screen name="splash" component={SplashGreen} />
+        <Stack.Screen name="onBoardingStack" component={OnboardingRoutes} />
         <Stack.Screen name="authStack" component={AuthStack} />
         <Stack.Screen name="mainBottomNav" component={MainBottomNav} />
         <Stack.Screen name="splashWhite" component={SplashWhite} />

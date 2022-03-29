@@ -87,6 +87,7 @@ export const Signup = ({navigation}: any) => {
         .createUserWithEmailAndPassword(email, password)
         .then(userCredential => {
           const uid = userCredential.user.uid;
+          userCredential.user.sendEmailVerification();
           createLaravelUser(uid);
         })
         .catch((error: any) => {

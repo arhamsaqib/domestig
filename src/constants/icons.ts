@@ -20,6 +20,9 @@ const card = require('../assets/images/icons/card.png');
 const cash = require('../assets/images/icons/cash.png');
 const wallet = require('../assets/images/icons/wallet.png');
 const wallet_cash = require('../assets/images/icons/wallet_cash.png');
+const onboarding1 = require('../assets/images/onboarding/ob1.png');
+const onboarding2 = require('../assets/images/onboarding/ob2.png');
+const onboarding3 = require('../assets/images/onboarding/ob3.png');
 const cash_coins = require('../assets/images/icons/cash_coins.png');
 const markRead = require('../assets/images/icons/markRead.png');
 const bin = require('../assets/images/icons/bin.png');
@@ -27,6 +30,9 @@ const clock = require('../assets/images/icons/clock.png');
 const forget = require('../assets/images/icons/forget.png');
 const ICONS = {
   markRead,
+  onboarding1,
+  onboarding2,
+  onboarding3,
   forget,
   clock,
   bin,
