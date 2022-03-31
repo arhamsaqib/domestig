@@ -8,7 +8,7 @@ export const uploadImage = (image: any) => {
     'POST',
     URL + endpoint,
     {
-      'Content-Type': 'multipart/form-data',
+      // 'Content-Type': 'multipart/form-data',
       Accept: 'application/json',
     },
     [
