@@ -118,7 +118,18 @@ export const MainMenu = ({navigation}: any) => {
   }
 
   const renderServices = ({item}: any) => {
-    return <CategoryCard name={item.categoryName} style={{width: '25%'}} />;
+    return (
+      <CategoryCard
+        name={item.categoryName}
+        style={{width: '25%'}}
+        onPress={() =>
+          navigation.navigate('servicesSub', {
+            service: item,
+            categoryName: item.categoryName,
+          })
+        }
+      />
+    );
   };
   const RenderFooter = () => {
     return (
