@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Image, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import StarRating from 'react-native-star-rating';
 import {getBookingReviews} from '../../../api/bookingReview';
 import {updateBooking} from '../../../api/bookings';
 import {showBookingSubmission} from '../../../api/bookingSubmission';
@@ -320,6 +321,33 @@ export const HistoryDetails = ({navigation, route}: any) => {
                 ${invoice.amount}
               </Text>
             </View>
+            {review.review_to_customer && (
+              <View
+                style={{
+                  width: '90%',
+                  // flexDirection: 'row',
+                  //alignItems: 'center',
+                  //justifyContent: 'space-between',
+                  marginBottom: 10,
+                }}>
+                <Text style={styles.head}>Review</Text>
+                <View style={{width: '30%'}}>
+                  <StarRating
+                    disabled={true}
+                    maxStars={5}
+                    starSize={17}
+                    starStyle={{marginRight: 3}}
+                    fullStarColor={'#D7B400'}
+                    rating={parseInt(review.customer_stars)}
+                    // animation="tada"
+                    //selectedStar={rating => setRating(rating)}
+                  />
+                </View>
+                <Text style={[styles.name, {fontSize: 13, color: 'grey'}]}>
+                  {review.review_to_customer}
+                </Text>
+              </View>
+            )}
             <GiveReview
               modalVisibility={ratingModal}
               onOutisdePress={() => setRatingModal(false)}

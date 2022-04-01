@@ -12,7 +12,6 @@ export const HomeStack = () => {
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="menu" component={MainMenu} />
       <Stack.Screen name="notifications" component={Notification} />
-      <Stack.Screen name="chat" component={Chat} />
       <Stack.Screen name="historyDetails" component={HistoryDetails} />
     </Stack.Navigator>
   );

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {SafeAreaView, StyleSheet, View} from 'react-native';
+import {Alert, SafeAreaView, StyleSheet, View} from 'react-native';
 import {BottomSheet} from '../../components/bottomSheet';
 import {MyTextInputWithIcon} from '../../components/textinputwithicon';
 import {FieldNameText} from '../../components/texts/fieldNameText';
@@ -114,7 +114,12 @@ export const Signup = ({navigation}: any) => {
   async function findPlace(place: string) {
     const res = await findPlaceByText(place);
     console.log(res, 'Place by text');
-    setPlaceInfo(res.candidates[0]);
+    if (res[0] === undefined) {
+      Alert.alert('Error while parsing place');
+      setLocation('');
+    } else {
+      setPlaceInfo(res.candidates[0]);
+    }
   }
 
   function onSelect(item: any) {
@@ -258,34 +263,6 @@ export const Signup = ({navigation}: any) => {
               {showPlaces && (
                 <MultipleOptions data={place.predictions} onSelect={onSelect} />
               )}
-              {/* <FieldNameText style={{marginBottom: 5}}>Country</FieldNameText>
-              <MyTextInputWithIcon
-                placeholder="Select your country"
-                onChangeText={setCountry}
-                autoCapitalize="none"
-                icon={
-                  <Icon
-                    name="globe-outline"
-                    size={16}
-                    color={COLORS.MAIN_BODYTEXT}
-                  />
-                }
-              />
-            </View>
-            <View style={{width: '90%', marginBottom: 20}}>
-              <FieldNameText style={{marginBottom: 5}}>Location</FieldNameText>
-              <MyTextInputWithIcon
-                placeholder="Enter your location"
-                onChangeText={setLocation}
-                icon={
-                  <Icon
-                    name="location-outline"
-                    size={16}
-                    color={COLORS.MAIN_BODYTEXT}
-                  />
-                }
-              />
-            </View> */}
             </View>
             <View style={{width: '90%', marginBottom: 300}}>
               <MyButton
@@ -295,11 +272,6 @@ export const Signup = ({navigation}: any) => {
                 disabled={loader || disabled()}
               />
             </View>
-            {/* <View style={[CommonStyles.row, CommonStyles.subView]}>
-              <DividerP style={{width: '30%'}} />
-              <FieldNameText>Or Sign in with</FieldNameText>
-              <DividerP style={{width: '30%'}} />
-            </View> */}
           </ScrollableView>
         </BottomSheet>
       </GradientWrapper>

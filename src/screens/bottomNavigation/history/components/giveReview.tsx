@@ -8,6 +8,7 @@ import {MyTextInput} from '../../../../components/textinput';
 
 import {Avatar} from '../../../../components/avatar';
 import StarRating from 'react-native-star-rating';
+import {MEDIA_URL} from '../../../../constants/url';
 
 interface Props {
   providerData?: any;
@@ -36,7 +37,15 @@ export const GiveReview = (props: Props) => {
           <FieldNameText onPress={props.onOutisdePress}>Skip Now</FieldNameText>
         </View>
 
-        <Avatar customSize size={70} />
+        <Avatar
+          customSize
+          size={70}
+          source={
+            props.providerData.avatar && {
+              uri: MEDIA_URL + props.providerData.avatar,
+            }
+          }
+        />
         <PageNameText style={{fontWeight: '600', fontSize: 20}}>
           {props.providerData.name ?? 'Customer'}
         </PageNameText>

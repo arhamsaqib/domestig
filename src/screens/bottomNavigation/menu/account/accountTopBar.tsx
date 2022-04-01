@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {ActivityIndicator, Image, StyleSheet, Text, View} from 'react-native';
 import {CommonStyles} from '../../../../common/styles';
 import {PageNameText} from '../../../../components/texts/pageNameText';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
@@ -29,7 +29,7 @@ export const AccountTopBar = ({navigation}: any) => {
     let result: any = await ImageCropPicker.openPicker({});
     // console.log(result, 'Image picked');
     if (!result.cancelled) {
-      setFileUri(result.sourceURL.toString());
+      setFileUri(result.path.toString());
     }
     setLoader(true);
     const res: any = await uploadImage(result);
@@ -88,8 +88,11 @@ export const AccountTopBar = ({navigation}: any) => {
               source={ICONS.rating}
               style={[styles.rating, {marginRight: 5}]}
             />
-            <Text style={styles.ratingTxt}>{'4.2'} out of 5</Text>
+            <Text style={styles.ratingTxt}>
+              {parseFloat(customer.rating).toFixed(1)} out of 5
+            </Text>
           </View>
+          {loader && <ActivityIndicator color={COLORS.MAIN_1} />}
         </SafeAreaView>
       </View>
       <TobTabs.Navigator

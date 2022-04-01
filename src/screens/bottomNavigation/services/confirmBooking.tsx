@@ -80,14 +80,14 @@ export const ConfirmBooking = ({navigation, route}: any) => {
     };
 
     const res = await createBookings(booking);
-    //console.log(res, 'Booking');
+    console.log(res, 'Booking');
     if (res.id !== undefined) {
       const d = {
         booking_id: res.id,
         providers: route.params.providers,
       };
       const req = await createBookingRequest(d).finally(() => setLoader(false));
-      //console.log(req, 'requests');
+      console.log(req, 'requests');
       if (res.id !== undefined) {
         Alert.alert('Booking posted successfully!');
       }

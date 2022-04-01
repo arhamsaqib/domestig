@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {FlatList, Linking, StyleSheet, Text, View} from 'react-native';
+import {
+  BackHandler,
+  FlatList,
+  Linking,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import {getAllServices} from '../../../api/categories';
 import {CommonStyles} from '../../../common/styles';
 import {Banner} from '../../../components/banner';
@@ -19,8 +26,7 @@ import {getCustomerActiveBookings} from '../../../api/customerActiveBookings';
 import {showProviderWithId} from '../../../api/provider';
 import {showBookingSubmission} from '../../../api/bookingSubmission';
 import {useFocusEffect} from '@react-navigation/native';
-import {BannerPopup} from './components/bannerPopup';
-import {viewAllBanners} from '../../../api/banners';
+
 import {updateBooking} from '../../../api/bookings';
 import {getRecommended} from '../../../api/recommended';
 
@@ -34,34 +40,39 @@ export const MainMenu = ({navigation}: any) => {
   const [bookingSubmisstion, setBookingSubmission]: any = useState([]);
   const [recommended, setRecommended]: any = useState([]);
   const [notifCount, setNotifCount]: any = useState([]);
-
   const [providerWaitingModal, setProviderWaitingModal] = useState(false);
   const [verificationCodeModal, setVerificationCodeModal] = useState(false);
   const [workingModal, setWorkingModal] = useState(false);
+  const [interval, setInt]: any = useState();
+  //const [count, setCount]: any = useState(0);
 
-  async function getData() {
+  async function getData(count: any) {
     setLoader(true);
+    setProviderWaitingModal(false);
+    setVerificationCodeModal(false);
+    setWorkingModal(false);
+    if (count <= 1) {
+      const res = await getAllServices().finally(() => setLoader(false));
+      if (res !== undefined) {
+        setServices(res);
+      }
+      const user = await getCustomerById(state.id);
+      if (user !== undefined) {
+        setCustomer(user);
+      }
 
-    const res = await getAllServices().finally(() => setLoader(false));
-    if (res !== undefined) {
-      setServices(res);
+      const recD = {
+        lat: user.latitude,
+        lng: user.longitude,
+      };
+      const recom = await getRecommended(recD);
+      if (recom !== undefined) {
+        setRecommended(recom);
+      }
+      // console.log(recom, 'recommedned');
+      const count = await getCustomerNotificationsCount(state.id);
+      setNotifCount(count);
     }
-    const user = await getCustomerById(state.id);
-    if (user !== undefined) {
-      setCustomer(user);
-    }
-
-    const recD = {
-      lat: user.latitude,
-      lng: user.longitude,
-    };
-    const recom = await getRecommended(recD);
-    if (recom !== undefined) {
-      setRecommended(recom);
-    }
-    // console.log(recom, 'recommedned');
-    const count = await getCustomerNotificationsCount(state.id);
-    setNotifCount(count);
     const pendingdata = {
       customer_id: state.id,
       status: 'pending',
@@ -94,15 +105,27 @@ export const MainMenu = ({navigation}: any) => {
         setBookingSubmission(sub);
       }
     }
+    if (bkninp.id || bkn.id) {
+      if (count <= 1) {
+        setInt(setInterval(() => getData(5), 30000));
+        console.log('refreshon');
+      }
+      //setCount(count + 1);
+    }
+    if (bkn.id === undefined && bkninp.id === undefined) {
+      clearInterval(interval);
+    }
   }
   useEffect(() => {
-    getData();
+    var count = 0;
+    count = count + 1;
+
+    getData(count);
   }, []);
 
   useFocusEffect(
     React.useCallback(() => {
-      const unsubscribe: any = () => getData();
-
+      const unsubscribe: any = () => getData(0);
       return () => unsubscribe();
     }, []),
   );
@@ -114,7 +137,7 @@ export const MainMenu = ({navigation}: any) => {
     const res = await updateBooking(booking.id, data);
     console.log(res);
     setProviderWaitingModal(false);
-    getData();
+    getData(2);
   }
 
   const renderServices = ({item}: any) => {

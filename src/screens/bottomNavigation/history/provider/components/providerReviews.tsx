@@ -20,11 +20,11 @@ export const ProviderCardReviews = (props: Props) => {
         <Avatar
           customSize
           size={41}
-          //   source={
-          //     props.item.provider_avatar && {
-          //       uri: MEDIA_URL + props.item.provider_avatar,
-          //     }
-          //}
+          source={
+            props.item.customer_avatar && {
+              uri: MEDIA_URL + props.item.customer_avatar,
+            }
+          }
         />
       </View>
       <View style={styles.col}>

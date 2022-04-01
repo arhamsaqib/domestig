@@ -6,6 +6,7 @@ import {SplashGreen} from '../splash/splashGreen';
 import MainBottomNav from '../bottomNavigation/navigator/mainBottomTabs';
 import {AuthStack} from '../auth/authStack';
 import {OnboardingRoutes} from '../onboarding/obStack';
+import {Chat} from '../bottomNavigation/home/chat';
 
 const Stack = createNativeStackNavigator();
 
@@ -16,6 +17,7 @@ const MainStack = () => {
         <Stack.Screen name="splash" component={SplashGreen} />
         <Stack.Screen name="onBoardingStack" component={OnboardingRoutes} />
         <Stack.Screen name="authStack" component={AuthStack} />
+        <Stack.Screen name="chat" component={Chat} />
         <Stack.Screen name="mainBottomNav" component={MainBottomNav} />
         <Stack.Screen name="splashWhite" component={SplashWhite} />
         {/* <Stack.Screen name="splashGreen" component={SplashGreen} /> */}
