@@ -1,12 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  BackHandler,
-  FlatList,
-  Linking,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {FlatList, Linking, StyleSheet, Text, View} from 'react-native';
 import {getAllServices} from '../../../api/categories';
 import {CommonStyles} from '../../../common/styles';
 import {Banner} from '../../../components/banner';
@@ -208,7 +201,7 @@ export const MainMenu = ({navigation}: any) => {
   };
   return (
     <>
-      <View style={CommonStyles.screenMain}>
+      <View style={[CommonStyles.screenMain, {}]}>
         <View style={{width: '100%', marginBottom: '5%'}}>
           <FlatList
             style={styles.servicesView}

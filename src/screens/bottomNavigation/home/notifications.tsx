@@ -79,7 +79,8 @@ export const Notification = () => {
   }
 
   return (
-    <SafeAreaView style={CommonStyles.screenMain}>
+    <SafeAreaView style={[CommonStyles.screenMain]}>
+      <View style={{marginVertical: 10}} />
       <View
         style={{
           width: '90%',

@@ -1,5 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import {SafeAreaView, StyleSheet, View} from 'react-native';
+import {
+  SafeAreaView,
+  StyleSheet,
+  View,
+  KeyboardAvoidingView,
+} from 'react-native';
 import {BottomSheet} from '../../components/bottomSheet';
 import {MyTextInputWithIcon} from '../../components/textinputwithicon';
 import {FieldNameText} from '../../components/texts/fieldNameText';
@@ -20,6 +25,8 @@ import auth from '@react-native-firebase/auth';
 import rememberMeAction from '../../redux/action/rememberMeAction';
 import {THIS_VERSION} from '../../constants/version';
 import {getLatestVersion} from '../../api/version';
+import {ScrollableView} from '../../helpers/scrollableView';
+import {KEYBOARD_PADDING} from '../../constants/keyboardPadding';
 
 export const Login = ({navigation}: any) => {
   const [email, setEmail] = useState('');
@@ -125,101 +132,113 @@ export const Login = ({navigation}: any) => {
   return (
     <>
       <GradientWrapper>
-        <SafeAreaView style={styles.heading}>
-          <PageNameText style={{marginVertical: 20}} white>
-            Welcome Back
-          </PageNameText>
-          {update && (
+        <KeyboardAvoidingView
+          keyboardVerticalOffset={KEYBOARD_PADDING}
+          behavior="padding"
+          style={{width: '100%', alignItems: 'center'}}>
+          <SafeAreaView style={styles.heading}>
+            <PageNameText style={{marginVertical: 20}} white>
+              Welcome Back
+            </PageNameText>
+            {update && (
+              <FieldNameText
+                style={{
+                  fontWeight: 'bold',
+                  color: 'yellow',
+                  //marginTop: 20,
+                }}>
+                A new update is available
+              </FieldNameText>
+            )}
+          </SafeAreaView>
+          <BottomSheet style={{marginTop: '5%'}}>
+            <ScrollableView>
+              <View style={{width: '90%', marginVertical: 20}}>
+                <TitleText>Login with</TitleText>
+              </View>
+
+              <View style={{width: '90%', marginBottom: 20}}>
+                <FieldNameText style={{marginBottom: 5}}>Email</FieldNameText>
+                <MyTextInputWithIcon
+                  placeholder="Enter your mail"
+                  autoCapitalize="none"
+                  onChangeText={setEmail}
+                  value={email}
+                  icon={
+                    <Icon
+                      name="mail-outline"
+                      size={16}
+                      color={COLORS.MAIN_BODYTEXT}
+                    />
+                  }
+                />
+              </View>
+              <View style={{width: '90%', marginBottom: 20}}>
+                <FieldNameText style={{marginBottom: 5}}>
+                  Password
+                </FieldNameText>
+                <MyTextInputWithIcon
+                  placeholder="Enter your password"
+                  secureTextEntry
+                  onChangeText={setPassword}
+                  autoCapitalize="none"
+                  value={password}
+                  icon={
+                    <Icon
+                      name="lock-closed-outline"
+                      size={16}
+                      color={COLORS.MAIN_BODYTEXT}
+                    />
+                  }
+                />
+              </View>
+
+              <View
+                style={[
+                  CommonStyles.subView,
+                  CommonStyles.row,
+                  {marginBottom: 30},
+                ]}>
+                <View style={[CommonStyles.row, {width: '40%'}]}>
+                  <CheckBox value={rememberMe} onChangeVal={setRememberMe} />
+                  <FieldNameText>Remember me</FieldNameText>
+                </View>
+                <MainBodyText
+                  onPress={() => navigation.navigate('forget')}
+                  style={{color: 'black'}}>
+                  Forgot password!
+                </MainBodyText>
+              </View>
+              <View style={{width: '90%', marginBottom: 20}}>
+                <MyButton
+                  title="Login Now"
+                  onPress={onLogin}
+                  loading={loader}
+                  disabled={disabled() || loader}
+                />
+              </View>
+              <View style={[CommonStyles.row, CommonStyles.subView]}>
+                <DividerP style={{width: '30%'}} />
+                <FieldNameText>Or Sign in with</FieldNameText>
+                <DividerP style={{width: '30%'}} />
+              </View>
+            </ScrollableView>
+          </BottomSheet>
+        </KeyboardAvoidingView>
+
+        <View
+          style={[{width: '90%', alignItems: 'center'}, CommonStyles.bottom5p]}>
+          <FieldNameText>
+            Don't have an account?{' '}
             <FieldNameText
-              style={{
-                fontWeight: 'bold',
-                color: 'yellow',
-                //marginTop: 20,
-              }}>
-              A new update is available
+              onPress={() => navigation.navigate('signup')}
+              style={{color: COLORS.MAIN_1, fontWeight: 'bold'}}>
+              Sign up
             </FieldNameText>
-          )}
-        </SafeAreaView>
-        <BottomSheet style={{marginTop: '5%'}}>
-          <View style={{width: '90%', marginVertical: 20}}>
-            <TitleText>Login with</TitleText>
-          </View>
-          <View style={{width: '90%', marginBottom: 20}}>
-            <FieldNameText style={{marginBottom: 5}}>Email</FieldNameText>
-            <MyTextInputWithIcon
-              placeholder="Enter your mail"
-              autoCapitalize="none"
-              onChangeText={setEmail}
-              value={email}
-              icon={
-                <Icon
-                  name="mail-outline"
-                  size={16}
-                  color={COLORS.MAIN_BODYTEXT}
-                />
-              }
-            />
-          </View>
-          <View style={{width: '90%', marginBottom: 20}}>
-            <FieldNameText style={{marginBottom: 5}}>Password</FieldNameText>
-            <MyTextInputWithIcon
-              placeholder="Enter your password"
-              secureTextEntry
-              onChangeText={setPassword}
-              autoCapitalize="none"
-              value={password}
-              icon={
-                <Icon
-                  name="lock-closed-outline"
-                  size={16}
-                  color={COLORS.MAIN_BODYTEXT}
-                />
-              }
-            />
-          </View>
-          <View
-            style={[
-              CommonStyles.subView,
-              CommonStyles.row,
-              {marginBottom: 30},
-            ]}>
-            <View style={[CommonStyles.row, {width: '40%'}]}>
-              <CheckBox value={rememberMe} onChangeVal={setRememberMe} />
-              <FieldNameText>Remember me</FieldNameText>
-            </View>
-            <MainBodyText
-              onPress={() => navigation.navigate('forget')}
-              style={{color: 'black'}}>
-              Forgot password!
-            </MainBodyText>
-          </View>
-          <View style={{width: '90%', marginBottom: 20}}>
-            <MyButton
-              title="Login Now"
-              onPress={onLogin}
-              loading={loader}
-              disabled={disabled() || loader}
-            />
-          </View>
-          <View style={[CommonStyles.row, CommonStyles.subView]}>
-            <DividerP style={{width: '30%'}} />
-            <FieldNameText>Or Sign in with</FieldNameText>
-            <DividerP style={{width: '30%'}} />
-          </View>
-        </BottomSheet>
-      </GradientWrapper>
-      <View
-        style={[CommonStyles.bottom5p, {width: '90%', alignItems: 'center'}]}>
-        <FieldNameText>
-          Don't have an account?{' '}
-          <FieldNameText
-            onPress={() => navigation.navigate('signup')}
-            style={{color: COLORS.MAIN_1, fontWeight: 'bold'}}>
-            Sign up
           </FieldNameText>
-        </FieldNameText>
-        <FieldNameText>v{THIS_VERSION} beta</FieldNameText>
-      </View>
+          <FieldNameText>v{THIS_VERSION} beta</FieldNameText>
+        </View>
+      </GradientWrapper>
     </>
   );
 };

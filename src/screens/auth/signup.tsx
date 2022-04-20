@@ -1,5 +1,11 @@
 import React, {useState} from 'react';
-import {Alert, SafeAreaView, StyleSheet, View} from 'react-native';
+import {
+  Alert,
+  KeyboardAvoidingView,
+  SafeAreaView,
+  StyleSheet,
+  View,
+} from 'react-native';
 import {BottomSheet} from '../../components/bottomSheet';
 import {MyTextInputWithIcon} from '../../components/textinputwithicon';
 import {FieldNameText} from '../../components/texts/fieldNameText';
@@ -22,6 +28,7 @@ import {useStore} from 'react-redux';
 import {CountriesOptions} from '../../components/countriesOption';
 import {MultipleOptions} from '../../components/multipleOptions';
 import {findPlaceByText, placeAutocomplete} from '../../api/places';
+import {KEYBOARD_PADDING} from '../../constants/keyboardPadding';
 
 export const Signup = ({navigation}: any) => {
   const [name, setName]: any = useState('');
@@ -127,149 +134,161 @@ export const Signup = ({navigation}: any) => {
   return (
     <>
       <GradientWrapper>
-        <SafeAreaView style={styles.heading}>
-          <PageNameText style={{marginVertical: 20}} white>
-            Getting Started
-          </PageNameText>
-        </SafeAreaView>
-        <BottomSheet style={{marginTop: '5%'}}>
-          <ScrollableView>
-            <View style={{width: '90%', marginVertical: 20}}>
-              <TitleText>Sign up with</TitleText>
-            </View>
-            <View style={{width: '90%', marginBottom: 20}}>
-              <FieldNameText style={{marginBottom: 5}}>Name</FieldNameText>
-              <MyTextInputWithIcon
-                placeholder="Enter your name"
-                autoCapitalize="none"
-                onChangeText={setName}
-                icon={
-                  <Icon
-                    name="person-outline"
-                    size={16}
-                    color={COLORS.MAIN_BODYTEXT}
-                  />
-                }
-              />
-            </View>
-            <View style={{width: '90%', marginBottom: 20}}>
-              <FieldNameText style={{marginBottom: 5}}>Email</FieldNameText>
-              <MyTextInputWithIcon
-                placeholder="Enter your email"
-                onChangeText={setEmail}
-                autoCapitalize="none"
-                icon={
-                  <Icon
-                    name="mail-outline"
-                    size={16}
-                    color={COLORS.MAIN_BODYTEXT}
-                  />
-                }
-              />
-            </View>
-            <View style={{width: '90%', marginBottom: 20}}>
-              <FieldNameText style={{marginBottom: 5}}>Phone</FieldNameText>
-              <MyTextInputWithIcon
-                placeholder="Enter your phone"
-                onChangeText={setPhone}
-                icon={
-                  <Icon
-                    name="call-outline"
-                    size={16}
-                    color={COLORS.MAIN_BODYTEXT}
-                  />
-                }
-              />
-            </View>
-            <View style={{width: '90%', marginBottom: 20}}>
-              <FieldNameText style={{marginBottom: 5}}>Password</FieldNameText>
-              <MyTextInputWithIcon
-                placeholder="Enter your password"
-                onChangeText={setPassword}
-                autoCapitalize="none"
-                secureTextEntry
-                icon={
-                  <Icon
-                    name="lock-closed-outline"
-                    size={16}
-                    color={COLORS.MAIN_BODYTEXT}
-                  />
-                }
-              />
-            </View>
-            <View style={{width: '90%', marginBottom: 20}}>
-              <FieldNameText style={{marginBottom: 5}}>
-                Confirm Password
-              </FieldNameText>
-              <MyTextInputWithIcon
-                placeholder="Enter confirm password"
-                secureTextEntry
-                autoCapitalize="none"
-                onChangeText={setConfirmPassword}
-                icon={
-                  <Icon
-                    name="lock-closed-outline"
-                    size={16}
-                    color={COLORS.MAIN_BODYTEXT}
-                  />
-                }
-              />
-            </View>
-            <View style={{width: '90%', marginBottom: 20}}>
-              <FieldNameText style={{marginBottom: 5}}>Country</FieldNameText>
-              <MyTextInputWithIcon
-                placeholder="Select your country"
-                onChangeText={setCountry}
-                defaultValue={country}
-                onFocus={() => setShowCountries(true)}
-                autoCapitalize="none"
-                icon={
-                  <Icon
-                    name="globe-outline"
-                    size={16}
-                    color={COLORS.MAIN_BODYTEXT}
-                  />
-                }
-              />
-              {showCountries && (
-                <CountriesOptions
-                  onSelect={(item: any) => {
-                    setCountry(item.name);
-                    setShowCountries(false);
-                  }}
-                  find={country}
+        <KeyboardAvoidingView
+          keyboardVerticalOffset={KEYBOARD_PADDING}
+          behavior="padding"
+          style={{width: '100%', alignItems: 'center'}}>
+          <SafeAreaView style={styles.heading}>
+            <PageNameText style={{marginVertical: 20}} white>
+              Getting Started
+            </PageNameText>
+          </SafeAreaView>
+          <BottomSheet style={{marginTop: '5%'}}>
+            <ScrollableView>
+              <View style={{width: '90%', marginVertical: 20}}>
+                <TitleText>Sign up with</TitleText>
+              </View>
+              <View style={{width: '90%', marginBottom: 20}}>
+                <FieldNameText style={{marginBottom: 5}}>Name</FieldNameText>
+                <MyTextInputWithIcon
+                  placeholder="Enter your name"
+                  autoCapitalize="none"
+                  onChangeText={setName}
+                  icon={
+                    <Icon
+                      name="person-outline"
+                      size={16}
+                      color={COLORS.MAIN_BODYTEXT}
+                    />
+                  }
                 />
-              )}
-            </View>
-            <View style={{width: '90%', marginBottom: 20}}>
-              <FieldNameText style={{marginBottom: 5}}>Location</FieldNameText>
-              <MyTextInputWithIcon
-                onFocus={() => setShowPlaces(true)}
-                placeholder="Enter your location"
-                defaultValue={location}
-                onChangeText={findLocation}
-                icon={
-                  <Icon
-                    name="location-outline"
-                    size={16}
-                    color={COLORS.MAIN_BODYTEXT}
+              </View>
+              <View style={{width: '90%', marginBottom: 20}}>
+                <FieldNameText style={{marginBottom: 5}}>Email</FieldNameText>
+                <MyTextInputWithIcon
+                  placeholder="Enter your email"
+                  onChangeText={setEmail}
+                  autoCapitalize="none"
+                  icon={
+                    <Icon
+                      name="mail-outline"
+                      size={16}
+                      color={COLORS.MAIN_BODYTEXT}
+                    />
+                  }
+                />
+              </View>
+              <View style={{width: '90%', marginBottom: 20}}>
+                <FieldNameText style={{marginBottom: 5}}>Phone</FieldNameText>
+                <MyTextInputWithIcon
+                  placeholder="Enter your phone"
+                  onChangeText={setPhone}
+                  icon={
+                    <Icon
+                      name="call-outline"
+                      size={16}
+                      color={COLORS.MAIN_BODYTEXT}
+                    />
+                  }
+                />
+              </View>
+              <View style={{width: '90%', marginBottom: 20}}>
+                <FieldNameText style={{marginBottom: 5}}>
+                  Password
+                </FieldNameText>
+                <MyTextInputWithIcon
+                  placeholder="Enter your password"
+                  onChangeText={setPassword}
+                  autoCapitalize="none"
+                  secureTextEntry
+                  icon={
+                    <Icon
+                      name="lock-closed-outline"
+                      size={16}
+                      color={COLORS.MAIN_BODYTEXT}
+                    />
+                  }
+                />
+              </View>
+              <View style={{width: '90%', marginBottom: 20}}>
+                <FieldNameText style={{marginBottom: 5}}>
+                  Confirm Password
+                </FieldNameText>
+                <MyTextInputWithIcon
+                  placeholder="Enter confirm password"
+                  secureTextEntry
+                  autoCapitalize="none"
+                  onChangeText={setConfirmPassword}
+                  icon={
+                    <Icon
+                      name="lock-closed-outline"
+                      size={16}
+                      color={COLORS.MAIN_BODYTEXT}
+                    />
+                  }
+                />
+              </View>
+              <View style={{width: '90%', marginBottom: 20}}>
+                <FieldNameText style={{marginBottom: 5}}>Country</FieldNameText>
+                <MyTextInputWithIcon
+                  placeholder="Select your country"
+                  onChangeText={setCountry}
+                  defaultValue={country}
+                  onFocus={() => setShowCountries(true)}
+                  autoCapitalize="none"
+                  icon={
+                    <Icon
+                      name="globe-outline"
+                      size={16}
+                      color={COLORS.MAIN_BODYTEXT}
+                    />
+                  }
+                />
+                {showCountries && (
+                  <CountriesOptions
+                    onSelect={(item: any) => {
+                      setCountry(item.name);
+                      setShowCountries(false);
+                    }}
+                    find={country}
                   />
-                }
-              />
-              {showPlaces && (
-                <MultipleOptions data={place.predictions} onSelect={onSelect} />
-              )}
-            </View>
-            <View style={{width: '90%', marginBottom: 300}}>
-              <MyButton
-                title="Sign up now"
-                onPress={onRegister}
-                loading={loader}
-                disabled={loader || disabled()}
-              />
-            </View>
-          </ScrollableView>
-        </BottomSheet>
+                )}
+              </View>
+              <View style={{width: '90%', marginBottom: 20}}>
+                <FieldNameText style={{marginBottom: 5}}>
+                  Location
+                </FieldNameText>
+                <MyTextInputWithIcon
+                  onFocus={() => setShowPlaces(true)}
+                  placeholder="Enter your location"
+                  defaultValue={location}
+                  onChangeText={findLocation}
+                  icon={
+                    <Icon
+                      name="location-outline"
+                      size={16}
+                      color={COLORS.MAIN_BODYTEXT}
+                    />
+                  }
+                />
+                {showPlaces && (
+                  <MultipleOptions
+                    data={place.predictions}
+                    onSelect={onSelect}
+                  />
+                )}
+              </View>
+              <View style={{width: '90%', marginBottom: 300}}>
+                <MyButton
+                  title="Sign up now"
+                  onPress={onRegister}
+                  loading={loader}
+                  disabled={loader || disabled()}
+                />
+              </View>
+            </ScrollableView>
+          </BottomSheet>
+        </KeyboardAvoidingView>
       </GradientWrapper>
       {/* <View
         style={[CommonStyles.bottom5p, {width: '90%', alignItems: 'center'}]}>

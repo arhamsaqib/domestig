@@ -1,5 +1,12 @@
-import React, {useEffect, useState} from 'react';
-import {ActivityIndicator, Image, StyleSheet, Text, View} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import {CommonStyles} from '../../../../common/styles';
 import {PageNameText} from '../../../../components/texts/pageNameText';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
@@ -17,6 +24,9 @@ import {getCustomerById, updateCustomer} from '../../../../api/customer';
 import {MEDIA_URL} from '../../../../constants/url';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import {uploadImage} from '../../../../api/uploadImage';
+import {ScrollableView} from '../../../../helpers/scrollableView';
+import {ScrollView} from 'react-native-gesture-handler';
+import Animated from 'react-native-reanimated';
 
 const TobTabs = createMaterialTopTabNavigator();
 
@@ -51,8 +61,9 @@ export const AccountTopBar = ({navigation}: any) => {
   useEffect(() => {
     getData();
   }, []);
-  return (
-    <>
+
+  const Comp1 = () => {
+    return (
       <View style={styles.card}>
         <SafeAreaView
           style={{width: '90%', alignItems: 'center', alignSelf: 'center'}}>
@@ -95,17 +106,29 @@ export const AccountTopBar = ({navigation}: any) => {
           {loader && <ActivityIndicator color={COLORS.MAIN_1} />}
         </SafeAreaView>
       </View>
+    );
+  };
+
+  return (
+    <>
+      <Comp1 />
       <TobTabs.Navigator
+        overScrollMode="always"
         screenOptions={{
           tabBarActiveTintColor: COLORS.MAIN_2,
           tabBarInactiveTintColor: COLORS.MAIN_SUBTEXT,
           tabBarLabelStyle: styles.label,
-          tabBarIndicatorStyle: {borderColor: COLORS.MAIN_2, borderWidth: 1},
+          tabBarIndicatorStyle: {
+            borderColor: COLORS.MAIN_2,
+            borderWidth: 1,
+          },
         }}>
         <TobTabs.Screen
           name="profileDetails"
           component={ProfileDetails}
-          options={{title: 'Profile Details'}}
+          options={{
+            title: 'Profile Details',
+          }}
         />
         <TobTabs.Screen
           name="profileReviews"

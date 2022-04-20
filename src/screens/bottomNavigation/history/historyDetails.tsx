@@ -111,6 +111,8 @@ export const HistoryDetails = ({navigation, route}: any) => {
   }, []);
   return (
     <SafeAreaView style={CommonStyles.screenMain}>
+      <View style={{marginTop: 10}} />
+
       <ProviderDetails
         data={provider}
         modalVisibility={card}

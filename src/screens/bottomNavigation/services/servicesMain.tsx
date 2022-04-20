@@ -62,6 +62,8 @@ export const ServicesMain = ({navigation}: any) => {
 
   return (
     <SafeAreaView style={CommonStyles.screenMain}>
+      <View style={{marginTop: 10}} />
+
       <View style={styles.topRow}>
         <View style={{width: '15%', alignItems: 'flex-start'}}>
           <BackIcon black onPress={() => navigation.goBack()} />

@@ -70,7 +70,7 @@ export const Drawer = ({navigation, onClose}: any) => {
       iconName: 'location-outline',
       // onPress: () => navigation.navigate('addresses'),
       onPress: () => {
-        navigation.navigate('menu', {screen: 'userAccount'});
+        navigation.navigate('addresses', {screen: 'userAccount'});
         onClose();
       },
     },

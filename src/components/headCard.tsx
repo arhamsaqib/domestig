@@ -67,7 +67,8 @@ export const HeadCard = (props: Props) => {
 
 const styles = StyleSheet.create({
   main: {
-    height: 277,
+    //height: 277,
+    height: 307, //added new
     width: '100%',
     alignItems: 'center',
   },
@@ -85,6 +86,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    marginTop: 30, //added new
   },
   gm: {
     fontFamily: FONTS.P_REGULAR,

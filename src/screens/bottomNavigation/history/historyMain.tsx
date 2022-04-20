@@ -56,6 +56,8 @@ export const HistoryMain = ({navigation}: any) => {
   }, []);
   return (
     <SafeAreaView style={CommonStyles.screenMain}>
+      <View style={{marginTop: 10}} />
+
       <View style={{width: '90%', marginVertical: 10}}>
         <PageNameText>Booking History</PageNameText>
       </View>
