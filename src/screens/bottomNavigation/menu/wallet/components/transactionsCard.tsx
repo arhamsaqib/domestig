@@ -20,7 +20,7 @@ const Transaction = () => {
           justifyContent: 'center',
           height: 35,
         }}>
-        <Text style={styles.val}>{'234234'}</Text>
+        <Text style={styles.val}>{'0123'}</Text>
       </View>
       <View
         style={{
@@ -29,7 +29,7 @@ const Transaction = () => {
           justifyContent: 'center',
           height: 35,
         }}>
-        <Text style={styles.val}>{'$5680'}</Text>
+        <Text style={styles.val}>{'$10'}</Text>
       </View>
       <View
         style={{
@@ -38,7 +38,7 @@ const Transaction = () => {
           justifyContent: 'center',
           height: 35,
         }}>
-        <Text style={styles.val}>{'August 05, 2021'}</Text>
+        <Text style={styles.val}>{'July 01, 2022'}</Text>
       </View>
     </View>
   );

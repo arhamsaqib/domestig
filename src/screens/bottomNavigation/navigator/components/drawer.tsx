@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Image, Modal, StyleSheet, Text, View} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import {SafeAreaView} from 'react-native';
 import {CommonStyles} from '../../../../common/styles';
 import {Avatar} from '../../../../components/avatar';
 import {Divider} from '../../../../components/divider';
@@ -12,7 +12,7 @@ import {ScrollableView} from '../../../../helpers/scrollableView';
 import {RootStateOrAny, useSelector} from 'react-redux';
 import {getCustomerById} from '../../../../api/customer';
 import {MEDIA_URL} from '../../../../constants/url';
-import {useNavigation} from '@react-navigation/native';
+import {DrawerItem} from '@react-navigation/drawer';
 
 export const Drawer = ({navigation, onClose}: any) => {
   const state = useSelector((state: RootStateOrAny) => state.currentUser);
@@ -35,26 +35,38 @@ export const Drawer = ({navigation, onClose}: any) => {
   const options = [
     {
       name: 'Home',
-      iconName: 'home-outline',
+      iconName: 'home',
       onPress: () => {
         navigation.navigate('home');
         onClose();
       },
+      image: {
+        source: ICONS.home,
+        style: {width: 18, height: 20},
+      },
     },
     {
       name: 'History',
-      iconName: 'time-outline',
+      iconName: 'history',
       onPress: () => {
         navigation.navigate('history');
         onClose();
       },
+      image: {
+        source: ICONS.history,
+        style: {width: 20, height: 18},
+      },
     },
     {
       name: 'Notification',
-      iconName: 'notifications-outline',
+      iconName: 'notifications-none',
       onPress: () => {
         navigation.navigate('notifications');
         onClose();
+      },
+      image: {
+        source: ICONS.bell,
+        style: {width: 18, height: 20},
       },
     },
     {
@@ -64,14 +76,22 @@ export const Drawer = ({navigation, onClose}: any) => {
         navigation.navigate('menu', {screen: 'userAccount'});
         onClose();
       },
+      image: {
+        source: ICONS.account,
+        style: {width: 18, height: 20},
+      },
     },
     {
       name: 'Addresses',
       iconName: 'location-outline',
       // onPress: () => navigation.navigate('addresses'),
       onPress: () => {
-        navigation.navigate('addresses', {screen: 'userAccount'});
+        navigation.navigate('menu', {screen: 'addresses'});
         onClose();
+      },
+      image: {
+        source: ICONS.address,
+        style: {width: 18, height: 20},
       },
     },
     {
@@ -82,6 +102,10 @@ export const Drawer = ({navigation, onClose}: any) => {
         navigation.navigate('menu', {screen: 'payment'});
         onClose();
       },
+      image: {
+        source: ICONS.payment,
+        style: {width: 20, height: 14.17},
+      },
     },
     {
       name: 'Wallet',
@@ -90,6 +114,10 @@ export const Drawer = ({navigation, onClose}: any) => {
       onPress: () => {
         navigation.navigate('menu', {screen: 'wallet'});
         onClose();
+      },
+      image: {
+        source: ICONS.wallet1,
+        style: {width: 20, height: 19},
       },
     },
     {
@@ -100,6 +128,10 @@ export const Drawer = ({navigation, onClose}: any) => {
         navigation.navigate('menu', {screen: 'language'});
         onClose();
       },
+      image: {
+        source: ICONS.language,
+        style: {width: 20, height: 20},
+      },
     },
     {
       name: 'Share & Discount',
@@ -108,6 +140,10 @@ export const Drawer = ({navigation, onClose}: any) => {
       onPress: () => {
         navigation.navigate('menu', {screen: 'referrals'});
         onClose();
+      },
+      image: {
+        source: ICONS.share,
+        style: {width: 18, height: 20},
       },
     },
     {
@@ -118,6 +154,10 @@ export const Drawer = ({navigation, onClose}: any) => {
         navigation.navigate('menu', {screen: 'tos'});
         onClose();
       },
+      image: {
+        source: ICONS.book,
+        style: {width: 20, height: 15},
+      },
     },
     {
       name: 'Privacy Policy',
@@ -126,6 +166,10 @@ export const Drawer = ({navigation, onClose}: any) => {
       onPress: () => {
         navigation.navigate('menu', {screen: 'privacyPolicy'});
         onClose();
+      },
+      image: {
+        source: ICONS.book,
+        style: {width: 20, height: 15},
       },
     },
   ];
@@ -136,38 +180,47 @@ export const Drawer = ({navigation, onClose}: any) => {
         name={item.name}
         iconName={item.iconName}
         onPress={item.onPress}
+        image={item.image}
       />
     );
   };
 
   return (
-    // <View style={{flex: 1, flexDirection: 'row'}}>
-    //  <View style={{width: '20%', backgroundColor: COLORS.WF2}} />
-    <SafeAreaView style={[styles.main, styles.elevated_card]}>
-      <Avatar
-        customSize
-        size={70}
-        source={user.avatar && {uri: MEDIA_URL + user.avatar}}
-      />
-      <Text style={[styles.name, {marginVertical: 10}]}>{user.name}</Text>
-      <View style={styles.ratingCont}>
-        <Image
-          style={[styles.rating, {marginRight: 5}]}
-          source={ICONS.rating}
+    <>
+      <SafeAreaView style={[styles.main, styles.elevated_card]}>
+        <Avatar
+          customSize
+          size={70}
+          source={user.avatar && {uri: MEDIA_URL + user.avatar}}
         />
-        <Text style={styles.ratingTxt}>{parseFloat(user.rating)} out of 5</Text>
-      </View>
-      <Divider />
-      <ScrollableView>
-        <View style={{width: '80%', marginTop: 10}}>
-          {options.map(renderOptions)}
+        <Text style={[styles.name, {marginVertical: 10}]}>{user.name}</Text>
+        <View style={styles.ratingCont}>
+          <Image
+            style={[styles.rating, {marginRight: 5}]}
+            source={ICONS.rating}
+          />
+          <Text style={styles.ratingTxt}>
+            {parseFloat(user.rating)} out of 5
+          </Text>
         </View>
-        <View style={{width: '80%', marginTop: 20}}>
-          <DrawerOption name="Log-out" iconName="log-out-outline" />
-        </View>
-      </ScrollableView>
-    </SafeAreaView>
-    // </View>
+        <Divider />
+        <ScrollableView>
+          <View style={{width: '80%', marginTop: 10}}>
+            {options.map(renderOptions)}
+          </View>
+          <View style={{width: '80%', marginTop: 20}}>
+            <DrawerOption
+              name="Log-out"
+              iconName="log-out-outline"
+              image={{
+                source: ICONS.logout,
+                style: {width: 20, height: 18},
+              }}
+            />
+          </View>
+        </ScrollableView>
+      </SafeAreaView>
+    </>
   );
 };
 
@@ -178,6 +231,7 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'flex-end',
     height: '100%',
+    marginTop: 15,
   },
   // main: {
   //   //flex: 1,

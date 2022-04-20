@@ -1,6 +1,12 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import {
+  Image,
+  ImageStyle,
+  StyleProp,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 import {COLORS} from '../../../../constants/colors';
 import {FONTS} from '../../../../constants/fonts';
 
@@ -9,16 +15,21 @@ interface Props {
   onPress?(): void;
   iconName: string;
   opened?: boolean;
+  icon?: any;
+  image?: any;
 }
 
 export const DrawerOption = (props: Props) => {
   return (
     <TouchableOpacity onPress={props.onPress} style={styles.main}>
-      <Icon
+      {/* <Icon
         name={props.iconName}
         size={20}
         color={props.opened ? COLORS.MAIN_2 : COLORS.MAIN_SUBTEXT}
-      />
+      /> */}
+      {props.image && (
+        <Image source={props.image.source} style={props.image.style} />
+      )}
       <Text
         style={[
           styles.name,

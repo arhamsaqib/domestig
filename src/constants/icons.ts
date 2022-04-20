@@ -28,7 +28,29 @@ const markRead = require('../assets/images/icons/markRead.png');
 const bin = require('../assets/images/icons/bin.png');
 const clock = require('../assets/images/icons/clock.png');
 const forget = require('../assets/images/icons/forget.png');
+const account = require('../assets/icons/account.png');
+const address = require('../assets/icons/address.png');
+const bell = require('../assets/icons/bell.png');
+const book = require('../assets/icons/book.png');
+const history = require('../assets/icons/history.png');
+const home = require('../assets/icons/home.png');
+const language = require('../assets/icons/language.png');
+const logout = require('../assets/icons/logout.png');
+const payment = require('../assets/icons/payment.png');
+const share = require('../assets/icons/share.png');
+const wallet1 = require('../assets/icons/wallet.png');
 const ICONS = {
+  wallet1,
+  share,
+  payment,
+  logout,
+  language,
+  home,
+  history,
+  book,
+  bell,
+  address,
+  account,
   markRead,
   onboarding1,
   onboarding2,

@@ -29,7 +29,7 @@ export const BalanceCard = (props: Props) => {
           {props.available && 'Available'}
           {props.used && 'Used'} balance
         </Text>
-        <Text style={styles.balance}>$5055.00</Text>
+        <Text style={styles.balance}>$1000.00</Text>
       </View>
     </View>
   );

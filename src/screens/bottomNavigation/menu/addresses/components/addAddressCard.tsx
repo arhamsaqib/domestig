@@ -1,5 +1,11 @@
 import React, {useState} from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {
+  Image,
+  KeyboardAvoidingView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import {BottomCard} from '../../../../../components/bottomCard';
 import {GreenCircle} from '../../../../../components/greenCircle';
 import {MyTextInput} from '../../../../../components/textinput';
@@ -13,6 +19,7 @@ import {findPlaceByText, placeAutocomplete} from '../../../../../api/places';
 import {MultipleOptions} from '../../../../../components/multipleOptions';
 import {RootStateOrAny, useSelector} from 'react-redux';
 import {createCustomerAddress} from '../../../../../api/customerAddresses';
+import {KEYBOARD_PADDING} from '../../../../../constants/keyboardPadding';
 
 interface Props {
   modalVisibility: boolean;
@@ -66,8 +73,9 @@ export const AddAddressCard = (props: Props) => {
   return (
     <BottomCard
       modalVisibility={props.modalVisibility}
-      style={[{height: 413}, showPlaces && {height: 700}]}
-      onOutsidePress={props.onOutsidePress}>
+      style={[{height: '50%'}, showPlaces && {height: '90%'}]}
+      onOutsidePress={props.onOutsidePress}
+      onArrowPress={props.onOutsidePress}>
       <View style={{width: '100%', alignItems: 'center'}}>
         <GreenCircle>
           <Image source={ICONS.location} style={styles.icon} />

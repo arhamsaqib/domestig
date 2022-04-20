@@ -69,6 +69,7 @@ export const UpdateAddressCard = (props: Props) => {
     <BottomCard
       modalVisibility={props.modalVisibility}
       style={[{height: 413}, showPlaces && {height: 700}]}
+      onArrowPress={props.onOutsidePress}
       onOutsidePress={props.onOutsidePress}>
       <View style={{width: '100%', alignItems: 'center'}}>
         <GreenCircle>

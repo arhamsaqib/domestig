@@ -17,6 +17,7 @@ interface ModalView {
   cardTopStyle?: StyleProp<ViewStyle>;
   cardTopChildren?: any;
   cardTop?: boolean;
+  onArrowPress?(): void;
 }
 
 export const BottomCard: FunctionComponent<ModalView> = ({
@@ -27,6 +28,7 @@ export const BottomCard: FunctionComponent<ModalView> = ({
   cardTop,
   cardTopStyle,
   style,
+  onArrowPress,
 }) => {
   return (
     <Modal visible={modalVisibility} transparent={true}>
@@ -44,6 +46,7 @@ export const BottomCard: FunctionComponent<ModalView> = ({
         )}
         <View style={[styles.modalView2, style]}>
           <TouchableOpacity
+            onPress={onArrowPress}
             style={{
               width: '90%',
               alignItems: 'center',
