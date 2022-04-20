@@ -1,6 +1,5 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {COLORS} from '../../../constants/colors';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {HeadCard} from '../../../components/headCard';
@@ -12,19 +11,12 @@ import {Alert, StyleSheet, Text} from 'react-native';
 import {DrawerOpener} from './components/drawerOpener';
 import {Drawer} from './components/drawer';
 import {MenuStack} from '../menu/menuStack';
+import {CustomerTabItem} from './components/customerTabItem';
 
 const BottomNav = createBottomTabNavigator();
 
 const Label = ({children}: any) => {
   return <Text style={styles.labelActive}>{children}</Text>;
-};
-
-const SamplePage = () => {
-  return (
-    <SafeAreaView style={{flex: 1, backgroundColor: COLORS.MAIN_SUBTEXT}}>
-      <HeadCard />
-    </SafeAreaView>
-  );
 };
 
 const MainBottomNav = () => {
@@ -41,55 +33,84 @@ const MainBottomNav = () => {
         },
         tabBarActiveBackgroundColor: COLORS.light_green,
         tabBarItemStyle: {
-          //borderWidth: 1,
+          // borderWidth: 1,
           justifyContent: 'center',
           alignItems: 'center',
           borderRadius: 5,
           height: 35,
           alignSelf: 'center',
+          alignContent: 'center',
         },
-
         //tabBarShowLabel: false,
-        tabBarStyle: {padding: 10},
+        tabBarStyle: {
+          height: 100,
+          justifyContent: 'center',
+          alignItems: 'center',
+        },
       }}>
       <BottomNav.Screen
         name="home"
         component={HomeStack}
-        options={{
+        options={navigation => ({
+          unmountOnBlur: true,
           title: 'Home',
-          tabBarIcon: ({color, focused}) => (
-            <Icon name="home-outline" color={color} size={25} />
+          tabBarButton: props => (
+            <CustomerTabItem
+              name="Home"
+              navigation={navigation}
+              //icon={<Icon name="home-outline" color={'black'} size={25} />}
+              iconName="home-outline"
+            />
           ),
-          tabBarLabel: ({focused}) => {
-            return <Label>{focused && 'Home'}</Label>;
-          },
-        }}
+          // tabBarIcon: ({color, focused}) => (
+          //   <Icon name="home-outline" color={color} size={25} />
+          // ),
+          // tabBarLabel: ({focused}) => {
+          //   return <Label>{focused && 'Home'}</Label>;
+          // },
+        })}
       />
       <BottomNav.Screen
         name="services"
         component={ServicesStack}
-        options={{
+        options={navigation => ({
           title: 'Services',
-          tabBarIcon: ({color, focused}) => (
-            <Icon name="apps-outline" color={color} size={25} />
+          tabBarButton: props => (
+            <CustomerTabItem
+              name="Services"
+              navigation={navigation}
+              //icon={<Icon name="apps-outline" color={'black'} size={25} />}
+              iconName="apps-outline"
+            />
           ),
-          tabBarLabel: ({focused}) => {
-            return <Label>{focused && 'Services'}</Label>;
-          },
-        }}
+          // tabBarIcon: ({color, focused}) => (
+          //   <Icon name="apps-outline" color={color} size={25} />
+          // ),
+          // tabBarLabel: ({focused}) => {
+          //   return <Label>{focused && 'Services'}</Label>;
+          // },
+        })}
       />
       <BottomNav.Screen
         name="history"
         component={HistoryStack}
-        options={{
+        options={navigation => ({
           title: 'History',
-          tabBarIcon: ({color, focused}) => (
-            <Icon name="time-outline" color={color} size={25} />
+          // tabBarIcon: ({color, focused}) => (
+          //   <Icon name="time-outline" color={color} size={25} />
+          // ),
+          // tabBarLabel: ({focused}) => {
+          //   return <Label>{focused && 'History'}</Label>;
+          // },
+          tabBarButton: props => (
+            <CustomerTabItem
+              name="History"
+              navigation={navigation}
+              //icon={<Icon name="time-outline" color={'black'} size={25} />}
+              iconName="time-outline"
+            />
           ),
-          tabBarLabel: ({focused}) => {
-            return <Label>{focused && 'History'}</Label>;
-          },
-        }}
+        })}
       />
       <BottomNav.Screen
         name="menu"
@@ -97,7 +118,7 @@ const MainBottomNav = () => {
         // component={() => {
         //   return null;
         // }}
-        options={{
+        options={navigation => ({
           title: 'Menu',
           tabBarIcon: ({color, focused}) => (
             <Icon name="menu-outline" color={color} size={25} />
@@ -105,8 +126,14 @@ const MainBottomNav = () => {
           tabBarLabel: ({focused}) => {
             return <Label>{focused && 'Menu'}</Label>;
           },
-          //tabBarButton: props => <DrawerOpener />,
-        }}
+          tabBarButton: props => (
+            <DrawerOpener
+              navigation={navigation}
+              iconName="menu-outline"
+              name="Menu"
+            />
+          ),
+        })}
       />
     </BottomNav.Navigator>
   );

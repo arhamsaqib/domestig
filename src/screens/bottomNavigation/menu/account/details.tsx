@@ -43,13 +43,8 @@ export const ProfileDetails = () => {
   async function findPlace(place: string) {
     const res = await findPlaceByText(place);
     console.log(res, 'Place by text');
-    if (res[0] === undefined) {
-      Alert.alert('Error while parsing place');
-      //setLocation('');
-      setPlaceInfo(res.candidates[0]);
-    } else {
-      setPlaceInfo(res.candidates[0]);
-    }
+
+    setPlaceInfo(res.candidates[0]);
   }
   function onSelect(item: any) {
     //console.log(item, 'Selected Item');
@@ -100,20 +95,6 @@ export const ProfileDetails = () => {
             icon={<Icon name="call-outline" size={15} color={'#777777'} />}
           />
         </View>
-        {/* <View style={{width: '90%', marginTop: 10}}>
-          <Text style={[styles.field, {marginBottom: 5}]}>Country</Text>
-          <DropDown
-            name={user.country ?? 'Select your country'}
-            icon={<Icon name="globe-outline" size={15} color={'#777777'} />}
-          />
-        </View>
-        <View style={{width: '90%', marginTop: 10}}>
-          <Text style={[styles.field, {marginBottom: 5}]}>Location</Text>
-          <DropDown
-            name={user.location ?? 'Type your location'}
-            icon={<Icon name="location-outline" size={15} color={'#777777'} />}
-          />
-        </View> */}
         <View style={{width: '90%', marginBottom: 20}}>
           <FieldNameText style={{marginBottom: 5}}>Country</FieldNameText>
           <MyTextInputWithIcon

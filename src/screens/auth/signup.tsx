@@ -114,12 +114,8 @@ export const Signup = ({navigation}: any) => {
   async function findPlace(place: string) {
     const res = await findPlaceByText(place);
     console.log(res, 'Place by text');
-    if (res[0] === undefined) {
-      Alert.alert('Error while parsing place');
-      setLocation('');
-    } else {
-      setPlaceInfo(res.candidates[0]);
-    }
+
+    setPlaceInfo(res.candidates[0]);
   }
 
   function onSelect(item: any) {
