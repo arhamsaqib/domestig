@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 interface Props extends TextInputProps {
   icon?: any;
+  ref?: any;
 }
 
 export const MyTextInputWithIcon = (props: Props) => {
@@ -15,6 +16,7 @@ export const MyTextInputWithIcon = (props: Props) => {
     <View style={styles.main}>
       <View style={styles.iconContainer}>{icon}</View>
       <TextInput
+        ref={props.ref}
         style={[styles.ti, style]}
         placeholderTextColor="#BCBCBC"
         {...rest}

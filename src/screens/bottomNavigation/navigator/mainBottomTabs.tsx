@@ -43,7 +43,7 @@ const MainBottomNav = () => {
         },
         //tabBarShowLabel: false,
         tabBarStyle: {
-          height: 100,
+          height: 83,
           justifyContent: 'center',
           alignItems: 'center',
         },

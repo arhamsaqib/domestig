@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: 35,
     alignSelf: 'center',
+    borderRadius: 5,
   },
   tabBarLabelStyle: {
     fontFamily: FONTS.P_MEDIUM,

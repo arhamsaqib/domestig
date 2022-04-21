@@ -12,7 +12,6 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {CommonStyles} from '../../../common/styles';
 import {Avatar} from '../../../components/avatar';
 import {PageNameText} from '../../../components/texts/pageNameText';
-import messaging from '@react-native-firebase/messaging';
 import {SentMessage} from './components/sentMessage';
 import {MyButton} from '../../../components/button';
 import {ReceivedMessage} from './components/receivedMessage';

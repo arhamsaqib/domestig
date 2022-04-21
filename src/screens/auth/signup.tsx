@@ -56,14 +56,14 @@ export const Signup = ({navigation}: any) => {
   }
   async function createLaravelUser(uid: string) {
     const data = {
-      name: name,
-      email: email,
+      name: name.trim(),
+      email: email.trim(),
       fuid: uid,
       status: 'active',
       location: location,
       latitude: placeIinfo.geometry.location.lat,
       longitude: placeIinfo.geometry.location.lng,
-      phone: phone,
+      phone: phone.trim(),
       country: country,
     };
     const user = await createCustomer(data).finally(() => {
@@ -91,7 +91,7 @@ export const Signup = ({navigation}: any) => {
     setError('');
     if (CheckSameString(password, confirmPassword)) {
       auth()
-        .createUserWithEmailAndPassword(email, password)
+        .createUserWithEmailAndPassword(email.trim(), password)
         .then(userCredential => {
           const uid = userCredential.user.uid;
           userCredential.user.sendEmailVerification();

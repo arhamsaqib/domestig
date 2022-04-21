@@ -27,7 +27,8 @@ import {THIS_VERSION} from '../../constants/version';
 import {getLatestVersion} from '../../api/version';
 import {ScrollableView} from '../../helpers/scrollableView';
 import {KEYBOARD_PADDING} from '../../constants/keyboardPadding';
-
+//@ts-ignore
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 export const Login = ({navigation}: any) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -109,7 +110,7 @@ export const Login = ({navigation}: any) => {
     // setError('');
     setLoader(true);
     auth()
-      .signInWithEmailAndPassword(email, password)
+      .signInWithEmailAndPassword(email.trim(), password)
       .then(userCredential => {
         setLoader(false);
         const uid = userCredential.user.uid;
@@ -129,30 +130,33 @@ export const Login = ({navigation}: any) => {
         console.error(error);
       });
   }
+  var ref: any;
+  var ref2: any;
   return (
     <>
       <GradientWrapper>
-        <KeyboardAvoidingView
+        {/* <KeyboardAvoidingView
           keyboardVerticalOffset={KEYBOARD_PADDING}
           behavior="padding"
-          style={{width: '100%', alignItems: 'center'}}>
-          <SafeAreaView style={styles.heading}>
-            <PageNameText style={{marginVertical: 20}} white>
-              Welcome Back
-            </PageNameText>
-            {update && (
-              <FieldNameText
-                style={{
-                  fontWeight: 'bold',
-                  color: 'yellow',
-                  //marginTop: 20,
-                }}>
-                A new update is available
-              </FieldNameText>
-            )}
-          </SafeAreaView>
-          <BottomSheet style={{marginTop: '5%'}}>
-            <ScrollableView>
+          style={{width: '100%', alignItems: 'center'}}> */}
+        <SafeAreaView style={styles.heading}>
+          <PageNameText style={{marginVertical: 20}} white>
+            Welcome Back
+          </PageNameText>
+          {update && (
+            <FieldNameText
+              style={{
+                fontWeight: 'bold',
+                color: 'yellow',
+                //marginTop: 20,
+              }}>
+              A new update is available
+            </FieldNameText>
+          )}
+        </SafeAreaView>
+        <BottomSheet style={{marginTop: '5%', height: '100%'}}>
+          <KeyboardAwareScrollView style={{width: '100%'}}>
+            <View style={{width: '100%', alignItems: 'center'}}>
               <View style={{width: '90%', marginVertical: 20}}>
                 <TitleText>Login with</TitleText>
               </View>
@@ -160,6 +164,9 @@ export const Login = ({navigation}: any) => {
               <View style={{width: '90%', marginBottom: 20}}>
                 <FieldNameText style={{marginBottom: 5}}>Email</FieldNameText>
                 <MyTextInputWithIcon
+                  ref={(r: any) => {
+                    ref = r;
+                  }}
                   placeholder="Enter your mail"
                   autoCapitalize="none"
                   onChangeText={setEmail}
@@ -178,6 +185,9 @@ export const Login = ({navigation}: any) => {
                   Password
                 </FieldNameText>
                 <MyTextInputWithIcon
+                  ref={(r: any) => {
+                    ref = r;
+                  }}
                   placeholder="Enter your password"
                   secureTextEntry
                   onChangeText={setPassword}
@@ -222,22 +232,26 @@ export const Login = ({navigation}: any) => {
                 <FieldNameText>Or Sign in with</FieldNameText>
                 <DividerP style={{width: '30%'}} />
               </View>
-            </ScrollableView>
-          </BottomSheet>
-        </KeyboardAvoidingView>
+            </View>
+          </KeyboardAwareScrollView>
+        </BottomSheet>
+        {/* </KeyboardAvoidingView> */}
 
-        <View
-          style={[{width: '90%', alignItems: 'center'}, CommonStyles.bottom5p]}>
-          <FieldNameText>
-            Don't have an account?{' '}
-            <FieldNameText
-              onPress={() => navigation.navigate('signup')}
-              style={{color: COLORS.MAIN_1, fontWeight: 'bold'}}>
-              Sign up
+        {/* <View
+            style={[
+              {width: '90%', alignItems: 'center'},
+              CommonStyles.bottom5p,
+            ]}>
+            <FieldNameText>
+              Don't have an account?{' '}
+              <FieldNameText
+                onPress={() => navigation.navigate('signup')}
+                style={{color: COLORS.MAIN_1, fontWeight: 'bold'}}>
+                Sign up
+              </FieldNameText>
             </FieldNameText>
-          </FieldNameText>
-          <FieldNameText>v{THIS_VERSION} beta</FieldNameText>
-        </View>
+            <FieldNameText>v{THIS_VERSION} beta</FieldNameText>
+          </View> */}
       </GradientWrapper>
     </>
   );

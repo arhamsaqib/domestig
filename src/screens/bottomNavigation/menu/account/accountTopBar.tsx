@@ -1,14 +1,12 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
-  FlatList,
+  Dimensions,
   Image,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
-import {CommonStyles} from '../../../../common/styles';
-import {PageNameText} from '../../../../components/texts/pageNameText';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {Avatar} from '../../../../components/avatar';
 import {COLORS} from '../../../../constants/colors';
@@ -24,10 +22,8 @@ import {getCustomerById, updateCustomer} from '../../../../api/customer';
 import {MEDIA_URL} from '../../../../constants/url';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import {uploadImage} from '../../../../api/uploadImage';
-import {ScrollableView} from '../../../../helpers/scrollableView';
-import {ScrollView} from 'react-native-gesture-handler';
-import Animated from 'react-native-reanimated';
-
+//@ts-ignore
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 const TobTabs = createMaterialTopTabNavigator();
 
 export const AccountTopBar = ({navigation}: any) => {
@@ -108,34 +104,45 @@ export const AccountTopBar = ({navigation}: any) => {
       </View>
     );
   };
-
+  var width = Dimensions.get('screen').width;
+  var height = Dimensions.get('screen').height;
   return (
     <>
-      <Comp1 />
-      <TobTabs.Navigator
-        overScrollMode="always"
-        screenOptions={{
-          tabBarActiveTintColor: COLORS.MAIN_2,
-          tabBarInactiveTintColor: COLORS.MAIN_SUBTEXT,
-          tabBarLabelStyle: styles.label,
-          tabBarIndicatorStyle: {
-            borderColor: COLORS.MAIN_2,
-            borderWidth: 1,
-          },
-        }}>
-        <TobTabs.Screen
-          name="profileDetails"
-          component={ProfileDetails}
-          options={{
-            title: 'Profile Details',
-          }}
-        />
-        <TobTabs.Screen
-          name="profileReviews"
-          component={Reviews}
-          options={{title: 'Reviews'}}
-        />
-      </TobTabs.Navigator>
+      {/* <View style={{flex: 1}}> */}
+      <KeyboardAwareScrollView style={{flex: 0}}>
+        <Comp1 />
+
+        <View
+          style={{
+            height: width / 0.8,
+          }}>
+          <TobTabs.Navigator
+            overScrollMode="always"
+            screenOptions={{
+              tabBarActiveTintColor: COLORS.MAIN_2,
+              tabBarInactiveTintColor: COLORS.MAIN_SUBTEXT,
+              tabBarLabelStyle: styles.label,
+              tabBarIndicatorStyle: {
+                borderColor: COLORS.MAIN_2,
+                borderWidth: 1,
+              },
+            }}>
+            <TobTabs.Screen
+              name="profileDetails"
+              component={ProfileDetails}
+              options={{
+                title: 'Profile Details',
+              }}
+            />
+            <TobTabs.Screen
+              name="profileReviews"
+              component={Reviews}
+              options={{title: 'Reviews'}}
+            />
+          </TobTabs.Navigator>
+        </View>
+      </KeyboardAwareScrollView>
+      {/* </View> */}
     </>
   );
 };

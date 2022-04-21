@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {ActivityIndicator, Alert, StyleSheet, Text, View} from 'react-native';
+import {
+  ActivityIndicator,
+  Alert,
+  KeyboardAvoidingView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import {CommonStyles} from '../../../../common/styles';
 import {MyTextInputWithIcon} from '../../../../components/textinputwithicon';
 import {COLORS} from '../../../../constants/colors';
@@ -14,6 +21,7 @@ import {findPlaceByText, placeAutocomplete} from '../../../../api/places';
 import {CountriesOptions} from '../../../../components/countriesOption';
 import {FieldNameText} from '../../../../components/texts/fieldNameText';
 import {MultipleOptions} from '../../../../components/multipleOptions';
+import {KEYBOARD_PADDING} from '../../../../constants/keyboardPadding';
 
 export const ProfileDetails = (props: any) => {
   const [user, setUser]: any = useState([]);
@@ -71,6 +79,7 @@ export const ProfileDetails = (props: any) => {
     <View style={[CommonStyles.screenMain, {height: '100%'}]}>
       {/* <ScrollableView> */}
       {loader && <ActivityIndicator color={COLORS.MAIN_1} />}
+
       <View style={{width: '90%', marginTop: 20}}>
         <Text style={[styles.field, {marginBottom: 5}]}>Name</Text>
         <MyTextInputWithIcon
