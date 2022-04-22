@@ -1,31 +1,24 @@
-import React, {useEffect, useState} from 'react';
-import {
-  FlatList,
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import React, {useCallback, useEffect, useState} from 'react';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {SafeAreaView} from 'react-native';
 import {CommonStyles} from '../../../common/styles';
 import {Avatar} from '../../../components/avatar';
 import {PageNameText} from '../../../components/texts/pageNameText';
 import {SentMessage} from './components/sentMessage';
-import {MyButton} from '../../../components/button';
 import {ReceivedMessage} from './components/receivedMessage';
-import {MyTextInputWithIcon} from '../../../components/textinputwithicon';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {FONTS} from '../../../constants/fonts';
 import LinearGradient from 'react-native-linear-gradient';
 import {COLORS} from '../../../constants/colors';
-import {receiveMessages, sendMessage} from '../../../api/messages';
 import {MEDIA_URL} from '../../../constants/url';
 
-export const SendButton = (props: {onPress?(): void}) => {
+import {GiftedChat, Send} from 'react-native-gifted-chat';
+import firestore from '@react-native-firebase/firestore';
+import {BackIcon} from '../../../components/backIcon';
+
+export const SendButton = (props: {onPress?(): void; disabled?: boolean}) => {
   return (
-    <TouchableOpacity onPress={props.onPress}>
+    <TouchableOpacity disabled={props.disabled} onPress={props.onPress}>
       <LinearGradient
         style={{
           height: 25,
@@ -42,140 +35,154 @@ export const SendButton = (props: {onPress?(): void}) => {
 };
 
 export const Chat = ({route, navigation}: any) => {
-  const [newMessage, setNewMessage] = useState('');
-  const [allMessages, setAllMessages] = useState([]);
-  const [loader, setLoader] = useState(false);
+  const [messages, setMessages]: any = useState([]);
 
   useEffect(() => {
     console.log(route.params, 'chat routes');
-    setInterval(getData, 3000);
-    setLoader(true);
-    getData();
+    //setLoader(true);
+    //getData();
   }, []);
 
-  async function getData() {
-    const bid = route.params.booking_id;
-    const pid = route.params.provider_id;
-    const cid = route.params.customer_id;
-    const data = {
-      booking_id: bid,
-      provider_id: pid,
-      customer_id: cid,
+  const bid = route.params.booking_id;
+  const pid = route.params.provider_id;
+  const cid = route.params.customer_id;
+
+  useEffect(() => {
+    // getData();
+    const docId = 'b:' + bid + '-c:' + cid + '-p:' + pid;
+    const subscribe = firestore()
+      .collection('chatrooms')
+      .doc(docId)
+      .collection('messages')
+      .onSnapshot(snapshot => {
+        snapshot.docChanges().forEach(change => {
+          if (change.type === 'added') {
+            let data: any = change.doc.data();
+            console.log(data, 'all messages');
+            data.createdAt = data?.createdAt?.toDate();
+            setMessages((prevMessages: any) =>
+              GiftedChat.append(prevMessages, data),
+            );
+          }
+        });
+      });
+    return () => subscribe();
+  }, []);
+
+  const onSend = useCallback((messages = []) => {
+    const msg = messages[0];
+    const newMsg = {
+      ...msg,
+      from: 'customer',
+      sentBy: cid,
+      sentTo: pid,
+      // createdAt: new Date(),
     };
-    const res = await receiveMessages(data).finally(() => setLoader(false));
-    console.log(res);
-    if (res !== undefined) {
-      setAllMessages(res);
-    }
-    flatListRef.current?.scrollToEnd({animated: true});
-  }
-  const flatListRef = React.useRef<FlatList>(null);
 
-  // async function requestUserPermission() {
-  //   const authStatus = await messaging().requestPermission();
-  //   const enabled =
-  //     authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-  //     authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+    console.log(msg, 'On send message');
+    const docId = 'b:' + bid + '-c:' + cid + '-p:' + pid;
 
-  //   if (enabled) {
-  //     console.log('Authorization status:', authStatus);
-  //   }
-  // }
-  const renderMessages = ({item}: any) => {
-    return (
-      <>
-        {item.sent_by === 'provider' && (
-          <ReceivedMessage message={item.message} />
-        )}
-        {item.sent_by === 'customer' && <SentMessage message={item.message} />}
-      </>
-    );
-  };
-
-  async function onSendMessage() {
-    const data = {
-      booking_id: route.params.booking_id,
-      provider_id: route.params.provider_id,
-      customer_id: route.params.customer_id,
-      message: newMessage,
-      sent_by: 'customer',
-    };
-    const res = await sendMessage(data).finally(() => setNewMessage(''));
-    //console.log(res, 'New message response');
-  }
+    firestore()
+      .collection('chatrooms')
+      .doc(docId)
+      .collection('messages')
+      .add({...newMsg, createdAt: firestore.FieldValue.serverTimestamp()});
+  }, []);
 
   return (
-    <SafeAreaView style={[CommonStyles.screenMain]}>
-      <KeyboardAvoidingView
-        behavior="padding"
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 120 : 25}
-        style={{width: '100%', alignItems: 'center'}}>
+    <>
+      <SafeAreaView
+        style={{
+          flex: 1,
+          backgroundColor: 'white',
+        }}>
         <View
-          style={[CommonStyles.subView, {marginTop: 10, alignItems: 'center'}]}>
-          <Avatar
-            customSize
-            size={45}
-            source={
-              route.params.provider_details.avatar && {
-                uri: MEDIA_URL + route.params.provider_details.avatar,
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            width: '100%',
+            justifyContent: 'center',
+          }}>
+          <SafeAreaView
+            style={{
+              position: 'absolute',
+              left: 20,
+
+              alignItems: 'center',
+              height: 30,
+              justifyContent: 'center',
+            }}>
+            <BackIcon black onPress={() => navigation.goBack()} />
+          </SafeAreaView>
+          <View
+            style={[
+              {
+                marginVertical: 10,
+                alignItems: 'center',
+                alignSelf: 'center',
+              },
+            ]}>
+            <Avatar
+              customSize
+              size={45}
+              source={
+                route.params.provider_details.avatar && {
+                  uri: MEDIA_URL + route.params.provider_details.avatar,
+                }
               }
-            }
-          />
-          <PageNameText onPress={getData} style={{fontSize: 15}}>
-            {route.params.provider_details.name}
-          </PageNameText>
-        </View>
-        <View style={styles.back}>
-          <Icon
-            onPress={() => navigation.goBack()}
-            name="arrow-back-outline"
-            color={'black'}
-            size={20}
-          />
-        </View>
-        <View style={{width: '90%', marginTop: 10, height: '85%'}}>
-          <FlatList
-            ref={flatListRef}
-            data={allMessages}
-            renderItem={renderMessages}
-          />
-        </View>
-        <View style={styles.bottomBar}>
-          <View style={[{width: '10%'}, styles.iv]}>
-            <Icon name="attach-outline" size={20} />
-          </View>
-          <View style={[{width: '70%'}, styles.iv]}>
-            <TextInput
-              style={{fontFamily: FONTS.P_Light, height: 45, width: '100%'}}
-              placeholder={'Write your message..'}
-              placeholderTextColor={COLORS.MAIN_SUBTEXT}
-              onChangeText={setNewMessage}
-              value={newMessage}
             />
-          </View>
-          <View style={[{width: '20%'}, styles.iv]}>
-            <SendButton onPress={onSendMessage} />
+            <PageNameText style={{fontSize: 15}}>
+              {route.params.provider_details.name}
+            </PageNameText>
           </View>
         </View>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+        <GiftedChat
+          messages={messages}
+          onSend={messages => onSend(messages)}
+          renderMessage={message => {
+            const itm: any = message.currentMessage;
+            return (
+              <View style={{width: '90%', alignSelf: 'center'}}>
+                {itm.from === 'provider' && (
+                  <ReceivedMessage message={itm.text} />
+                )}
+                {itm.from === 'customer' && <SentMessage message={itm.text} />}
+              </View>
+            );
+          }}
+          textInputProps={{
+            fontFamily: FONTS.P_Light,
+            width: '100%',
+            padding: 10,
+            color: 'black',
+          }}
+          placeholder={'Write your message..'}
+          renderSend={props => {
+            const {sendButtonProps, ...rest} = props;
+            return (
+              <Send
+                {...rest}
+                sendButtonProps={{
+                  style: {
+                    alignSelf: 'center',
+                    marginRight: '1%',
+                  },
+                }}>
+                <SendButton disabled />
+              </Send>
+            );
+          }}
+          renderAvatar={() => null}
+          user={{
+            _id: cid,
+          }}
+        />
+      </SafeAreaView>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
-  bottomBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    //alignSelf: 'center',
-    // position: 'absolute',
-    // bottom: 20,
-    // borderWidth: 1,
-  },
-  iv: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   back: {
     position: 'absolute',
     left: 20,
