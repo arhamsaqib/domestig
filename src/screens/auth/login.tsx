@@ -25,8 +25,8 @@ import auth from '@react-native-firebase/auth';
 import rememberMeAction from '../../redux/action/rememberMeAction';
 import {THIS_VERSION} from '../../constants/version';
 import {getLatestVersion} from '../../api/version';
-import {ScrollableView} from '../../helpers/scrollableView';
-import {KEYBOARD_PADDING} from '../../constants/keyboardPadding';
+import Toast from 'react-native-toast-message';
+
 //@ts-ignore
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 export const Login = ({navigation}: any) => {
@@ -68,7 +68,14 @@ export const Login = ({navigation}: any) => {
 
   async function verifyLaravelUser(uid: any) {
     const user = await showCustomerByFUID(uid);
+    console.log(user, 'user');
+
     if (user.id !== undefined) {
+      Toast.show({
+        type: 'success',
+        text1: 'Auth',
+        text2: 'Logged in successfully 👋',
+      });
       store.dispatch(
         updateCurrentUserAction({
           id: user.id,
@@ -101,6 +108,12 @@ export const Login = ({navigation}: any) => {
       // wait(3000).then(() => {
       //   navigation.navigate('Onboarding Stack');
       // });
+    } else {
+      Toast.show({
+        type: 'error',
+        text1: 'Auth',
+        text2: 'Proper user not found',
+      });
     }
   }
   function disabled() {
@@ -121,11 +134,21 @@ export const Login = ({navigation}: any) => {
         setLoader(false);
 
         if (error.code === 'auth/invalid-email') {
+          Toast.show({
+            type: 'error',
+            text1: 'Auth',
+            text2: 'Invalid Email',
+          });
           // setError('The email address is invalid!');
         }
 
         if (error.code === 'auth/wrong-password') {
           //setError('Password is invalid!');
+          Toast.show({
+            type: 'error',
+            text1: 'Auth',
+            text2: 'Wrong password',
+          });
         }
         console.error(error);
       });
@@ -255,6 +278,7 @@ export const Login = ({navigation}: any) => {
         </BottomSheet>
         {/* </KeyboardAvoidingView> */}
       </GradientWrapper>
+      <Toast position="bottom" />
     </>
   );
 };
