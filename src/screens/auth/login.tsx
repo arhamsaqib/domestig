@@ -233,25 +233,27 @@ export const Login = ({navigation}: any) => {
                 <DividerP style={{width: '30%'}} />
               </View>
             </View>
+            <View
+              style={[
+                {
+                  width: '90%',
+                  alignItems: 'center',
+                },
+                //CommonStyles.bottom5p,
+              ]}>
+              <FieldNameText>
+                Don't have an account?{' '}
+                <FieldNameText
+                  onPress={() => navigation.navigate('signup')}
+                  style={{color: COLORS.MAIN_1, fontWeight: 'bold'}}>
+                  Sign up
+                </FieldNameText>
+              </FieldNameText>
+              <FieldNameText>v{THIS_VERSION} beta</FieldNameText>
+            </View>
           </KeyboardAwareScrollView>
         </BottomSheet>
         {/* </KeyboardAvoidingView> */}
-
-        {/* <View
-            style={[
-              {width: '90%', alignItems: 'center'},
-              CommonStyles.bottom5p,
-            ]}>
-            <FieldNameText>
-              Don't have an account?{' '}
-              <FieldNameText
-                onPress={() => navigation.navigate('signup')}
-                style={{color: COLORS.MAIN_1, fontWeight: 'bold'}}>
-                Sign up
-              </FieldNameText>
-            </FieldNameText>
-            <FieldNameText>v{THIS_VERSION} beta</FieldNameText>
-          </View> */}
       </GradientWrapper>
     </>
   );

@@ -287,20 +287,20 @@ export const Signup = ({navigation}: any) => {
                 />
               </View>
             </ScrollableView>
+            {/* <View
+              style={[{width: '90%', alignItems: 'center', borderWidth: 1}]}>
+              <FieldNameText>
+                Don't have an account?{' '}
+                <FieldNameText
+                  onPress={() => {}}
+                  style={{color: COLORS.MAIN_1, fontWeight: 'bold'}}>
+                  Sign up
+                </FieldNameText>
+              </FieldNameText> 
+            </View>*/}
           </BottomSheet>
         </KeyboardAvoidingView>
       </GradientWrapper>
-      {/* <View
-        style={[CommonStyles.bottom5p, {width: '90%', alignItems: 'center'}]}>
-        <FieldNameText>
-          Don't have an account?{' '}
-          <FieldNameText
-            onPress={() => {}}
-            style={{color: COLORS.MAIN_1, fontWeight: 'bold'}}>
-            Sign up
-          </FieldNameText>
-        </FieldNameText>
-      </View> */}
     </>
   );
 };

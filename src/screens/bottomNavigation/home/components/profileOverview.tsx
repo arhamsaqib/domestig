@@ -31,7 +31,9 @@ export const ProfileOverview = (props: Props) => {
             style={[styles.rating, {marginRight: 5}]}
             source={ICONS.rating}
           />
-          <Text style={styles.ratingTxt}>{parseFloat(props.data.rating)}</Text>
+          <Text style={styles.ratingTxt}>
+            {parseFloat(props.data.rating).toFixed(1)}
+          </Text>
         </View>
       </View>
     </View>

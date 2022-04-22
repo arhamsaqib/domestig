@@ -19,9 +19,11 @@ import {getCustomerActiveBookings} from '../../../api/customerActiveBookings';
 import {showProviderWithId} from '../../../api/provider';
 import {showBookingSubmission} from '../../../api/bookingSubmission';
 import {useFocusEffect} from '@react-navigation/native';
+import Pusher from 'pusher-js/react-native';
 
 import {updateBooking} from '../../../api/bookings';
 import {getRecommended} from '../../../api/recommended';
+import {PusherConfig} from '../../../config/pusher-config';
 
 export const MainMenu = ({navigation}: any) => {
   const [loader, setLoader] = useState(false);
@@ -39,33 +41,53 @@ export const MainMenu = ({navigation}: any) => {
   const [interval, setInt]: any = useState();
   //const [count, setCount]: any = useState(0);
 
-  async function getData(count: any) {
+  useEffect(() => {
+    getData();
+  }, []);
+
+  async function gd(channel: any) {
+    const pusher = new Pusher(PusherConfig.key, PusherConfig);
+    const chatChannel = pusher.subscribe('booking' + channel);
+    //console.log(chatChannel, 'chat');
+    //console.log(chatChannel, 'Pusher response');
+    chatChannel.bind('pusher:subscription_succeeded', () => {
+      // (3)
+      chatChannel.bind('onBookingUpdate', (data: any) => {
+        // (4)
+        console.log(data, ' Pusher data');
+        if (data.data.refresh === 'true') {
+          getData();
+        }
+      });
+    });
+  }
+
+  async function getData() {
     setLoader(true);
     setProviderWaitingModal(false);
     setVerificationCodeModal(false);
     setWorkingModal(false);
-    if (count <= 1) {
-      const res = await getAllServices().finally(() => setLoader(false));
-      if (res !== undefined) {
-        setServices(res);
-      }
-      const user = await getCustomerById(state.id);
-      if (user !== undefined) {
-        setCustomer(user);
-      }
-
-      const recD = {
-        lat: user.latitude,
-        lng: user.longitude,
-      };
-      const recom = await getRecommended(recD);
-      if (recom !== undefined) {
-        setRecommended(recom);
-      }
-      // console.log(recom, 'recommedned');
-      const count = await getCustomerNotificationsCount(state.id);
-      setNotifCount(count);
+    const res = await getAllServices().finally(() => setLoader(false));
+    if (res !== undefined) {
+      setServices(res);
     }
+    const user = await getCustomerById(state.id);
+    if (user !== undefined) {
+      setCustomer(user);
+    }
+
+    const recD = {
+      lat: user.latitude,
+      lng: user.longitude,
+    };
+    const recom = await getRecommended(recD);
+    if (recom !== undefined) {
+      setRecommended(recom);
+    }
+    // console.log(recom, 'recommedned');
+    const count = await getCustomerNotificationsCount(state.id);
+    setNotifCount(count);
+
     const pendingdata = {
       customer_id: state.id,
       status: 'pending',
@@ -74,6 +96,7 @@ export const MainMenu = ({navigation}: any) => {
     if (bkn.id !== undefined) {
       setBooking(bkn);
       setProviderWaitingModal(true);
+      gd(bkn.id);
     }
     const inProgressData = {
       customer_id: state.id,
@@ -81,6 +104,8 @@ export const MainMenu = ({navigation}: any) => {
     };
     const bkninp = await getCustomerActiveBookings(inProgressData);
     if (bkninp.id !== undefined) {
+      gd(bkninp.id);
+
       setBooking(bkninp);
       if (bkninp.verified !== 'true') {
         setVerificationCodeModal(true);
@@ -93,32 +118,16 @@ export const MainMenu = ({navigation}: any) => {
       if (prv.id !== undefined) {
         setProvider(prv);
       }
-      const sub = await showBookingSubmission(bkninp.id);
-      if (sub !== undefined) {
-        setBookingSubmission(sub);
-      }
     }
-    if (bkninp.id || bkn.id) {
-      if (count <= 1) {
-        setInt(setInterval(() => getData(5), 30000));
-        console.log('refreshon');
-      }
-      //setCount(count + 1);
-    }
-    if (bkn.id === undefined && bkninp.id === undefined) {
-      clearInterval(interval);
+    const sub = await showBookingSubmission(bkninp.id);
+    if (sub !== undefined) {
+      setBookingSubmission(sub);
     }
   }
-  useEffect(() => {
-    var count = 0;
-    count = count + 1;
-
-    getData(count);
-  }, []);
 
   useFocusEffect(
     React.useCallback(() => {
-      const unsubscribe: any = () => getData(0);
+      const unsubscribe: any = () => getData();
       return () => unsubscribe();
     }, []),
   );
@@ -130,7 +139,7 @@ export const MainMenu = ({navigation}: any) => {
     const res = await updateBooking(booking.id, data);
     console.log(res);
     setProviderWaitingModal(false);
-    getData(2);
+    getData();
   }
 
   const renderServices = ({item}: any) => {
