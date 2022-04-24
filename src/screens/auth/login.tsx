@@ -30,8 +30,8 @@ import Toast from 'react-native-toast-message';
 //@ts-ignore
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 export const Login = ({navigation}: any) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('c123@xyz.com');
+  const [password, setPassword] = useState('11221122');
   const [loader, setLoader] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [update, setUpdate] = useState(false);

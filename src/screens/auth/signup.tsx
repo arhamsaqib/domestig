@@ -29,6 +29,7 @@ import {CountriesOptions} from '../../components/countriesOption';
 import {MultipleOptions} from '../../components/multipleOptions';
 import {findPlaceByText, placeAutocomplete} from '../../api/places';
 import {KEYBOARD_PADDING} from '../../constants/keyboardPadding';
+import Toast from 'react-native-toast-message';
 
 export const Signup = ({navigation}: any) => {
   const [name, setName]: any = useState('');
@@ -98,13 +99,34 @@ export const Signup = ({navigation}: any) => {
           createLaravelUser(uid);
         })
         .catch((error: any) => {
+          console.log(error, 'error');
+
           if (error.code === 'auth/email-already-in-use') {
             setLoader(false);
             setError('That email address is already in use!');
+            Toast.show({
+              type: 'error',
+              text1: 'Register',
+              text2: 'Email already in use',
+            });
           }
           if (error.code === 'auth/invalid-email') {
             setLoader(false);
             setError('That email address is invalid!');
+            Toast.show({
+              type: 'error',
+              text1: 'Register',
+              text2: 'Invalid email address',
+            });
+          }
+          if (error.code === 'auth/email-already-in-use') {
+            setLoader(false);
+            setError('That email address is invalid!');
+            Toast.show({
+              type: 'error',
+              text1: 'Register',
+              text2: 'Email already in use',
+            });
           }
           //console.error(error);
         });
@@ -301,6 +323,7 @@ export const Signup = ({navigation}: any) => {
           </BottomSheet>
         </KeyboardAvoidingView>
       </GradientWrapper>
+      <Toast position="bottom" />
     </>
   );
 };
