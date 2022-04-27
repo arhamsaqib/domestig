@@ -17,7 +17,6 @@ export const Banner = () => {
   }
 
   const images = extractKeys(banners);
-  console.log(images);
 
   async function getData() {
     const bann = await viewAllBanners();
@@ -31,17 +30,11 @@ export const Banner = () => {
   }, []);
 
   function onImagePress(index: any) {
-    console.log(banners[index], 'index');
+    //console.log(banners[index], 'index');
     setSelected(banners[index]);
     setInfoModal(true);
   }
 
-  // const images = [
-  //   'https://source.unsplash.com/1024x768/?nature',
-  //   'https://source.unsplash.com/1024x768/?water',
-  //   'https://source.unsplash.com/1024x768/?girl',
-  //   'https://source.unsplash.com/1024x768/?tree', // Network image
-  // ];
   return (
     <>
       <SliderBox

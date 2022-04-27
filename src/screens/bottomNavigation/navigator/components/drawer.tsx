@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {Image, Modal, StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, View} from 'react-native';
 import {SafeAreaView} from 'react-native';
-import {CommonStyles} from '../../../../common/styles';
 import {Avatar} from '../../../../components/avatar';
 import {Divider} from '../../../../components/divider';
 import {COLORS} from '../../../../constants/colors';
@@ -12,7 +11,7 @@ import {ScrollableView} from '../../../../helpers/scrollableView';
 import {RootStateOrAny, useSelector} from 'react-redux';
 import {getCustomerById} from '../../../../api/customer';
 import {MEDIA_URL} from '../../../../constants/url';
-import {DrawerItem} from '@react-navigation/drawer';
+import auth from '@react-native-firebase/auth';
 
 export const Drawer = ({navigation, onClose}: any) => {
   const state = useSelector((state: RootStateOrAny) => state.currentUser);
@@ -185,6 +184,14 @@ export const Drawer = ({navigation, onClose}: any) => {
     );
   };
 
+  async function onLogout() {
+    auth()
+      .signOut()
+      .then(() => {
+        console.log('User signed out!');
+        navigation.navigate('authStack');
+      });
+  }
   return (
     <>
       <SafeAreaView style={[styles.main, styles.elevated_card]}>
@@ -210,6 +217,7 @@ export const Drawer = ({navigation, onClose}: any) => {
           </View>
           <View style={{width: '80%', marginTop: 20}}>
             <DrawerOption
+              onPress={onLogout}
               name="Log-out"
               iconName="log-out-outline"
               image={{

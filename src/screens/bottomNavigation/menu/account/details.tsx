@@ -17,7 +17,11 @@ import {MyButton} from '../../../../components/button';
 import {ScrollableView} from '../../../../helpers/scrollableView';
 import {getCustomerById, updateCustomer} from '../../../../api/customer';
 import {RootStateOrAny, useSelector} from 'react-redux';
-import {findPlaceByText, placeAutocomplete} from '../../../../api/places';
+import {
+  findPlaceById,
+  findPlaceByText,
+  placeAutocomplete,
+} from '../../../../api/places';
 import {CountriesOptions} from '../../../../components/countriesOption';
 import {FieldNameText} from '../../../../components/texts/fieldNameText';
 import {MultipleOptions} from '../../../../components/multipleOptions';
@@ -49,16 +53,16 @@ export const ProfileDetails = (props: any) => {
   }
 
   async function findPlace(place: string) {
-    const res = await findPlaceByText(place);
+    const res = await findPlaceById(place);
     console.log(res, 'Place by text');
 
-    setPlaceInfo(res.candidates[0]);
+    setPlaceInfo(res.result);
   }
   function onSelect(item: any) {
     //console.log(item, 'Selected Item');
     setLocation(item.description);
     setShowPlaces(false);
-    findPlace(item.description);
+    findPlace(item.place_id);
   }
   async function onSavePress() {
     setLoader(true);

@@ -4,6 +4,7 @@ import {MainMenu} from './main';
 import {Notification} from './notifications';
 import {Chat} from './chat';
 import {HistoryDetails} from '../history/historyDetails';
+import {ServicesSubcategory} from '../services/servicesSubcategory';
 
 const Stack = createNativeStackNavigator();
 
@@ -13,6 +14,7 @@ export const HomeStack = () => {
       <Stack.Screen name="menu" component={MainMenu} />
       <Stack.Screen name="notifications" component={Notification} />
       <Stack.Screen name="historyDetails" component={HistoryDetails} />
+      <Stack.Screen name="servicesSub" component={ServicesSubcategory} />
     </Stack.Navigator>
   );
 };

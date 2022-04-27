@@ -26,12 +26,9 @@ import rememberMeAction from '../../redux/action/rememberMeAction';
 import {THIS_VERSION} from '../../constants/version';
 import {getLatestVersion} from '../../api/version';
 import Toast from 'react-native-toast-message';
-
-//@ts-ignore
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 export const Login = ({navigation}: any) => {
-  const [email, setEmail] = useState('c123@xyz.com');
-  const [password, setPassword] = useState('11221122');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [loader, setLoader] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [update, setUpdate] = useState(false);
@@ -99,15 +96,6 @@ export const Login = ({navigation}: any) => {
         );
       }
       navigation.navigate('mainBottomNav');
-
-      // Toast.show({
-      //   type: 'success',
-      //   text1: 'Auth',
-      //   text2: 'Logged in successfully 👋',
-      // });
-      // wait(3000).then(() => {
-      //   navigation.navigate('Onboarding Stack');
-      // });
     } else {
       Toast.show({
         type: 'error',
@@ -150,18 +138,20 @@ export const Login = ({navigation}: any) => {
             text2: 'Wrong password',
           });
         }
+        if (error.code === 'auth/user-not-found') {
+          Toast.show({
+            type: 'error',
+            text1: 'Auth',
+            text2: 'User not found',
+          });
+          //setError('Password is invalid!');
+        }
         console.error(error);
       });
   }
-  var ref: any;
-  var ref2: any;
   return (
     <>
       <GradientWrapper>
-        {/* <KeyboardAvoidingView
-          keyboardVerticalOffset={KEYBOARD_PADDING}
-          behavior="padding"
-          style={{width: '100%', alignItems: 'center'}}> */}
         <SafeAreaView style={styles.heading}>
           <PageNameText style={{marginVertical: 20}} white>
             Welcome Back
@@ -178,105 +168,95 @@ export const Login = ({navigation}: any) => {
           )}
         </SafeAreaView>
         <BottomSheet style={{marginTop: '5%', height: '100%'}}>
-          <KeyboardAwareScrollView style={{width: '100%'}}>
-            <View style={{width: '100%', alignItems: 'center'}}>
-              <View style={{width: '90%', marginVertical: 20}}>
-                <TitleText>Login with</TitleText>
-              </View>
-
-              <View style={{width: '90%', marginBottom: 20}}>
-                <FieldNameText style={{marginBottom: 5}}>Email</FieldNameText>
-                <MyTextInputWithIcon
-                  ref={(r: any) => {
-                    ref = r;
-                  }}
-                  placeholder="Enter your mail"
-                  autoCapitalize="none"
-                  onChangeText={setEmail}
-                  value={email}
-                  icon={
-                    <Icon
-                      name="mail-outline"
-                      size={16}
-                      color={COLORS.MAIN_BODYTEXT}
-                    />
-                  }
-                />
-              </View>
-              <View style={{width: '90%', marginBottom: 20}}>
-                <FieldNameText style={{marginBottom: 5}}>
-                  Password
-                </FieldNameText>
-                <MyTextInputWithIcon
-                  ref={(r: any) => {
-                    ref = r;
-                  }}
-                  placeholder="Enter your password"
-                  secureTextEntry
-                  onChangeText={setPassword}
-                  autoCapitalize="none"
-                  value={password}
-                  icon={
-                    <Icon
-                      name="lock-closed-outline"
-                      size={16}
-                      color={COLORS.MAIN_BODYTEXT}
-                    />
-                  }
-                />
-              </View>
-
-              <View
-                style={[
-                  CommonStyles.subView,
-                  CommonStyles.row,
-                  {marginBottom: 30},
-                ]}>
-                <View style={[CommonStyles.row, {width: '40%'}]}>
-                  <CheckBox value={rememberMe} onChangeVal={setRememberMe} />
-                  <FieldNameText>Remember me</FieldNameText>
-                </View>
-                <MainBodyText
-                  onPress={() => navigation.navigate('forget')}
-                  style={{color: 'black'}}>
-                  Forgot password!
-                </MainBodyText>
-              </View>
-              <View style={{width: '90%', marginBottom: 20}}>
-                <MyButton
-                  title="Login Now"
-                  onPress={onLogin}
-                  loading={loader}
-                  disabled={disabled() || loader}
-                />
-              </View>
-              <View style={[CommonStyles.row, CommonStyles.subView]}>
-                <DividerP style={{width: '30%'}} />
-                <FieldNameText>Or Sign in with</FieldNameText>
-                <DividerP style={{width: '30%'}} />
-              </View>
+          {/* <KeyboardAwareScrollView style={{width: '100%'}}> */}
+          <View style={{width: '100%', alignItems: 'center'}}>
+            <View style={{width: '90%', marginVertical: 20}}>
+              <TitleText>Login with</TitleText>
             </View>
+
+            <View style={{width: '90%', marginBottom: 20}}>
+              <FieldNameText style={{marginBottom: 5}}>Email</FieldNameText>
+              <MyTextInputWithIcon
+                placeholder="Enter your mail"
+                autoCapitalize="none"
+                onChangeText={setEmail}
+                value={email}
+                icon={
+                  <Icon
+                    name="mail-outline"
+                    size={16}
+                    color={COLORS.MAIN_BODYTEXT}
+                  />
+                }
+              />
+            </View>
+            <View style={{width: '90%', marginBottom: 20}}>
+              <FieldNameText style={{marginBottom: 5}}>Password</FieldNameText>
+              <MyTextInputWithIcon
+                placeholder="Enter your password"
+                secureTextEntry
+                onChangeText={setPassword}
+                autoCapitalize="none"
+                value={password}
+                icon={
+                  <Icon
+                    name="lock-closed-outline"
+                    size={16}
+                    color={COLORS.MAIN_BODYTEXT}
+                  />
+                }
+              />
+            </View>
+
             <View
               style={[
-                {
-                  width: '90%',
-                  alignItems: 'center',
-                },
-                //CommonStyles.bottom5p,
+                CommonStyles.subView,
+                CommonStyles.row,
+                {marginBottom: 30},
               ]}>
-              <FieldNameText>
-                Don't have an account?{' '}
-                <FieldNameText
-                  onPress={() => navigation.navigate('signup')}
-                  style={{color: COLORS.MAIN_1, fontWeight: 'bold'}}>
-                  Sign up
-                </FieldNameText>
-              </FieldNameText>
-              <FieldNameText>v{THIS_VERSION} beta</FieldNameText>
+              <View style={[CommonStyles.row, {width: '40%'}]}>
+                <CheckBox value={rememberMe} onChangeVal={setRememberMe} />
+                <FieldNameText>Remember me</FieldNameText>
+              </View>
+              <MainBodyText
+                onPress={() => navigation.navigate('forget')}
+                style={{color: 'black'}}>
+                Forgot password!
+              </MainBodyText>
             </View>
-          </KeyboardAwareScrollView>
+            <View style={{width: '90%', marginBottom: 20}}>
+              <MyButton
+                title="Login Now"
+                onPress={onLogin}
+                loading={loader}
+                disabled={disabled() || loader}
+              />
+            </View>
+            <View style={[CommonStyles.row, CommonStyles.subView]}>
+              <DividerP style={{width: '30%'}} />
+              <FieldNameText>Or Sign in with</FieldNameText>
+              <DividerP style={{width: '30%'}} />
+            </View>
+          </View>
+          <View
+            style={[
+              {
+                width: '90%',
+                alignItems: 'center',
+              },
+              //CommonStyles.bottom5p,
+            ]}>
+            <FieldNameText>
+              Don't have an account?{' '}
+              <FieldNameText
+                onPress={() => navigation.navigate('signup')}
+                style={{color: COLORS.MAIN_1, fontWeight: 'bold'}}>
+                Sign up
+              </FieldNameText>
+            </FieldNameText>
+            <FieldNameText>v{THIS_VERSION} beta</FieldNameText>
+          </View>
         </BottomSheet>
-        {/* </KeyboardAvoidingView> */}
       </GradientWrapper>
       <Toast position="bottom" />
     </>

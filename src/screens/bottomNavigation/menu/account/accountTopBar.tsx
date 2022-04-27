@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Text,
   View,
+  TouchableOpacity,
 } from 'react-native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {Avatar} from '../../../../components/avatar';
@@ -22,6 +23,8 @@ import {getCustomerById, updateCustomer} from '../../../../api/customer';
 import {MEDIA_URL} from '../../../../constants/url';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import {uploadImage} from '../../../../api/uploadImage';
+import auth from '@react-native-firebase/auth';
+
 //@ts-ignore
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 const TobTabs = createMaterialTopTabNavigator();
@@ -60,6 +63,15 @@ export const AccountTopBar = ({navigation}: any) => {
     getData();
   }, []);
 
+  async function onLogout() {
+    auth()
+      .signOut()
+      .then(() => {
+        console.log('User signed out!');
+        navigation.navigate('authStack');
+      });
+  }
+
   const Comp1 = () => {
     return (
       <View style={styles.card}>
@@ -67,14 +79,16 @@ export const AccountTopBar = ({navigation}: any) => {
           style={{width: '90%', alignItems: 'center', alignSelf: 'center'}}>
           <View style={styles.row}>
             <BackIcon black onPress={() => navigation.goBack()} />
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <TouchableOpacity
+              onPress={onLogout}
+              style={{flexDirection: 'row', alignItems: 'center'}}>
               <Icon
                 name="log-out-outline"
                 size={20}
                 color={COLORS.MAIN_SUBTEXT}
               />
               <Text style={[styles.log, {marginLeft: 5}]}>Log-out</Text>
-            </View>
+            </TouchableOpacity>
           </View>
           <View style={{marginVertical: 20}} />
           <Avatar
@@ -116,7 +130,7 @@ export const AccountTopBar = ({navigation}: any) => {
 
         <View
           style={{
-            height: width / 0.8,
+            height: height + height / 3,
           }}>
           <TobTabs.Navigator
             overScrollMode="always"

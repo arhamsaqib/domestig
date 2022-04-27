@@ -1,11 +1,5 @@
 import React, {useState} from 'react';
-import {
-  Image,
-  KeyboardAvoidingView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {Image, StyleSheet, Text, View} from 'react-native';
 import {BottomCard} from '../../../../../components/bottomCard';
 import {GreenCircle} from '../../../../../components/greenCircle';
 import {MyTextInput} from '../../../../../components/textinput';
@@ -15,11 +9,9 @@ import {FONTS} from '../../../../../constants/fonts';
 import {ICONS} from '../../../../../constants/icons';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {MyButton} from '../../../../../components/button';
-import {findPlaceByText, placeAutocomplete} from '../../../../../api/places';
+import {findPlaceById, placeAutocomplete} from '../../../../../api/places';
 import {MultipleOptions} from '../../../../../components/multipleOptions';
 import {RootStateOrAny, useSelector} from 'react-redux';
-import {createCustomerAddress} from '../../../../../api/customerAddresses';
-import {KEYBOARD_PADDING} from '../../../../../constants/keyboardPadding';
 
 interface Props {
   modalVisibility: boolean;
@@ -43,16 +35,16 @@ export const AddAddressCard = (props: Props) => {
   }
 
   async function findPlace(place: string) {
-    const res = await findPlaceByText(place);
+    const res = await findPlaceById(place);
     console.log(res, 'Place by text');
-    if (res !== undefined) setPlaceInfo(res.candidates[0]);
+    if (res !== undefined) setPlaceInfo(res.result);
   }
 
   function onSelect(item: any) {
     //console.log(item, 'Selected Item');
     setLocation(item.description);
     setShowPlaces(false);
-    findPlace(item.description);
+    findPlace(item.place_id);
   }
 
   async function onSaveNewAddress() {
@@ -65,10 +57,6 @@ export const AddAddressCard = (props: Props) => {
     };
     props.onSavePress && props.onSavePress(data);
   }
-
-  // function disabled() {
-  //   return name.length < 2 && false;
-  // }
 
   return (
     <BottomCard

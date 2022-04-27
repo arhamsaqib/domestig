@@ -38,8 +38,6 @@ export const MainMenu = ({navigation}: any) => {
   const [providerWaitingModal, setProviderWaitingModal] = useState(false);
   const [verificationCodeModal, setVerificationCodeModal] = useState(false);
   const [workingModal, setWorkingModal] = useState(false);
-  const [interval, setInt]: any = useState();
-  //const [count, setCount]: any = useState(0);
 
   useEffect(() => {
     getData();
@@ -48,13 +46,11 @@ export const MainMenu = ({navigation}: any) => {
   async function gd(channel: any) {
     const pusher = new Pusher(PusherConfig.key, PusherConfig);
     const chatChannel = pusher.subscribe('booking' + channel);
-    //console.log(chatChannel, 'chat');
-    //console.log(chatChannel, 'Pusher response');
+
     chatChannel.bind('pusher:subscription_succeeded', () => {
       // (3)
       chatChannel.bind('onBookingUpdate', (data: any) => {
         // (4)
-        console.log(data, ' Pusher data');
         if (data.data.refresh === 'true') {
           getData();
         }
@@ -84,7 +80,6 @@ export const MainMenu = ({navigation}: any) => {
     if (recom !== undefined) {
       setRecommended(recom);
     }
-    // console.log(recom, 'recommedned');
     const count = await getCustomerNotificationsCount(state.id);
     setNotifCount(count);
 
@@ -137,7 +132,6 @@ export const MainMenu = ({navigation}: any) => {
       status: 'cancelled',
     };
     const res = await updateBooking(booking.id, data);
-    console.log(res);
     setProviderWaitingModal(false);
     getData();
   }

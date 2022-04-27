@@ -1,7 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import {SafeAreaView} from 'react-native';
-import {CommonStyles} from '../../../common/styles';
 import {Avatar} from '../../../components/avatar';
 import {PageNameText} from '../../../components/texts/pageNameText';
 import {SentMessage} from './components/sentMessage';
@@ -181,11 +180,3 @@ export const Chat = ({route, navigation}: any) => {
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  back: {
-    position: 'absolute',
-    left: 20,
-    top: 25,
-  },
-});

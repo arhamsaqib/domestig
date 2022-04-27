@@ -55,3 +55,30 @@ export const findPlaceByText = async (place: string) => {
       })
   );
 };
+export const findPlaceById = async (placeId: string) => {
+  const end =
+    'https://maps.googleapis.com/maps/api/place/details/json?place_id=' +
+    placeId +
+    '&key=' +
+    GOOGLE_MAPS_API_KEY;
+
+  return (
+    fetch(end, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+
+      //body: JSON.stringify(data),
+    })
+      //.then(response => console.log(response.status, 'Status of the request'))
+      .then(response => response.json())
+      .then(json => {
+        return json;
+      })
+      .catch(error => {
+        console.error(error, 'error');
+      })
+  );
+};

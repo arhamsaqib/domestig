@@ -13,6 +13,7 @@ import {
   getCustomerNotifications,
   updateCustomerNotification,
   deleteCustomerNotifications,
+  markReadAllNotifications,
 } from '../../../api/customerNotifications';
 import {CommonStyles} from '../../../common/styles';
 import {BottomCard} from '../../../components/bottomCard';
@@ -78,6 +79,11 @@ export const Notification = () => {
     });
   }
 
+  async function onAllRead() {
+    const res = await markReadAllNotifications(state.id);
+    getData();
+  }
+
   return (
     <SafeAreaView style={[CommonStyles.screenMain]}>
       <View style={{marginVertical: 10}} />
@@ -89,7 +95,7 @@ export const Notification = () => {
           justifyContent: 'space-between',
         }}>
         <PageNameText>Notifications</PageNameText>
-        <Text onPress={() => {}} style={styles.optionText}>
+        <Text onPress={onAllRead} style={styles.optionText}>
           Mark all as read
         </Text>
       </View>
