@@ -1,16 +1,26 @@
 import React from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
+import {FlatList} from 'react-native';
+import {MyButton} from '../../../../../components/button';
 import {Divider} from '../../../../../components/divider';
 import {FONTS} from '../../../../../constants/fonts';
 import {ICONS} from '../../../../../constants/icons';
+import {ConvertDateToObject} from '../../../../../helpers/convertDateTobject';
 import {ScrollableView} from '../../../../../helpers/scrollableView';
 
 interface Props {
   available?: boolean;
   used?: boolean;
+  data?: any;
+  headerComp?: any;
 }
 
-const Transaction = () => {
+export const Transaction = (props: {data?: any}) => {
+  const {data} = props;
+  const extra = parseFloat(data.extra_work_charges);
+  const amount = parseFloat(data.amount);
+  const total = parseFloat(data.total_amount);
+  const date = ConvertDateToObject(data.created_at);
   return (
     <View style={{flexDirection: 'row', alignItems: 'center', width: '90%'}}>
       <View
@@ -20,7 +30,7 @@ const Transaction = () => {
           justifyContent: 'center',
           height: 35,
         }}>
-        <Text style={styles.val}>{'0123'}</Text>
+        <Text style={styles.val}>{data.id}</Text>
       </View>
       <View
         style={{
@@ -29,7 +39,10 @@ const Transaction = () => {
           justifyContent: 'center',
           height: 35,
         }}>
-        <Text style={styles.val}>{'$10'}</Text>
+        <Text style={styles.val}>
+          {'$'}
+          {amount + (extra ? extra : 0)}
+        </Text>
       </View>
       <View
         style={{
@@ -38,60 +51,70 @@ const Transaction = () => {
           justifyContent: 'center',
           height: 35,
         }}>
-        <Text style={styles.val}>{'July 01, 2022'}</Text>
+        <Text style={styles.val}>
+          {date.month + ' ' + date.date + ', ' + date.year}
+        </Text>
       </View>
     </View>
   );
 };
 
 export const TransactionsCard = (props: Props) => {
+  function renderTransaction({item}: any) {
+    return <Transaction data={item} />;
+  }
+
   return (
-    <View style={styles.main}>
-      <View style={{flexDirection: 'row', alignItems: 'center', width: '90%'}}>
+    <>
+      <View style={styles.main}>
         <View
-          style={{
-            width: '30%',
-            alignItems: 'flex-start',
-            justifyContent: 'center',
-            height: 35,
-          }}>
-          <Text style={styles.head}>ID</Text>
+          style={{flexDirection: 'row', alignItems: 'center', width: '90%'}}>
+          <View
+            style={{
+              width: '30%',
+              alignItems: 'flex-start',
+              justifyContent: 'center',
+              height: 35,
+            }}>
+            <Text style={styles.head}>ID</Text>
+          </View>
+          <View
+            style={{
+              width: '30%',
+              alignItems: 'flex-start',
+              justifyContent: 'center',
+              height: 35,
+            }}>
+            <Text style={styles.head}>Amount</Text>
+          </View>
+          <View
+            style={{
+              width: '40%',
+              alignItems: 'flex-start',
+              justifyContent: 'center',
+              height: 35,
+            }}>
+            <Text style={styles.head}>Date</Text>
+          </View>
         </View>
+        <Divider />
         <View
           style={{
-            width: '30%',
-            alignItems: 'flex-start',
+            alignItems: 'center',
+            width: '100%',
             justifyContent: 'center',
-            height: 35,
+            //  borderWidth: 1,
           }}>
-          <Text style={styles.head}>Amount</Text>
-        </View>
-        <View
-          style={{
-            width: '40%',
-            alignItems: 'flex-start',
-            justifyContent: 'center',
-            height: 35,
-          }}>
-          <Text style={styles.head}>Date</Text>
+          <FlatList
+            data={props.data}
+            showsVerticalScrollIndicator
+            renderItem={renderTransaction}
+            style={{height: '80%'}}
+            inverted
+          />
         </View>
       </View>
-      <Divider />
-      <ScrollableView>
-        <Transaction />
-        <Transaction />
-        <Transaction />
-        <Transaction />
-        <Transaction />
-        <Transaction />
-        <Transaction />
-        <Transaction />
-        <Transaction />
-        <Transaction />
-        <Transaction />
-        <Transaction />
-      </ScrollableView>
-    </View>
+    </>
   );
 };
 
@@ -99,7 +122,7 @@ const styles = StyleSheet.create({
   main: {
     alignItems: 'center',
     //width:160,
-    maxHeight: 409,
+    height: 409,
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 3},
     shadowOpacity: 0.1,

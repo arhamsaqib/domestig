@@ -2,6 +2,11 @@ import {del, get, post} from './requestStructure';
 
 const endpoint = 'invoices';
 
+interface FindInvoices {
+  provider_id?: string;
+  customer_id?: string;
+  booking_id?: string;
+}
 interface GenerateInvoice {
   provider_id?: string;
   customer_id?: string;
@@ -18,5 +23,10 @@ export async function generateInvoice(data: GenerateInvoice) {
 }
 export async function viewInvoiceByBookingId(id: string) {
   const res = await get(endpoint + '/' + id);
+  return res;
+}
+export async function findInvoices(data: FindInvoices) {
+  const endp = 'find-invoices';
+  const res = await post(endp, data);
   return res;
 }
