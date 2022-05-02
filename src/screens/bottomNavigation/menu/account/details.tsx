@@ -1,31 +1,17 @@
 import React, {useEffect, useState} from 'react';
-import {
-  ActivityIndicator,
-  Alert,
-  KeyboardAvoidingView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
 import {CommonStyles} from '../../../../common/styles';
 import {MyTextInputWithIcon} from '../../../../components/textinputwithicon';
 import {COLORS} from '../../../../constants/colors';
 import {FONTS} from '../../../../constants/fonts';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {DropDown} from '../../../../components/dropdown';
 import {MyButton} from '../../../../components/button';
-import {ScrollableView} from '../../../../helpers/scrollableView';
 import {getCustomerById, updateCustomer} from '../../../../api/customer';
 import {RootStateOrAny, useSelector} from 'react-redux';
-import {
-  findPlaceById,
-  findPlaceByText,
-  placeAutocomplete,
-} from '../../../../api/places';
+import {findPlaceById, placeAutocomplete} from '../../../../api/places';
 import {CountriesOptions} from '../../../../components/countriesOption';
 import {FieldNameText} from '../../../../components/texts/fieldNameText';
 import {MultipleOptions} from '../../../../components/multipleOptions';
-import {KEYBOARD_PADDING} from '../../../../constants/keyboardPadding';
 
 export const ProfileDetails = (props: any) => {
   const [user, setUser]: any = useState([]);
@@ -40,8 +26,13 @@ export const ProfileDetails = (props: any) => {
   const state = useSelector((state: RootStateOrAny) => state.currentUser);
   async function getData() {
     const res = await getCustomerById(state.id);
+    console.log(res, 'user data');
+
     if (res !== undefined) {
       setUser(res);
+      setCountry(res.country);
+      setLocation(res.location);
+      setPhone(res.phone);
     }
   }
   useEffect(() => {
@@ -54,12 +45,9 @@ export const ProfileDetails = (props: any) => {
 
   async function findPlace(place: string) {
     const res = await findPlaceById(place);
-    console.log(res, 'Place by text');
-
     setPlaceInfo(res.result);
   }
   function onSelect(item: any) {
-    //console.log(item, 'Selected Item');
     setLocation(item.description);
     setShowPlaces(false);
     findPlace(item.place_id);
@@ -68,10 +56,14 @@ export const ProfileDetails = (props: any) => {
     setLoader(true);
     const data = {
       location: location,
-      latitude: placeIinfo.geometry.location.lat,
-      longitude: placeIinfo.geometry.location.lng,
+      latitude: placeIinfo?.geometry?.location
+        ? placeIinfo.geometry.location.lat
+        : '',
+      longitude: placeIinfo?.geometry?.location
+        ? placeIinfo.geometry.location.lng
+        : '',
       country: country,
-      phone: phone,
+      phone: phone ?? user.phone,
     };
     const res = await updateCustomer(user.id, data).finally(() =>
       setLoader(false),
@@ -81,7 +73,6 @@ export const ProfileDetails = (props: any) => {
   }
   return (
     <View style={[CommonStyles.screenMain, {height: '100%'}]}>
-      {/* <ScrollableView> */}
       {loader && <ActivityIndicator color={COLORS.MAIN_1} />}
 
       <View style={{width: '90%', marginTop: 20}}>
@@ -104,16 +95,16 @@ export const ProfileDetails = (props: any) => {
         <Text style={[styles.field, {marginBottom: 5}]}>Phone</Text>
         <MyTextInputWithIcon
           onChangeText={setPhone}
-          defaultValue={phone.length > 1 ? phone : user.phone}
+          defaultValue={phone}
           icon={<Icon name="call-outline" size={15} color={'#777777'} />}
         />
       </View>
-      <View style={{width: '90%', marginBottom: 20}}>
+      <View style={{width: '90%', marginVertical: 10}}>
         <FieldNameText style={{marginBottom: 5}}>Country</FieldNameText>
         <MyTextInputWithIcon
           placeholder="Select your country"
           onChangeText={setCountry}
-          defaultValue={country.length > 1 ? country : user.country}
+          defaultValue={country}
           onFocus={() => setShowCountries(true)}
           autoCapitalize="none"
           icon={
@@ -135,9 +126,9 @@ export const ProfileDetails = (props: any) => {
         <MyTextInputWithIcon
           onFocus={() => setShowPlaces(true)}
           placeholder="Enter your location"
-          defaultValue={location.length > 1 ? location : user.location}
+          defaultValue={location}
           onChangeText={findLocation}
-          //value={location}
+          // value={location}
           icon={
             <Icon
               name="location-outline"
@@ -153,7 +144,6 @@ export const ProfileDetails = (props: any) => {
       <View style={{width: '90%', marginTop: 20}}>
         <MyButton title="Save changes" onPress={onSavePress} loading={loader} />
       </View>
-      {/* </ScrollableView> */}
     </View>
   );
 };

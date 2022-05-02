@@ -77,15 +77,15 @@ export const ForgetPassword = ({navigation}: any) => {
               }
             />
           </View>
+          <View style={{width: '90%'}}>
+            <MyButton
+              title="Reset password"
+              loading={loading}
+              disabled={disabled()}
+              onPress={onResetPress}
+            />
+          </View>
         </BottomSheet>
-        <View style={{width: '90%', position: 'absolute', bottom: 30}}>
-          <MyButton
-            title="Reset password"
-            loading={loading}
-            disabled={disabled()}
-            onPress={onResetPress}
-          />
-        </View>
       </GradientWrapper>
     </>
   );

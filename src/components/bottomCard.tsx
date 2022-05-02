@@ -31,7 +31,7 @@ export const BottomCard: FunctionComponent<ModalView> = ({
   onArrowPress,
 }) => {
   return (
-    <Modal visible={modalVisibility} transparent={true}>
+    <Modal visible={modalVisibility} animationType="slide" transparent={true}>
       <View style={[styles.modalView1]}>
         <TouchableOpacity
           onPress={onOutsidePress}

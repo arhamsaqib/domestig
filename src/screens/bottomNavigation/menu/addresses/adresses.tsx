@@ -1,12 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, SafeAreaView, StyleSheet, View} from 'react-native';
-import {FlatList} from 'react-native-gesture-handler';
+import {FlatList} from 'react-native';
 import {RootStateOrAny, useSelector} from 'react-redux';
 import {
   createCustomerAddress,
   RegisterCustomerAdress,
   showCustomerAllAddresses,
-  UpdateCustomerAddress,
   updateCustomerAddress,
 } from '../../../../api/customerAddresses';
 import {CommonStyles} from '../../../../common/styles';
@@ -37,7 +36,10 @@ export const Addresses = ({navigation}: any) => {
   }
 
   async function onSaveNewAddress(data: RegisterCustomerAdress) {
-    const res = await createCustomerAddress(data);
+    setLoader(true);
+    const res = await createCustomerAddress(data).finally(() =>
+      setLoader(false),
+    );
     // console.log(res, 'new address');
     setShow(false);
     getData();

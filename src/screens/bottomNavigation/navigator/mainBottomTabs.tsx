@@ -107,6 +107,7 @@ const MainBottomNav = () => {
               name="Menu"
             />
           ),
+          unmountOnBlur: true,
         })}
       />
     </BottomNav.Navigator>

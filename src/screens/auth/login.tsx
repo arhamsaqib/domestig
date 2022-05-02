@@ -1,10 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  View,
-  KeyboardAvoidingView,
-} from 'react-native';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {BottomSheet} from '../../components/bottomSheet';
 import {MyTextInputWithIcon} from '../../components/textinputwithicon';
 import {FieldNameText} from '../../components/texts/fieldNameText';

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
 import {BottomCard} from '../../../../../components/bottomCard';
 import {GreenCircle} from '../../../../../components/greenCircle';
@@ -17,6 +17,7 @@ interface Props {
   modalVisibility: boolean;
   onOutsidePress?(): void;
   onSavePress?(data?: any): void;
+  loader?: boolean;
 }
 
 export const AddAddressCard = (props: Props) => {
@@ -24,7 +25,6 @@ export const AddAddressCard = (props: Props) => {
   const [name, setName]: any = useState('');
   const [placeIinfo, setPlaceInfo]: any = useState([]);
   const [showPlaces, setShowPlaces] = useState(false);
-  const [loader, setLoader] = useState(false);
   const [location, setLocation]: any = useState('');
 
   const state = useSelector((state: RootStateOrAny) => state.currentUser);
@@ -58,10 +58,24 @@ export const AddAddressCard = (props: Props) => {
     props.onSavePress && props.onSavePress(data);
   }
 
+  function disabled() {
+    return name.length < 2 || location.length < 2;
+  }
+
+  useEffect(() => {
+    function clean() {
+      setName('');
+      setLocation('');
+      setPlaceInfo([]);
+    }
+    return () => clean();
+  }, [props.modalVisibility]);
+
   return (
     <BottomCard
       modalVisibility={props.modalVisibility}
-      style={[{height: '50%'}, showPlaces && {height: '90%'}]}
+      style={[{height: 413}, showPlaces && {height: 700}]}
+      //style={[{height: '50%'}, showPlaces && {height: '90%'}]}
       onOutsidePress={props.onOutsidePress}
       onArrowPress={props.onOutsidePress}>
       <View style={{width: '100%', alignItems: 'center'}}>
@@ -83,6 +97,7 @@ export const AddAddressCard = (props: Props) => {
         /> */}
         <MyTextInputWithIcon
           onFocus={() => setShowPlaces(true)}
+          onBlur={() => setShowPlaces(false)}
           placeholder="Enter your location"
           defaultValue={location}
           onChangeText={findLocation}
@@ -102,8 +117,8 @@ export const AddAddressCard = (props: Props) => {
         <MyButton
           title="Save Now"
           onPress={onSaveNewAddress}
-          loading={loader}
-          disabled={loader}
+          loading={props.loader}
+          disabled={props.loader || disabled()}
         />
       </View>
     </BottomCard>

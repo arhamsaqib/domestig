@@ -93,7 +93,11 @@ export const SelectProviders = ({navigation, route}: any) => {
       </View>
       <View style={styles.btnRow}>
         <View style={{width: '45%'}}>
-          <MyButton secondary title="Back" />
+          <MyButton
+            secondary
+            title="Back"
+            onPress={() => navigation.goBack()}
+          />
         </View>
         <View style={{width: '45%'}}>
           <MyButton title="Next" onPress={onNextPress} disabled={disabled()} />

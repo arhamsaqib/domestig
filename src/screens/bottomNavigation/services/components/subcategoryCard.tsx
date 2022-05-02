@@ -12,7 +12,7 @@ interface Props {
 
 export const SubcategoryCard = (props: Props) => {
   return (
-    <TouchableOpacity style={styles.main}>
+    <TouchableOpacity disabled style={styles.main}>
       <View style={styles.row}>
         <Text style={styles.txt}>{props.name ?? 'Cat'}</Text>
         {!props.hideCheckmark && <CheckMark tick onPress={props.onPress} />}

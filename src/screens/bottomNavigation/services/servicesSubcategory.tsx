@@ -8,7 +8,7 @@ import {PageNameText} from '../../../components/texts/pageNameText';
 import {arrayOfObjectsSearchWithId} from '../../../helpers/arrayOfObjectsSearch';
 import {removeItemOnce} from '../../../helpers/removeItemFromArray';
 import {CalendarComponet} from './components/calendarComp';
-import {ProviderCard} from './components/providerCard';
+import Toast from 'react-native-toast-message';
 import {SubcategoryCard} from './components/subcategoryCard';
 
 export const ServicesSubcategory = ({navigation, route}: any) => {
@@ -46,36 +46,59 @@ export const ServicesSubcategory = ({navigation, route}: any) => {
       schedule: data,
     });
   }
+  function disabled() {
+    return selected.length < 1;
+  }
   return (
-    <SafeAreaView style={CommonStyles.screenMain}>
-      <View style={styles.topRow}>
-        <View style={{width: '15%', alignItems: 'flex-start'}}>
-          <BackIcon black onPress={() => navigation.goBack()} />
+    <>
+      <SafeAreaView style={CommonStyles.screenMain}>
+        <View style={styles.topRow}>
+          <View style={{width: '15%', alignItems: 'flex-start'}}>
+            <BackIcon black onPress={() => navigation.goBack()} />
+          </View>
+          <View
+            style={{width: '90%', alignItems: 'center', marginLeft: '-15%'}}>
+            <PageNameText>Select your services</PageNameText>
+          </View>
         </View>
-        <View style={{width: '90%', alignItems: 'center', marginLeft: '-15%'}}>
-          <PageNameText>Select your services</PageNameText>
+        <View style={{width: '90%', marginTop: 10}}>
+          <FlatList
+            renderItem={renderServices}
+            data={route.params.service.services}
+          />
         </View>
-      </View>
-      <View style={{width: '90%', marginTop: 10}}>
-        <FlatList
-          renderItem={renderServices}
-          data={route.params.service.services}
+        <CalendarComponet
+          modalVisibility={modal}
+          onOutsidePress={() => setModa(false)}
+          onScheduleNowPress={onSchedule}
         />
-      </View>
-      <CalendarComponet
-        modalVisibility={modal}
-        onOutsidePress={() => setModa(false)}
-        onScheduleNowPress={onSchedule}
-      />
-      <View style={styles.btnRow}>
-        <View style={{width: '45%'}}>
-          <MyButton secondary title="Schedule" onPress={() => setModa(true)} />
+        <View style={styles.btnRow}>
+          <View style={{width: '45%'}}>
+            <MyButton
+              secondary
+              title="Schedule"
+              onPress={() => {
+                selected.length < 1
+                  ? Toast.show({
+                      type: 'error',
+                      text1: 'Calendar',
+                      text2: 'Please select some services first',
+                    })
+                  : setModa(true);
+              }}
+            />
+          </View>
+          <View style={{width: '45%'}}>
+            <MyButton
+              title="Book now"
+              onPress={onNextPress}
+              disabled={disabled()}
+            />
+          </View>
         </View>
-        <View style={{width: '45%'}}>
-          <MyButton title="Book now" onPress={onNextPress} />
-        </View>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+      <Toast position="top" />
+    </>
   );
 };
 

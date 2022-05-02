@@ -69,10 +69,13 @@ export const CalendarComponet = (props: Props) => {
     };
     props.onScheduleNowPress && props.onScheduleNowPress(data);
   }
+  function disabled() {
+    return time.length < 1;
+  }
   return (
     <BottomCard
       onOutsidePress={props.onOutsidePress}
-      style={{height: '70%'}}
+      style={{height: '80%'}}
       modalVisibility={props.modalVisibility}>
       <View style={{width: '90%', alignSelf: 'center'}}>
         <PageNameText>Select Date</PageNameText>
@@ -116,7 +119,11 @@ export const CalendarComponet = (props: Props) => {
         </View>
       </View>
       <View style={{width: '90%', alignSelf: 'center', marginTop: 30}}>
-        <MyButton title="Schedule Now" onPress={onPress} />
+        <MyButton
+          title="Schedule Now"
+          onPress={onPress}
+          disabled={disabled()}
+        />
       </View>
     </BottomCard>
   );
