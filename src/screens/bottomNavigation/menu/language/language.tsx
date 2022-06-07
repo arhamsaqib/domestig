@@ -4,6 +4,7 @@ import {CommonStyles} from '../../../../common/styles';
 import {BackIcon} from '../../../../components/backIcon';
 import {MyButton} from '../../../../components/button';
 import {PageNameText} from '../../../../components/texts/pageNameText';
+import { ICONS } from '../../../../constants/icons';
 import {LanguageCard} from './components/languageCard';
 
 export const Language = ({navigation}: any) => {
@@ -18,8 +19,8 @@ export const Language = ({navigation}: any) => {
         </View>
       </View>
       <View style={{width: '90%', marginTop: 10}}>
-        <LanguageCard name="English" />
-        <LanguageCard name="French" />
+        <LanguageCard image={ICONS.english} name="English" defaultActive/>
+        <LanguageCard image={ICONS.french} name="French" />
       </View>
 
       <View style={styles.bottom}>

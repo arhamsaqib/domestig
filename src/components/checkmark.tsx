@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {COLORS} from '../constants/colors';
@@ -7,10 +7,14 @@ interface Props {
   circle?: boolean;
   tick?: boolean;
   onPress?(state: boolean): void;
+  defaultActive?:boolean
 }
 
 export const CheckMark = (props: Props) => {
   const [active, setActive] = useState(false);
+  useEffect(()=>{
+    props.defaultActive&&setActive(true)
+  },[])
   return (
     <TouchableOpacity
       onPress={() => {

@@ -46,6 +46,11 @@ export async function showpProviderAllBookings(id: string) {
   const res = await get(endp + '/' + id);
   return res;
 }
+export async function getBookingById(id: string) {
+  const endp = 'get-booking-by-id';
+  const res = await get(endp + '/' + id);
+  return res;
+}
 // export async function deleteCustomer(id: string) {
 //   const res = await del(endpoint + '/' + id);
 //   return res;

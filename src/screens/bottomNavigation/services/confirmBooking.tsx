@@ -1,6 +1,5 @@
-import {TabRouter} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
-import {Alert, FlatList, StyleSheet, Text, View} from 'react-native';
+import {Alert, StyleSheet, Text, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {RootStateOrAny, useSelector} from 'react-redux';
 import {getBannerWithCode} from '../../../api/banners';
@@ -10,7 +9,6 @@ import {getCustomerById} from '../../../api/customer';
 import {CommonStyles} from '../../../common/styles';
 import {BackIcon} from '../../../components/backIcon';
 import {MyButton} from '../../../components/button';
-import {CheckMark} from '../../../components/checkmark';
 import {RadioBtn} from '../../../components/radio';
 import {MyTextInput} from '../../../components/textinput';
 import {FieldNameText} from '../../../components/texts/fieldNameText';
@@ -54,7 +52,6 @@ export const ConfirmBooking = ({navigation, route}: any) => {
       setTime(r.schedule.time);
     }
     getData();
-    //console.log(route.params, 'params');
   }, []);
   const d = ConvertDateToObject(date);
   async function onSubmit() {
@@ -198,21 +195,26 @@ export const ConfirmBooking = ({navigation, route}: any) => {
             onPress={() => setPayment('card')}
           />
         </View>
-        <View style={{width: '90%', marginVertical: 15}}>
-          <Text style={[styles.field]}>Card Details</Text>
-        </View>
-        <View style={styles.row}>
-          <Text style={styles.value}>Arham Saqib</Text>
-          <Text style={styles.value}>**** **** **** 1234</Text>
-        </View>
-        <Text
-          onPress={() => {}}
-          style={[
-            styles.field,
-            {marginVertical: 5, textDecorationLine: 'underline'},
-          ]}>
-          Use different Card
-        </Text>
+        {payment === 'card' && (
+          <>
+            <View style={{width: '90%', marginVertical: 15}}>
+              <Text style={[styles.field]}>Card Details</Text>
+            </View>
+
+            <View style={styles.row}>
+              <Text style={styles.value}>Arham Saqib</Text>
+              <Text style={styles.value}>**** **** **** 1234</Text>
+            </View>
+            <Text
+              onPress={() => {}}
+              style={[
+                styles.field,
+                {marginVertical: 5, textDecorationLine: 'underline'},
+              ]}>
+              Use different Card
+            </Text>
+          </>
+        )}
         <View style={{width: '90%', marginVertical: 15}}>
           <Text style={[styles.head]}>Apply Coupon Code</Text>
         </View>

@@ -39,8 +39,10 @@ const logout = require('../assets/icons/logout.png');
 const payment = require('../assets/icons/payment.png');
 const share = require('../assets/icons/share.png');
 const wallet1 = require('../assets/icons/wallet.png');
+const english = require('../assets/icons/english.png');
+const french = require('../assets/icons/french.png');
 const ICONS = {
-  wallet1,
+  wallet1,english,french,
   share,
   payment,
   logout,

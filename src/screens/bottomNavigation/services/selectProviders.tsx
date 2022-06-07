@@ -3,7 +3,7 @@ import {ActivityIndicator, FlatList, StyleSheet, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {RootStateOrAny, useSelector} from 'react-redux';
 import {getCustomerById} from '../../../api/customer';
-import {showAllProviders, showProvidersByLocation} from '../../../api/provider';
+import {showProvidersByLocation} from '../../../api/provider';
 import {CommonStyles} from '../../../common/styles';
 import {BackIcon} from '../../../components/backIcon';
 import {MyButton} from '../../../components/button';
@@ -14,6 +14,7 @@ import {arrayOfObjectsSearchWithId} from '../../../helpers/arrayOfObjectsSearch'
 import {extractKeys} from '../../../helpers/extractKeys';
 import {removeItemOnce} from '../../../helpers/removeItemFromArray';
 import {ProviderCard} from './components/providerCard';
+import Toast from 'react-native-toast-message';
 
 export const SelectProviders = ({navigation, route}: any) => {
   const [providers, setProviders]: any = useState([]);
@@ -53,12 +54,18 @@ export const SelectProviders = ({navigation, route}: any) => {
     }
   }
   function onNextPress() {
-    navigation.navigate('confirmBooking', {
-      services: route.params.services,
-      providers: selected,
-      categoryName: route.params.categoryName,
-      schedule: route.params.schedule,
-    });
+    selected.length < 1
+      ? Toast.show({
+          type: 'error',
+          text1: 'No Provider selected',
+          text2: 'Please select atleast 1 provider',
+        })
+      : navigation.navigate('confirmBooking', {
+          services: route.params.services,
+          providers: selected,
+          categoryName: route.params.categoryName,
+          schedule: route.params.schedule,
+        });
   }
   const renderProviders = ({item}: any) => {
     return (
@@ -73,37 +80,45 @@ export const SelectProviders = ({navigation, route}: any) => {
     return providers.length < 1 || selected.length < 1;
   }
   return (
-    <SafeAreaView style={CommonStyles.screenMain}>
-      <View style={styles.topRow}>
-        <View style={{width: '15%', alignItems: 'flex-start'}}>
-          <BackIcon black onPress={() => navigation.goBack()} />
+    <>
+      <SafeAreaView style={CommonStyles.screenMain}>
+        <View style={styles.topRow}>
+          <View style={{width: '15%', alignItems: 'flex-start'}}>
+            <BackIcon black onPress={() => navigation.goBack()} />
+          </View>
+          <View
+            style={{width: '90%', alignItems: 'center', marginLeft: '-15%'}}>
+            <PageNameText>Select Providers</PageNameText>
+          </View>
         </View>
-        <View style={{width: '90%', alignItems: 'center', marginLeft: '-15%'}}>
-          <PageNameText>Select Providers</PageNameText>
+        <View style={{width: '90%', marginTop: 10}}>
+          {loader && <ActivityIndicator color={COLORS.MAIN_1} size="small" />}
+          {providers.length < 1 && (
+            <FieldNameText>
+              No providers found for selected services
+            </FieldNameText>
+          )}
+          <FlatList renderItem={renderProviders} data={providers} />
         </View>
-      </View>
-      <View style={{width: '90%', marginTop: 10}}>
-        {loader && <ActivityIndicator color={COLORS.MAIN_1} size="small" />}
-        {providers.length < 1 && (
-          <FieldNameText>
-            No providers found for selected services
-          </FieldNameText>
-        )}
-        <FlatList renderItem={renderProviders} data={providers} />
-      </View>
-      <View style={styles.btnRow}>
-        <View style={{width: '45%'}}>
-          <MyButton
-            secondary
-            title="Back"
-            onPress={() => navigation.goBack()}
-          />
+        <View style={styles.btnRow}>
+          <View style={{width: '45%'}}>
+            <MyButton
+              secondary
+              title="Back"
+              onPress={() => navigation.goBack()}
+            />
+          </View>
+          <View style={{width: '45%'}}>
+            <MyButton
+              title="Next"
+              onPress={onNextPress}
+              disabled={disabled()}
+            />
+          </View>
         </View>
-        <View style={{width: '45%'}}>
-          <MyButton title="Next" onPress={onNextPress} disabled={disabled()} />
-        </View>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+      <Toast position="bottom" />
+    </>
   );
 };
 

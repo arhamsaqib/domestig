@@ -1,12 +1,9 @@
 import React from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {FlatList} from 'react-native';
-import {MyButton} from '../../../../../components/button';
 import {Divider} from '../../../../../components/divider';
 import {FONTS} from '../../../../../constants/fonts';
-import {ICONS} from '../../../../../constants/icons';
 import {ConvertDateToObject} from '../../../../../helpers/convertDateTobject';
-import {ScrollableView} from '../../../../../helpers/scrollableView';
 
 interface Props {
   available?: boolean;
@@ -17,20 +14,40 @@ interface Props {
 
 export const Transaction = (props: {data?: any}) => {
   const {data} = props;
-  const extra = parseFloat(data.extra_work_charges);
-  const amount = parseFloat(data.amount);
-  const total = parseFloat(data.total_amount);
-  const date = ConvertDateToObject(data.created_at);
+  const amount = ((parseFloat(data.amount) * 1) / 100).toString();
+  const id = data.id;
+  const d = data.created * 1000;
+  const date = ConvertDateToObject(d);
+  const status =
+    Math.sign(parseFloat(data.amount)) === -1 ? 'Deducted' : 'Added';
   return (
     <View style={{flexDirection: 'row', alignItems: 'center', width: '90%'}}>
       <View
         style={{
-          width: '30%',
+          width: '20%',
+          alignItems: 'flex-start',
+          justifyContent: 'center',
+          height: 35,
+          marginRight: 10,
+        }}>
+        <Text
+          ellipsizeMode="tail"
+          numberOfLines={1}
+          style={[styles.val, {width: '90%'}]}>
+          {data.id}
+        </Text>
+      </View>
+      <View
+        style={{
+          width: '20%',
           alignItems: 'flex-start',
           justifyContent: 'center',
           height: 35,
         }}>
-        <Text style={styles.val}>{data.id}</Text>
+        <Text style={styles.val}>
+          {'$'}
+          {amount}
+        </Text>
       </View>
       <View
         style={{
@@ -40,8 +57,7 @@ export const Transaction = (props: {data?: any}) => {
           height: 35,
         }}>
         <Text style={styles.val}>
-          {'$'}
-          {amount + (extra ? extra : 0)}
+          {date.month + ' ' + date.date + ', ' + date.year}
         </Text>
       </View>
       <View
@@ -51,52 +67,90 @@ export const Transaction = (props: {data?: any}) => {
           justifyContent: 'center',
           height: 35,
         }}>
-        <Text style={styles.val}>
-          {date.month + ' ' + date.date + ', ' + date.year}
-        </Text>
+        <Text style={styles.val}>{status}</Text>
+      </View>
+      <View
+        style={{
+          // width: '40%',
+          alignItems: 'flex-start',
+          justifyContent: 'center',
+          height: 35,
+        }}>
+        <Text style={styles.val}>456</Text>
       </View>
     </View>
   );
 };
 
 export const TransactionsCard = (props: Props) => {
+  console.log(props.data, 'DATA TRANs');
+
   function renderTransaction({item}: any) {
+    console.log(item, 'item dataaa');
+
     return <Transaction data={item} />;
   }
 
   return (
     <>
       <View style={styles.main}>
-        <View
-          style={{flexDirection: 'row', alignItems: 'center', width: '90%'}}>
+        <ScrollView
+          showsHorizontalScrollIndicator={false}
+          horizontal
+          style={{
+            flexDirection: 'row',
+            width: '90%',
+          }}>
           <View
             style={{
-              width: '30%',
+              // width: '30%',
               alignItems: 'flex-start',
               justifyContent: 'center',
               height: 35,
+              marginRight: 50,
             }}>
             <Text style={styles.head}>ID</Text>
           </View>
           <View
             style={{
-              width: '30%',
+              //width: '30%',
               alignItems: 'flex-start',
               justifyContent: 'center',
               height: 35,
+              marginRight: 50,
             }}>
             <Text style={styles.head}>Amount</Text>
           </View>
           <View
             style={{
-              width: '40%',
+              // width: '40%',
+              alignItems: 'flex-start',
+              justifyContent: 'center',
+              height: 35,
+              marginRight: 50,
+            }}>
+            <Text style={styles.head}>Date</Text>
+          </View>
+          <View
+            style={{
+              // width: '40%',
+              alignItems: 'flex-start',
+              justifyContent: 'center',
+              height: 35,
+              marginRight: 50,
+            }}>
+            <Text style={styles.head}>Action</Text>
+          </View>
+          <View
+            style={{
+              // width: '40%',
               alignItems: 'flex-start',
               justifyContent: 'center',
               height: 35,
             }}>
-            <Text style={styles.head}>Date</Text>
+            <Text style={styles.head}>Summary</Text>
           </View>
-        </View>
+        </ScrollView>
         <Divider />
         <View
           style={{
@@ -105,13 +159,14 @@ export const TransactionsCard = (props: Props) => {
             justifyContent: 'center',
             //  borderWidth: 1,
           }}>
-          <FlatList
-            data={props.data}
-            showsVerticalScrollIndicator
-            renderItem={renderTransaction}
-            style={{height: '80%'}}
-            inverted
-          />
+          <ScrollView horizontal style={{width: '90%', alignSelf: 'center'}}>
+            <FlatList
+              data={props.data.data}
+              showsVerticalScrollIndicator
+              renderItem={renderTransaction}
+              style={{height: '90%'}}
+            />
+          </ScrollView>
         </View>
       </View>
     </>

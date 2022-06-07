@@ -1,5 +1,6 @@
 import React from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
+import {TouchableOpacity} from 'react-native';
 import {CustomSwitch} from '../../../../../components/customSwitch';
 import {GreenCircle} from '../../../../../components/greenCircle';
 import {COLORS} from '../../../../../constants/colors';
@@ -12,6 +13,9 @@ interface Props {
   name?: string;
   default?: boolean;
   editable?: boolean;
+  onToggle?(): void;
+  toggleValue?: boolean;
+  onEditPress?(): void;
 }
 
 export const PaymentCard = (props: Props) => {
@@ -22,12 +26,16 @@ export const PaymentCard = (props: Props) => {
         <Text style={styles.name}>{props.name ?? 'Card'}</Text>
       </View>
       <View style={styles.row1}>
-        {props.switch && <CustomSwitch />}
+        {props.switch && (
+          <CustomSwitch isOn={props.toggleValue} onToggle={props.onToggle} />
+        )}
         {props.editable && (
-          <Image
-            source={ICONS.pencil}
-            style={[styles.pencil, {marginLeft: 5}]}
-          />
+          <TouchableOpacity onPress={props.onEditPress}>
+            <Image
+              source={ICONS.pencil}
+              style={[styles.pencil, {marginLeft: 5}]}
+            />
+          </TouchableOpacity>
         )}
         {props.default && <Text style={styles.def}>{'Default'}</Text>}
       </View>

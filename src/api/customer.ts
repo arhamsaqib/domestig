@@ -11,6 +11,7 @@ export interface RegisterCustomer {
   longitude?: string;
   latitude?: string;
   country?: string;
+  stripeId?: string;
 }
 
 export interface UpdateProvider {

@@ -34,6 +34,7 @@ import {
 } from '../../api/places';
 import {KEYBOARD_PADDING} from '../../constants/keyboardPadding';
 import Toast from 'react-native-toast-message';
+import {createStripeCustomer} from '../../api/stripe/stripeCustomer';
 
 export const Signup = ({navigation}: any) => {
   const [name, setName]: any = useState('');
@@ -59,17 +60,33 @@ export const Signup = ({navigation}: any) => {
       name.length < 2
     );
   }
+
   async function createLaravelUser(uid: string) {
+    // Creating User stripe account start
+    const stripeUser = {
+      name: name.trim(),
+      email: email.trim(),
+      address: location,
+      description: 'customer',
+    };
+
+    const stripeResposne = await createStripeCustomer(stripeUser);
+    console.log(stripeResposne, 'Stripe');
+
     const data = {
       name: name.trim(),
       email: email.trim(),
       fuid: uid,
       status: 'active',
-      location: location,
-      latitude: placeIinfo.geometry.location.lat,
-      longitude: placeIinfo.geometry.location.lng,
+      // location: location,
+      // latitude: placeIinfo.geometry.location.lat,
+      // longitude: placeIinfo.geometry.location.lng,
+      location: '456 Westwood Drive, Virginia',
+      latitude: '32.161671',
+      longitude: '74.188309',
       phone: phone.trim(),
       country: country,
+      stripeId: stripeResposne.id,
     };
     const user = await createCustomer(data).finally(() => {
       setLoader(false);
@@ -104,7 +121,7 @@ export const Signup = ({navigation}: any) => {
         })
         .catch((error: any) => {
           console.log(error, 'error');
-
+          setLoader(false);
           if (error.code === 'auth/email-already-in-use') {
             setLoader(false);
             setError('That email address is already in use!');
@@ -176,6 +193,7 @@ export const Signup = ({navigation}: any) => {
               placeholder="Enter your name"
               autoCapitalize="none"
               onChangeText={setName}
+              autoCorrect={false}
               icon={
                 <Icon
                   name="person-outline"

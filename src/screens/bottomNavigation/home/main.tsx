@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {FlatList, Linking, StyleSheet, Text, View} from 'react-native';
 import {getAllServices} from '../../../api/categories';
 import {CommonStyles} from '../../../common/styles';
@@ -9,7 +9,7 @@ import {FONTS} from '../../../constants/fonts';
 import {CategoryCard} from './components/categoryCard';
 import {RecommendedCard} from './components/recommendedCard';
 import {getCustomerById} from '../../../api/customer';
-import {RootStateOrAny, useSelector} from 'react-redux';
+import {RootStateOrAny, useSelector, useStore} from 'react-redux';
 import {getCustomerNotificationsCount} from '../../../api/customerNotifications';
 import {ProviderAcceptModal} from './components/providerAcceptModal';
 import {CancelVerificationModal} from './components/cancelVerificaitionModal';
@@ -20,10 +20,19 @@ import {showProviderWithId} from '../../../api/provider';
 import {showBookingSubmission} from '../../../api/bookingSubmission';
 import {useFocusEffect} from '@react-navigation/native';
 import Pusher from 'pusher-js/react-native';
+import Toast from 'react-native-toast-message';
 
-import {updateBooking} from '../../../api/bookings';
+import {getBookingById, updateBooking} from '../../../api/bookings';
 import {getRecommended} from '../../../api/recommended';
 import {PusherConfig} from '../../../config/pusher-config';
+import {ServiceOverview} from './components/overview';
+import updateCurrentBookingAction from '../../../redux/action/currentbookingAction';
+import {
+  updatePayment,
+  viewPaymentHistoryByBookingId,
+} from '../../../api/paymentHistory';
+import {stripeTransfer} from '../../../api/stripe/transfers';
+import {createCustomerTransaction} from '../../../api/stripe/transaction';
 
 export const MainMenu = ({navigation}: any) => {
   const [loader, setLoader] = useState(false);
@@ -38,9 +47,11 @@ export const MainMenu = ({navigation}: any) => {
   const [providerWaitingModal, setProviderWaitingModal] = useState(false);
   const [verificationCodeModal, setVerificationCodeModal] = useState(false);
   const [workingModal, setWorkingModal] = useState(false);
-
+  const [overview, setOverview] = useState(false);
+  const store = useStore();
   useEffect(() => {
     getData();
+    checkPayment();
   }, []);
 
   async function gd(channel: any) {
@@ -56,6 +67,31 @@ export const MainMenu = ({navigation}: any) => {
         }
       });
     });
+  }
+
+  const bookingState = useSelector(
+    (state: RootStateOrAny) => state.currentBooking,
+  );
+  async function checkPayment() {
+    //const bid = bookingState.id;
+    // if (bid !== undefined) {
+    const res = await viewPaymentHistoryByBookingId(state.id);
+    console.log(res, 'Payment History');
+
+    if (res.status === 'pending') {
+      console.log('booking payment pending');
+      const bk = await getBookingById(res.booking_id);
+      if (bk.status === 'completed') {
+        setBooking(bk);
+        store.dispatch(
+          updateCurrentBookingAction({
+            id: bk.id,
+          }),
+        );
+        setOverview(true);
+      }
+    }
+    //}
   }
 
   async function getData() {
@@ -107,6 +143,11 @@ export const MainMenu = ({navigation}: any) => {
       } else {
         setWorkingModal(true);
       }
+      // store.dispatch(
+      //   updateCurrentBookingAction({
+      //     id: bkninp.id,
+      //   }),
+      //);
     }
     if (bkninp.provider_id !== undefined) {
       const prv = await showProviderWithId(bkninp.provider_id);
@@ -117,6 +158,37 @@ export const MainMenu = ({navigation}: any) => {
     const sub = await showBookingSubmission(bkninp.id);
     if (sub !== undefined) {
       setBookingSubmission(sub);
+    }
+  }
+
+  async function onCompletePayment(provider: any, amount: any, booking: any) {
+    console.log(provider, 'Provider', amount);
+    const res = await stripeTransfer({
+      account: provider.stripeId,
+      amount: amount.toString() + '00',
+      currency: 'usd',
+    }).finally(() => {});
+    console.log(res, 'Transfer response');
+
+    if (res.id) {
+      const bln = await createCustomerTransaction(
+        {
+          amount: amount.toString() + '00',
+          currency: 'usd',
+        },
+        customer.stripeId,
+      );
+      console.log(bln, 'balance');
+      const upd = await updatePayment(booking.id, {status: 'complete'});
+      setOverview(false);
+    }
+    if (res.error) {
+      setOverview(false);
+      Toast.show({
+        type: 'error',
+        text1: res.error.code,
+        text2: res.error.message,
+      });
     }
   }
 
@@ -245,6 +317,14 @@ export const MainMenu = ({navigation}: any) => {
         }}
         onPhonePress={() => Linking.openURL(`tel:${provider.phone}`)}
       />
+      <ServiceOverview
+        provider={provider}
+        submission={bookingSubmisstion}
+        booking={booking}
+        visibility={overview}
+        onCompletePayment={onCompletePayment}
+      />
+      <Toast position="bottom" />
     </>
   );
 };

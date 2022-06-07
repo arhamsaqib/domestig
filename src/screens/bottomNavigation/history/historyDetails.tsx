@@ -109,6 +109,23 @@ export const HistoryDetails = ({navigation, route}: any) => {
   useEffect(() => {
     getData();
   }, []);
+  function calcAmount() {
+    let timeString = submission.time_taken ? submission.time_taken : '00:00:00';
+    var total = 0;
+    var min = 0;
+    if (submission.time_taken) {
+      let regExTime: any = /([0-9]?[0-9]):([0-9][0-9]):([0-9][0-9])/;
+      let regExTimeArr = regExTime.exec(timeString);
+      let timeHr = parseInt(regExTimeArr[1]);
+      let timeMin = parseInt(regExTimeArr[2]);
+      let timeSec = parseInt(regExTimeArr[3]);
+
+      total = timeHr * parseFloat(details.rate);
+      min = (timeMin / 60) * parseFloat(details.rate);
+    }
+    return total + min;
+  }
+
   return (
     <SafeAreaView style={CommonStyles.screenMain}>
       <View style={{marginTop: 10}} />
@@ -191,7 +208,7 @@ export const HistoryDetails = ({navigation, route}: any) => {
                 </Text>
               </View>
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <Text style={styles.valueBold}>24</Text>
+                <Text style={styles.valueBold}>{details.rate ?? 'NA'}</Text>
                 <Text style={styles.value}>/h</Text>
               </View>
             </View>
@@ -292,7 +309,7 @@ export const HistoryDetails = ({navigation, route}: any) => {
               }}>
               <Text style={[styles.name, {fontSize: 13}]}>Total Amount</Text>
               <Text style={[styles.name, {fontSize: 13}]}>
-                ${invoice.total_amount}
+                ${calcAmount() + parseFloat(invoice.extra_work_charges)}
               </Text>
             </View>
             <View
@@ -306,7 +323,7 @@ export const HistoryDetails = ({navigation, route}: any) => {
                 Extra work charge
               </Text>
               <Text style={[styles.name, {fontSize: 13}]}>
-                ${invoice.extra_amount_charges ?? 0}
+                ${invoice.extra_work_charges ?? 0}
               </Text>
             </View>
             <View
@@ -320,7 +337,7 @@ export const HistoryDetails = ({navigation, route}: any) => {
               <Text style={[styles.name, {fontSize: 13}]}>Amount</Text>
               <Text style={[styles.name, {fontSize: 13}]}>
                 {' '}
-                ${invoice.amount}
+                ${calcAmount()}
               </Text>
             </View>
             {review.review_to_customer && (

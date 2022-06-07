@@ -32,10 +32,18 @@ export const ServicesSubcategory = ({navigation, route}: any) => {
     );
   };
   function onNextPress() {
-    navigation.navigate('selectProviders', {
-      services: selected,
-      categoryName: route.params.categoryName,
-    });
+    if (selected.length < 1) {
+      Toast.show({
+        type: 'error',
+        text1: 'Services',
+        text2: 'Please select atleast 1 service',
+      });
+    } else {
+      navigation.navigate('selectProviders', {
+        services: selected,
+        categoryName: route.params.categoryName,
+      });
+    }
   }
   function onSchedule(data?: any) {
     console.log(data);
@@ -97,7 +105,7 @@ export const ServicesSubcategory = ({navigation, route}: any) => {
           </View>
         </View>
       </SafeAreaView>
-      <Toast position="top" />
+      <Toast position="bottom" />
     </>
   );
 };
