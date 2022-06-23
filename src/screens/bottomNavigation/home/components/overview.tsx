@@ -296,7 +296,7 @@ export const ServiceOverview = (props: Props) => {
                 <Text style={[styles.name, {fontSize: 13}]}>Amount</Text>
                 <Text style={[styles.name, {fontSize: 13}]}>
                   {' '}
-                  ${calcAmount()}
+                  ${calcAmount().toFixed(2)}
                 </Text>
               </View>
               <View style={{width: '90%', marginTop: 10}}>

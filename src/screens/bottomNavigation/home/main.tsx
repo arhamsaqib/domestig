@@ -15,7 +15,7 @@ import {ProviderAcceptModal} from './components/providerAcceptModal';
 import {CancelVerificationModal} from './components/cancelVerificaitionModal';
 import {VerificationCodeModal} from './components/verificationCodeModal';
 import {ProviderWorkingModal} from './components/providerWorkingModal';
-import {getCustomerActiveBookings} from '../../../api/customerActiveBookings';
+import {getCustomerOpenBookings} from '../../../api/customerActiveBookings';
 import {showProviderWithId} from '../../../api/provider';
 import {showBookingSubmission} from '../../../api/bookingSubmission';
 import {useFocusEffect} from '@react-navigation/native';
@@ -63,7 +63,8 @@ export const MainMenu = ({navigation}: any) => {
       chatChannel.bind('onBookingUpdate', (data: any) => {
         // (4)
         if (data.data.refresh === 'true') {
-          getData();
+          //getData();
+          GetCustomerOpenBooking();
         }
       });
     });
@@ -93,76 +94,92 @@ export const MainMenu = ({navigation}: any) => {
     }
     //}
   }
+  //------------------------------------------------------------ Breakdown into functions ---------------------------------------------
 
-  async function getData() {
-    setLoader(true);
-    setProviderWaitingModal(false);
-    setVerificationCodeModal(false);
-    setWorkingModal(false);
+  async function GetNotifications() {
+    const count = await getCustomerNotificationsCount(state.id);
+    setNotifCount(count);
+  }
+
+  async function GetBookingSubmissionData() {
+    if (booking.id) {
+      const sub = await showBookingSubmission(booking.id);
+      if (sub !== undefined) {
+        setBookingSubmission(sub);
+      }
+    }
+  }
+
+  async function GetAllServices() {
     const res = await getAllServices().finally(() => setLoader(false));
     if (res !== undefined) {
       setServices(res);
     }
+  }
+
+  async function GetCustomer() {
     const user = await getCustomerById(state.id);
     if (user !== undefined) {
       setCustomer(user);
+      return user;
     }
+    return [];
+  }
 
+  async function GetCustomerOpenBooking() {
+    setProviderWaitingModal(false);
+    setVerificationCodeModal(false);
+    setWorkingModal(false);
+    const res = await getCustomerOpenBookings(state.id);
+    console.log(res, 'open booking rn');
+    if (res.id !== undefined && res.status !== 'completed') {
+      gd(res.id);
+      setBooking(res);
+
+      if (res.status === 'pending') {
+        console.log('provider waiting');
+
+        setProviderWaitingModal(true);
+      }
+      if (res.status === 'in-progress') {
+        if (res.verified !== 'true') {
+          setVerificationCodeModal(true);
+        } else {
+          setWorkingModal(true);
+        }
+        if (res.provider_id !== undefined) {
+          const prv = await showProviderWithId(res.provider_id);
+          if (prv.id !== undefined) {
+            setProvider(prv);
+          }
+        }
+        const sub = await showBookingSubmission(res.id);
+        if (sub !== undefined) {
+          setBookingSubmission(sub);
+        }
+      }
+    }
+    return res;
+  }
+  //---------------------------------------------------------------------------------------------------------------------------------------
+
+  async function getData() {
+    setLoader(true);
+    await GetAllServices();
+    const user = await GetCustomer();
     const recD = {
       lat: user.latitude,
       lng: user.longitude,
     };
+    await GetNotifications();
     const recom = await getRecommended(recD);
     if (recom !== undefined) {
       setRecommended(recom);
     }
-    const count = await getCustomerNotificationsCount(state.id);
-    setNotifCount(count);
-
-    const pendingdata = {
-      customer_id: state.id,
-      status: 'pending',
-    };
-    const bkn = await getCustomerActiveBookings(pendingdata);
-    if (bkn.id !== undefined) {
-      setBooking(bkn);
-      setProviderWaitingModal(true);
-      gd(bkn.id);
-    }
-    const inProgressData = {
-      customer_id: state.id,
-      status: 'in-progress',
-    };
-    const bkninp = await getCustomerActiveBookings(inProgressData);
-    if (bkninp.id !== undefined) {
-      gd(bkninp.id);
-
-      setBooking(bkninp);
-      if (bkninp.verified !== 'true') {
-        setVerificationCodeModal(true);
-      } else {
-        setWorkingModal(true);
-      }
-      // store.dispatch(
-      //   updateCurrentBookingAction({
-      //     id: bkninp.id,
-      //   }),
-      //);
-    }
-    if (bkninp.provider_id !== undefined) {
-      const prv = await showProviderWithId(bkninp.provider_id);
-      if (prv.id !== undefined) {
-        setProvider(prv);
-      }
-    }
-    const sub = await showBookingSubmission(bkninp.id);
-    if (sub !== undefined) {
-      setBookingSubmission(sub);
-    }
+    const booking = await GetCustomerOpenBooking();
   }
 
   async function onCompletePayment(provider: any, amount: any, booking: any) {
-    console.log(provider, 'Provider', amount);
     const res = await stripeTransfer({
       account: provider.stripeId,
       amount: amount.toString() + '00',
@@ -170,7 +187,8 @@ export const MainMenu = ({navigation}: any) => {
     }).finally(() => {});
     console.log(res, 'Transfer response');
 
-    if (res.id) {
+    // if (res.id) {
+    if (true) {
       const bln = await createCustomerTransaction(
         {
           amount: amount.toString() + '00',
@@ -179,7 +197,9 @@ export const MainMenu = ({navigation}: any) => {
         customer.stripeId,
       );
       console.log(bln, 'balance');
-      const upd = await updatePayment(booking.id, {status: 'complete'});
+      const upd = await updatePayment(booking.id, {
+        status: 'complete',
+      });
       setOverview(false);
     }
     if (res.error) {
@@ -339,3 +359,75 @@ const styles = StyleSheet.create({
     //justifyContent: 'space-between',
   },
 });
+
+/*
+ async function getData() {
+    setLoader(true);
+    setProviderWaitingModal(false);
+    setVerificationCodeModal(false);
+    setWorkingModal(false);
+    const res = await getAllServices().finally(() => setLoader(false));
+    if (res !== undefined) {
+      setServices(res);
+    }
+    const user = await getCustomerById(state.id);
+    if (user !== undefined) {
+      setCustomer(user);
+    }
+
+    const recD = {
+      lat: user.latitude,
+      lng: user.longitude,
+    };
+    const recom = await getRecommended(recD);
+    if (recom !== undefined) {
+      setRecommended(recom);
+    }
+    const count = await getCustomerNotificationsCount(state.id);
+    setNotifCount(count);
+
+    const pendingdata = {
+      customer_id: state.id,
+      status: 'pending',
+    };
+    const bkn = await getCustomerActiveBookings(pendingdata);
+    if (bkn.id !== undefined) {
+      setBooking(bkn);
+      setProviderWaitingModal(true);
+      gd(bkn.id);
+    }
+    const inProgressData = {
+      customer_id: state.id,
+      status: 'in-progress',
+    };
+    const bkninp = await getCustomerActiveBookings(inProgressData);
+    if (bkninp.id !== undefined) {
+      gd(bkninp.id);
+
+      setBooking(bkninp);
+      if (bkninp.verified !== 'true') {
+        setVerificationCodeModal(true);
+      } else {
+        setWorkingModal(true);
+      }
+      // store.dispatch(
+      //   updateCurrentBookingAction({
+      //     id: bkninp.id,
+      //   }),
+      //);
+    }
+    if (bkninp.provider_id !== undefined) {
+      const prv = await showProviderWithId(bkninp.provider_id);
+      if (prv.id !== undefined) {
+        setProvider(prv);
+      }
+    }
+    const sub = await showBookingSubmission(bkninp.id);
+    if (sub !== undefined) {
+      setBookingSubmission(sub);
+    }
+  }
+
+
+
+*/

@@ -74,6 +74,7 @@ export const ConfirmBooking = ({navigation, route}: any) => {
       latitude: customer.latitude,
       longitude: customer.longitude,
       coupon: error === 'applied' ? coupon.toString() : '',
+      current: 'open',
     };
 
     const res = await createBookings(booking);

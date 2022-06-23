@@ -11,6 +11,12 @@ export async function getCustomerActiveBookings(data: CustomerBooking) {
   const res = await post(endpoint, data);
   return res;
 }
+
+export async function getCustomerOpenBookings(customerId: string) {
+  const endp = 'get-customer-open-booking/' + customerId;
+  const res = await get(endp);
+  return res;
+}
 export async function updateCustomerBooking(
   bookingId: string,
   data: {status: string},

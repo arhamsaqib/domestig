@@ -18,6 +18,7 @@ interface ModalView {
   cardTopChildren?: any;
   cardTop?: boolean;
   onArrowPress?(): void;
+  children?: any;
 }
 
 export const BottomCard: FunctionComponent<ModalView> = ({

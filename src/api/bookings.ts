@@ -12,6 +12,7 @@ export interface RegisterBooking {
   latitude?: string;
   longitude?: string;
   location?: string;
+  current?: string;
 }
 export interface Update {
   provider_id?: string;
