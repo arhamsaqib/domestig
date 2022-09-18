@@ -21,7 +21,7 @@
 		49B0CEA47ED84EC2BA078EDF /* Poppins-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FE02FC8C4E7447BB9259C02D /* Poppins-LightItalic.ttf */; };
 		4FCA069EE2D94DBCB6B2A0AD /* Poppins-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 86CB40736F704BDEAD935611 /* Poppins-Italic.ttf */; };
 		6D4C4FFE984F4B8FB400ED14 /* Poppins-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7894DC564CCF479BA03F2134 /* Poppins-Black.ttf */; };
-		72F881CF27D2C46E006D3F75 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 72F881CE27D2C46E006D3F75 /* GoogleService-Info.plist */; };
+		7253D721288AC3AF003100CE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7253D720288AC3AF003100CE /* GoogleService-Info.plist */; };
 		7508537810F443B7A22CFE0F /* Poppins-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DB8D0D5789D946E1B2271DBD /* Poppins-Medium.ttf */; };
 		7C213B3DE6FEEAF7970A3050 /* libPods-domestig.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F2A9E94E12A7E9C622A377B6 /* libPods-domestig.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
@@ -66,7 +66,7 @@
 		5A722D433EB1991E4C16B7AC /* Pods-domestig.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-domestig.release.xcconfig"; path = "Target Support Files/Pods-domestig/Pods-domestig.release.xcconfig"; sourceTree = "<group>"; };
 		647D0673B2504FB69C1B3E2B /* Poppins-Thin.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Thin.ttf"; path = "../src/assets/fonts/Poppins/Poppins-Thin.ttf"; sourceTree = "<group>"; };
 		6E9C86034977A9E231DF0870 /* Pods-domestig.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-domestig.debug.xcconfig"; path = "Target Support Files/Pods-domestig/Pods-domestig.debug.xcconfig"; sourceTree = "<group>"; };
-		72F881CE27D2C46E006D3F75 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../GoogleService-Info.plist"; sourceTree = "<group>"; };
+		7253D720288AC3AF003100CE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7533D8A2D4E34646AC387B62 /* Poppins-ThinItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-ThinItalic.ttf"; path = "../src/assets/fonts/Poppins/Poppins-ThinItalic.ttf"; sourceTree = "<group>"; };
 		7894DC564CCF479BA03F2134 /* Poppins-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Black.ttf"; path = "../src/assets/fonts/Poppins/Poppins-Black.ttf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = domestig/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -179,7 +179,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				72F881CE27D2C46E006D3F75 /* GoogleService-Info.plist */,
+				7253D720288AC3AF003100CE /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* domestig */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* domestigTests */,
@@ -326,7 +326,7 @@
 				34B35CCCD95D4593BED9BF08 /* Poppins-SemiBoldItalic.ttf in Resources */,
 				182595DDFEE640A4B095419F /* Poppins-Thin.ttf in Resources */,
 				440991C57A8A45ABA8A92110 /* Poppins-ThinItalic.ttf in Resources */,
-				72F881CF27D2C46E006D3F75 /* GoogleService-Info.plist in Resources */,
+				7253D721288AC3AF003100CE /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -545,7 +545,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2022080801;
+				DEVELOPMENT_TEAM = Z3R4X96893;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = domestig/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -557,7 +558,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.arhamsaqib.domestig;
 				PRODUCT_NAME = domestig;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -571,7 +572,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2022080801;
+				DEVELOPMENT_TEAM = Z3R4X96893;
 				INFOPLIST_FILE = domestig/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -582,7 +584,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.arhamsaqib.domestig;
 				PRODUCT_NAME = domestig;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";

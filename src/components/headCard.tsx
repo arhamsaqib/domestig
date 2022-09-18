@@ -59,7 +59,12 @@ export const HeadCard = (props: Props) => {
       </View>
 
       <View style={styles.bottom}>
-        <Image source={ICONS.vaccum} style={styles.vaccumImg} />
+        <Image
+          source={ICONS.vaccum}
+          style={styles.vaccumImg}
+          resizeMethod="scale"
+          resizeMode="contain"
+        />
       </View>
     </LinearGradient>
   );
@@ -76,10 +81,17 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     right: 0,
+    width: '60%',
+    height: '60%',
+    alignItems: 'baseline',
+    justifyContent: 'flex-end',
   },
   vaccumImg: {
-    height: 162.81,
-    width: 242.13,
+    // height: 162.81,
+    // width: 242.13,
+    height: '100%',
+
+    width: '100%',
   },
   topView: {
     width: '90%',

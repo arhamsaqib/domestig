@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {FlatList, Linking, StyleSheet, Text, View} from 'react-native';
 import {getAllServices} from '../../../api/categories';
 import {CommonStyles} from '../../../common/styles';
